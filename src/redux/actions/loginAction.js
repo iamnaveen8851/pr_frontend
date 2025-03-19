@@ -21,6 +21,9 @@ export const handleLogin = (formState, navigate) => {
         // To add a delay before the dashboard is visible to show the loading
         setTimeout(() => {
           dispatch(getLoginData(res.data));
+          localStorage.setItem("accessToken", res.data.accessToken);
+          console.log(res.data, "----");
+
           navigate("/");
         }, 1000);
       }
