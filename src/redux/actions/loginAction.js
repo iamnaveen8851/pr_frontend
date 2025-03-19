@@ -29,8 +29,10 @@ export const handleLogin = (formState, navigate) => {
       const errorMessage =
         error.response?.data?.message || "Login failed. Please try again.";
 
-      console.log(errorMessage, "............error");
-      dispatch({ type: "LOGIN_FAILURE", payload: errorMessage });
+      // console.log(errorMessage, "............error");
+      setTimeout(() => {
+        dispatch({ type: "LOGIN_FAILURE", payload: errorMessage });
+      }, 1000);
     }
   };
 };

@@ -8,7 +8,7 @@ function App() {
       <PublicRoute />
       {/* <Loader/> */}
       {/* Toast for message */}
-      <Toaster color={"green"} position={"top-right"} reverseOrder={false} />
+      <Toaster color={"green"} position={"bottom-right"} reverseOrder={false} />
     </>
   );
 }
