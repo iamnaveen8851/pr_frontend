@@ -3,13 +3,12 @@ import styles from "../styles/signup.module.css";
 import { handleSignUp } from "../redux/actions/signUpAction";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import Loader from "./Loader";
 import toast from "react-hot-toast";
 
 const SignUp = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, isSignedUp, message, user } = useSelector(
+  const { loading, isSignedUp, message } = useSelector(
     (state) => state.signUpReducer
   );
   const [formState, setFormState] = useState({
@@ -17,21 +16,138 @@ const SignUp = () => {
     email: "",
     password: "",
   });
+  const [errors, setErrors] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const [touched, setTouched] = useState({
+    username: false,
+    email: false,
+    password: false,
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Validation functions
+  const validateUsername = (username) => {
+    if (!username.trim()) return "Username is required";
+    if (username.length < 3) return "Username must be at least 3 characters";
+    if (username.length > 20) return "Username must be less than 20 characters";
+    if (!/^[a-zA-Z0-9_]+$/.test(username))
+      return "Username can only contain letters, numbers and underscores";
+    return "";
+  };
+
+  const validateEmail = (email) => {
+    if (!email.trim()) return "Email is required";
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) return "Please enter a valid email address";
+    return "";
+  };
+
+  const validatePassword = (password) => {
+    if (!password) return "Password is required";
+    if (password.length < 8) return "Password must be at least 8 characters";
+    if (!/[A-Z]/.test(password))
+      return "Password must contain at least one uppercase letter";
+    if (!/[a-z]/.test(password))
+      return "Password must contain at least one lowercase letter";
+    if (!/[0-9]/.test(password))
+      return "Password must contain at least one number";
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password))
+      return "Password must contain at least one special character";
+    return "";
+  };
+
+  // Handle input changes with validation
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormState({
+      ...formState,
+      [name]: value,
+    });
+
+    // Validate on change if field has been touched
+    if (touched[name]) {
+      let errorMessage = "";
+      if (name === "username") errorMessage = validateUsername(value);
+      else if (name === "email") errorMessage = validateEmail(value);
+      else if (name === "password") errorMessage = validatePassword(value);
+
+      setErrors({
+        ...errors,
+        [name]: errorMessage,
+      });
+    }
+  };
+
+  // Handle blur events to mark fields as touched
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    setTouched({
+      ...touched,
+      [name]: true,
+    });
+
+    // Validate on blur
+    let errorMessage = "";
+    if (name === "username") errorMessage = validateUsername(value);
+    else if (name === "email") errorMessage = validateEmail(value);
+    else if (name === "password") errorMessage = validatePassword(value);
+
+    setErrors({
+      ...errors,
+      [name]: errorMessage,
+    });
+  };
 
   const handleSubmit = async (e) => {
-    console.log("Sign up form submitted:", formState);
     e.preventDefault();
+
+    // Validate all fields before submission
+    const usernameError = validateUsername(formState.username);
+    const emailError = validateEmail(formState.email);
+    const passwordError = validatePassword(formState.password);
+
+    const newErrors = {
+      username: usernameError,
+      email: emailError,
+      password: passwordError,
+    };
+
+    setErrors(newErrors);
+    setTouched({
+      username: true,
+      email: true,
+      password: true,
+    });
+
+    // Check if there are any errors
+    if (usernameError || emailError || passwordError) {
+      toast.error("Please fix the errors in the form");
+      return;
+    }
+
+    setIsSubmitting(true);
+    console.log("Sign up form submitted:", formState);
     dispatch(handleSignUp(formState, navigate));
   };
 
   useEffect(() => {
     if (!isSignedUp && message && !loading) {
       toast.error(`${message}`);
+      setIsSubmitting(false);
+    }
+
+    if (!loading) {
+      setIsSubmitting(false);
     }
   }, [isSignedUp, message, loading]);
-  if (loading) {
-    return <Loader />;
-  }
+
+  // if (loading) {
+  //   return <Loader />;
+  // }
+
   return (
     <>
       <div className={styles.parentContainer}>
@@ -46,49 +162,104 @@ const SignUp = () => {
             <h3 className={styles.heading}>Register</h3>
             <br />
             <form className={styles.form} onSubmit={handleSubmit}>
-              <input
-                className={styles.inputBoxes}
-                type="text"
-                placeholder="Username"
-                value={formState.username}
-                onChange={(e) =>
-                  setFormState({
-                    ...formState,
-                    username: e.target.value,
-                  })
-                }
-                required
-              />
-              <input
-                className={styles.inputBoxes}
-                type="text"
-                placeholder="Email"
-                value={formState.email}
-                onChange={(e) =>
-                  setFormState({
-                    ...formState,
-                    email: e.target.value,
-                  })
-                }
-                required
-              />
+              <div className={styles.inputGroup}>
+                <input
+                  className={`${styles.inputBoxes} ${
+                    errors.username && touched.username ? styles.inputError : ""
+                  }`}
+                  type="text"
+                  name="username"
+                  placeholder="Username"
+                  value={formState.username}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  required
+                />
+                {errors.username && touched.username && (
+                  <p className={styles.errorText}>{errors.username}</p>
+                )}
+              </div>
 
-              <input
-                className={styles.inputBoxes}
-                type="password"
-                placeholder="Password"
-                value={formState.password}
-                onChange={(e) =>
-                  setFormState({
-                    ...formState,
-                    password: e.target.value,
-                  })
-                }
-                required
-              />
+              <div className={styles.inputGroup}>
+                <input
+                  className={`${styles.inputBoxes} ${
+                    errors.email && touched.email ? styles.inputError : ""
+                  }`}
+                  type="text"
+                  name="email"
+                  placeholder="Email"
+                  value={formState.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  required
+                />
+                {errors.email && touched.email && (
+                  <p className={styles.errorText}>{errors.email}</p>
+                )}
+              </div>
 
-              <button className={styles.submitBtn} type="submit">
-                Register
+              <div className={styles.inputGroup}>
+                <input
+                  className={`${styles.inputBoxes} ${
+                    errors.password && touched.password ? styles.inputError : ""
+                  }`}
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={formState.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  required
+                />
+                {errors.password && touched.password && (
+                  <p className={styles.errorText}>{errors.password}</p>
+                )}
+              </div>
+
+              <button
+                className={`${styles.submitBtn} ${
+                  errors.username ||
+                  errors.email ||
+                  errors.password ||
+                  isSubmitting
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                }`}
+                type="submit"
+                disabled={
+                  errors.username ||
+                  errors.email ||
+                  errors.password ||
+                  isSubmitting
+                }
+              >
+                {isSubmitting ? (
+                  <div className="flex items-center justify-center">
+                    <svg
+                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Registering...
+                  </div>
+                ) : (
+                  "Register"
+                )}
               </button>
 
               <div className="m-auto">

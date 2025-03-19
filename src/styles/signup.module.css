@@ -43,3 +43,21 @@
 .linkBtn {
   @apply text-[14px] md:text-[16px] lg:text-[16px]  text-orange-500 hover:text-[#250ef0];
 }
+
+
+/* Add these styles to your existing CSS file */
+.inputGroup {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.inputError {
+  border: 1px solid #ff3333 !important;
+}
+
+.errorText {
+  color: #ff3333;
+  font-size: 12px;
+  margin-top: 5px;
+  text-align: left;
+}
