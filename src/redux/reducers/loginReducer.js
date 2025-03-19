@@ -35,16 +35,6 @@ export const loginReducer = (state = initialState, action) => {
         token: null,
       };
 
-    // Add a new case for token authentication
-    case "SET_AUTH_FROM_TOKEN":
-      return {
-        ...state,
-        isLoggedIn: true,
-        token: action.payload,
-        user: state.user,
-        message: state.message || "Authenticated with token",
-        loading: false,
-      };
     default:
       return state;
   }
