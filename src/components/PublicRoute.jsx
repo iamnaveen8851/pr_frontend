@@ -1,8 +1,11 @@
+// import { useState, useEffect } from "react";
 import Dashboard from "./Dashboard";
 import { Routes, Route } from "react-router-dom";
 import Login from "./Login";
 import SignUp from "./SignUp";
 import PrivateRoute from "./PrivateRoute";
+// import Loader from "./Loader";
+
 const PublicRoute = () => {
   return (
     <>
@@ -10,9 +13,9 @@ const PublicRoute = () => {
         <Route
           path="/"
           element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
+            // <PrivateRoute>
+            // </PrivateRoute>
+            <Dashboard />
           }
         />
         <Route path="/users/login" element={<Login />} />
