@@ -6,7 +6,7 @@ const PrivateRoute = ({ children }) => {
   const { isLoggedIn } = useSelector((state) => state.loginReducer);
 
   const token = localStorage.getItem("accessToken");
-  console.log("Token", token);
+  // console.log("Token", token);
   if (isLoggedIn || isSignedUp || token) {
     return children;
   } else {
