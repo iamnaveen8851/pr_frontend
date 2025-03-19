@@ -16,7 +16,6 @@ export const handleSignUp = (formState, navigate) => {
         formState
       );
       if (res.status === 201) {
-        
         setTimeout(() => {
           dispatch(signUpData(res.data));
           navigate("/");
@@ -25,7 +24,9 @@ export const handleSignUp = (formState, navigate) => {
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "These Credentials Exists";
-      dispatch({ type: "SIGN_UP_ERROR", payload: errorMessage });
+      setTimeout(() => {
+        dispatch({ type: "SIGN_UP_ERROR", payload: errorMessage });
+      }, 1000);
 
       console.error(error);
     }
