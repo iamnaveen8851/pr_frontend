@@ -4,12 +4,14 @@ import { handleSignUp } from "../redux/actions/signUpAction";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Import FontAwesomeIcon
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'; // Import eye icons
 
 const SignUp = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading, isSignedUp, message } = useSelector(
-    (state) => state.signUpReducer
+    (state) => state.authReducer
   );
   const [formState, setFormState] = useState({
     username: "",
@@ -27,6 +29,7 @@ const SignUp = () => {
     password: false,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // State for password visibility
 
   // Validation functions
   const validateUsername = (username) => {
@@ -134,19 +137,10 @@ const SignUp = () => {
   };
 
   useEffect(() => {
-    if (!isSignedUp && message && !loading) {
-      toast.error(`${message}`);
-      setIsSubmitting(false);
-    }
-
     if (!loading) {
       setIsSubmitting(false);
     }
   }, [isSignedUp, message, loading]);
-
-  // if (loading) {
-  //   return <Loader />;
-  // }
 
   return (
     <>
@@ -199,18 +193,26 @@ const SignUp = () => {
               </div>
 
               <div className={styles.inputGroup}>
-                <input
-                  className={`${styles.inputBoxes} ${
-                    errors.password && touched.password ? styles.inputError : ""
-                  }`}
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={formState.password}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  required
-                />
+                <div className="relative">
+                  <input
+                    className={`${styles.inputBoxes} ${
+                      errors.password && touched.password ? styles.inputError : ""
+                    }`}
+                    type={showPassword ? "text" : "password"} // Toggle input type
+                    name="password"
+                    placeholder="Password"
+                    value={formState.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    required
+                  />
+                  <span
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+                    onClick={() => setShowPassword(!showPassword)} // Toggle visibility
+                  >
+                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} /> {/* Toggle icon */}
+                  </span>
+                </div>
                 {errors.password && touched.password && (
                   <p className={styles.errorText}>{errors.password}</p>
                 )}

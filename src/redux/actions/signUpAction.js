@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { axiosInstance } from "../../utils/axiosInstance";
 
 const signUpData = (data) => {
@@ -17,15 +18,17 @@ export const handleSignUp = (formState, navigate) => {
       );
       if (res.status === 201) {
         setTimeout(() => {
-          localStorage.setItem("accessToken", res.data.accessToken);
+          // localStorage.setItem("accessToken", res.data.accessToken);
           dispatch(signUpData(res.data));
-          navigate("/");
+          toast.success("User registered successfully!")
+          navigate("/login");
         }, 1000);
       }
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "These Credentials Exists";
-      setTimeout(() => {
+      toast.error(errorMessage)
+        setTimeout(() => {
         dispatch({ type: "SIGN_UP_ERROR", payload: errorMessage });
       }, 1000);
 
