@@ -1,8 +1,12 @@
 import { useEffect } from "react";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import styles from "../styles/dashboard.module.css";
+import { clearCookie } from "../redux/actions/logoutAction";
 const Dashboard = () => {
+  // const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { user: loggedInUser, isLoggedIn } = useSelector(
     (state) => state.loginReducer
   );
@@ -17,7 +21,23 @@ const Dashboard = () => {
       toast.success(`Welcome ${signedUpUser}!`);
     }
   }, [isLoggedIn, isSignedUp]);
-  return <div>Dashboard </div>;
+
+  const handleLogout = () => {
+    console.log("logout Clicked");
+    if (isLoggedIn || isSignedUp) {
+      dispatch(clearCookie());
+    }
+
+    // navigate("/login");
+  };
+  return (
+    <div className={styles.parentContainer}>
+      Dashboard
+      <button className={styles.logout} onClick={handleLogout}>
+        Logout
+      </button>
+    </div>
+  );
 };
 
 export default Dashboard;

@@ -10,7 +10,7 @@ const PrivateRoute = ({ children }) => {
   if (isLoggedIn || isSignedUp || token) {
     return children;
   } else {
-    return <Navigate to="/users/login" />;
+    return <Navigate to="/login" />;
   }
 };
 

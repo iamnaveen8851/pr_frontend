@@ -221,7 +221,7 @@ const Login = () => {
                 <p>
                   Dont have account?{" "}
                   <button
-                    onClick={() => navigate("/users/signup")}
+                    onClick={() => navigate("/signup")}
                     className={styles.linkBtn}
                   >
                     Register
