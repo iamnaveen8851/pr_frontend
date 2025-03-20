@@ -8,25 +8,24 @@ import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons"; // Import the 
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const { user: loggedInUser, isLoggedIn } = useSelector(
-    (state) => state.loginReducer
+  const { user, isLoggedIn, isSignedUp } = useSelector(
+    (state) => state.authReducer
   );
-  const { user: signedUpUser, isSignedUp } = useSelector(
-    (state) => state.signUpReducer
-  );
+  // const { user: signedUpUser,  } = useSelector(
+  //   (state) => state.signUpReducer
+  // );
 
   useEffect(() => {
     if (isLoggedIn) {
-      toast.success(`Welcome ${loggedInUser}!`);
-    } else if (isSignedUp) {
-      toast.success(`Welcome ${signedUpUser}!`);
+      toast.success(`Welcome ${user}!`);
     }
   }, [isLoggedIn, isSignedUp]);
 
   // To Trigger the logout event and clear the access token & cookies simultaneously
   const handleLogout = () => {
     console.log("logout Clicked");
-    if (isLoggedIn || isSignedUp) {
+    console.log(isLoggedIn, isSignedUp, "..........auth status........");
+    if (!isLoggedIn || !isSignedUp) {
       dispatch(clearCookie());
     }
   };

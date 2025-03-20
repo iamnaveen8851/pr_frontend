@@ -2,8 +2,7 @@ import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import PropTypes from "prop-types";
 const PrivateRoute = ({ children }) => {
-  const { isSignedUp } = useSelector((state) => state.signUpReducer);
-  const { isLoggedIn } = useSelector((state) => state.loginReducer);
+  const { isSignedUp, isLoggedIn } = useSelector((state) => state.authReducer);
 
   const token = localStorage.getItem("accessToken");
 

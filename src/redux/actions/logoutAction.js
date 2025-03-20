@@ -4,12 +4,13 @@ export const clearCookie = () => {
   return async (dispatch) => {
     try {
       const res = await axiosInstance.post(`/users/logout`);
-      if (res.status === 200) {
-        dispatch({
-          type: "LOGOUT_SUCCESS",
-        });
-        localStorage.removeItem("accessToken");
-      }
+    //   localStorage.removeItem("accessToken");
+    //   if (res.status === 200) {
+    // }
+    localStorage.removeItem("accessToken");
+    dispatch({
+      type: "LOGOUT_SUCCESS",
+    });
 
       dispatch({
         type: "LOGOUT_SUCCESS",

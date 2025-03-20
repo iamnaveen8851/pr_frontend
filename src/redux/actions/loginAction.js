@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { axiosInstance } from "../../utils/axiosInstance";
 
 const getLoginData = (data) => {
@@ -17,6 +18,7 @@ export const handleLogin = (formState, navigate) => {
         formState
       );
 
+      console.log(res, ".......res");
       if (res.status === 200) {
         // To add a delay before the dashboard is visible to show the loading
         setTimeout(() => {
@@ -29,10 +31,11 @@ export const handleLogin = (formState, navigate) => {
       }
     } catch (error) {
       // Extract error message safely
+      console.log(error);
       const errorMessage =
         error.response?.data?.message || "Login failed. Please try again.";
-
-      // console.log(errorMessage, "............error");
+      toast.error(errorMessage);
+      console.log(errorMessage, "............error");
       setTimeout(() => {
         dispatch({ type: "LOGIN_FAILURE", payload: errorMessage });
       }, 1000);
