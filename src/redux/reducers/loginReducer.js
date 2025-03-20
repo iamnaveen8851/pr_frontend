@@ -3,7 +3,6 @@ const initialState = {
   message: "",
   loading: false,
   user: null,
-  // token: null,
 };
 
 export const loginReducer = (state = initialState, action) => {
@@ -24,6 +23,15 @@ export const loginReducer = (state = initialState, action) => {
         message: action.payload.message,
         user: action.payload.user,
         // token: action.payload.token,
+      };
+
+    case "LOGOUT_SUCCESS":
+      return {
+        ...state,
+        loading: false,
+        isLoggedIn: false,
+        message: null,
+        user: null,
       };
 
     case "LOGIN_FAILURE":

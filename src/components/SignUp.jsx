@@ -266,7 +266,7 @@ const SignUp = () => {
                 <p>
                   If you have account{" "}
                   <button
-                    onClick={() => navigate("/users/login")}
+                    onClick={() => navigate("/login")}
                     className={styles.linkBtn}
                   >
                     Login

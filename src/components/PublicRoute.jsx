@@ -18,8 +18,8 @@ const PublicRoute = () => {
             </PrivateRoute>
           }
         />
-        <Route path="/users/login" element={<Login />} />
-        <Route path="/users/signup" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
     </>
   );

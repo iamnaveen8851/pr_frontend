@@ -23,6 +23,15 @@ export const signUpReducer = (state = initialState, action) => {
         user: action.payload.user.username,
       };
 
+    case "LOGOUT_SUCCESS":
+      return {
+        ...state,
+        loading: false,
+        isSignedUp: false,
+        message: null,
+        user: null,
+      };
+
     case "SIGN_UP_ERROR":
       return {
         ...state,
