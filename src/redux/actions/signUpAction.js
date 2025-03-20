@@ -17,6 +17,7 @@ export const handleSignUp = (formState, navigate) => {
       );
       if (res.status === 201) {
         setTimeout(() => {
+          localStorage.setItem("accessToken", res.data.accessToken);
           dispatch(signUpData(res.data));
           navigate("/");
         }, 1000);
