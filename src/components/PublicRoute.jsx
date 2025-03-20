@@ -13,9 +13,9 @@ const PublicRoute = () => {
         <Route
           path="/"
           element={
-            // <PrivateRoute>
-            // </PrivateRoute>
-            <Dashboard />
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
           }
         />
         <Route path="/users/login" element={<Login />} />
