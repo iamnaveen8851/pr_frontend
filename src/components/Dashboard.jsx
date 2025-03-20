@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
 import styles from "../styles/dashboard.module.css";
 import { clearCookie } from "../redux/actions/logoutAction";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Import FontAwesomeIcon
+import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons"; // Import the specific icon
+
 const Dashboard = () => {
-  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user: loggedInUser, isLoggedIn } = useSelector(
     (state) => state.loginReducer
@@ -22,18 +23,20 @@ const Dashboard = () => {
     }
   }, [isLoggedIn, isSignedUp]);
 
+  // To Trigger the logout event and clear the access token & cookies simultaneously
   const handleLogout = () => {
     console.log("logout Clicked");
     if (isLoggedIn || isSignedUp) {
       dispatch(clearCookie());
     }
-
-    // navigate("/login");
   };
+
   return (
     <div className={styles.parentContainer}>
       Dashboard
       <button className={styles.logout} onClick={handleLogout}>
+        <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />{" "}
+        {/* Add icon with margin */}
         Logout
       </button>
     </div>

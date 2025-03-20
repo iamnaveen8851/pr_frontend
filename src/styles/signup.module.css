@@ -1,63 +1,51 @@
 .parentContainer {
-  @apply 
-  /* border-4 border-green-500  */
-  flex flex-col h-max  md:flex-row;
+  @apply flex flex-col h-screen md:flex-row; /* Use h-screen for full viewport height */
 }
 
 .leftChild {
-  @apply
-   /* border-2 border-blue-500  */
-  w-[100%]   h-full md:w-[100vw] lg:w-[70%];
+  @apply w-full h-1/2 md:h-full md:w-1/2 lg:w-2/3; /* Adjust height for smaller screens */
 }
 
 .imageStyling {
-  @apply w-full lg:w-full h-full md:h-[100vh] lg:h-[695px] md:w-fit object-cover;
+  @apply w-full h-full object-cover; /* Ensure full height and width */
 }
 
 .rightChild {
-  @apply w-full md:w-[60%] lg:w-[45%] h-full 
-   /* border-4 border-red-700 */
-   ;
+  @apply w-full md:w-1/2 lg:w-1/3 h-full flex items-center justify-center p-[20px]; /* Center content */
 }
 
 .formContainer {
-  @apply border-r-8 border-r-orange-300 border-b-8 border-b-orange-300 w-[90%] md:w-[80%] lg:w-[70%] h-[90vh] md:h-[90vh] lg:h-fit m-auto  p-[25px] pt-[40px] rounded-2xl shadow-2xl my-20;
+  @apply border-r-8 border-r-orange-300 border-b-8 border-b-orange-300 w-full md:w-4/5 lg:w-[80%] h-auto m-auto p-6 pt-10 rounded-2xl shadow-2xl; /* Adjust width and padding */
 }
 
 .heading {
-  @apply text-orange-500 text-3xl text-center font-semibold font-sans;
+  @apply text-orange-500 text-2xl md:text-3xl text-center font-semibold font-sans; /* Responsive text size */
 }
 
 .form {
-  @apply w-[100%]  m-auto  p-[28px] grid grid-cols-1 justify-around gap-8;
+  @apply w-full m-auto p-4 grid grid-cols-1 gap-6; /* Adjust padding and gap */
 }
 
 .inputBoxes {
-  @apply border-2 border-gray-400 p-[10px] md:p-[10px] lg:p-[10px] w-[100%] md:w-[100%] lg:w-[100%] rounded-lg shadow-lg;
+  @apply border-2 border-gray-400 p-3 w-full rounded-lg shadow-lg; /* Simplified padding */
 }
 
 .submitBtn {
-  @apply border-2 bg-orange-500 text-[18px] hover:bg-orange-700 text-white w-[60%] md:w-[70%] lg:w-[80%] font-normal p-[8px] rounded-xl m-auto;
+  @apply border-2 bg-orange-500 text-lg hover:bg-orange-700 text-white w-full md:w-3/4 lg:w-2/3 font-normal p-3 rounded-xl m-auto; /* Responsive width */
 }
 
 .linkBtn {
-  @apply text-[14px] md:text-[16px] lg:text-[16px]  text-orange-500 hover:text-[#250ef0];
+  @apply text-sm md:text-base lg:text-base text-orange-500 hover:text-blue-500; /* Responsive text size */
 }
 
-
-/* Add these styles to your existing CSS file */
 .inputGroup {
-  width: 100%;
-  margin-bottom: 15px;
+  @apply w-full mb-4; /* Consistent margin */
 }
 
 .inputError {
-  border: 1px solid #ff3333 !important;
+  @apply border-red-500; /* Use Tailwind color */
 }
 
 .errorText {
-  color: #ff3333;
-  font-size: 12px;
-  margin-top: 5px;
-  text-align: left;
+  @apply text-red-500 text-xs mt-1 text-left; /* Use Tailwind color and size */
 }
