@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "../styles/signup.module.css";
 import { handleSignUp } from "../redux/actions/signUpAction";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
