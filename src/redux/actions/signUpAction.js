@@ -1,38 +1,21 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import toast from "react-hot-toast";
 import { axiosInstance } from "../../utils/axiosInstance";
 
-const signUpData = (data) => {
-  return {
-    type: "SIGN_UP_SUCCESS",
-    payload: data,
-  };
-};
-
-export const handleSignUp = (formState, navigate) => {
-  return async (dispatch) => {
-    dispatch({ type: "SIGN_UP_REQUEST" });
+export const handleSignUp = createAsyncThunk(
+  'auth/signUp',
+  async ({ formState, navigate }, { rejectWithValue }) => {
     try {
-      const res = await axiosInstance.post(
-        import.meta.env.VITE_SIGNUP,
-        formState
-      );
+      const res = await axiosInstance.post(import.meta.env.VITE_SIGNUP, formState);
       if (res.status === 201) {
-        setTimeout(() => {
-          // localStorage.setItem("accessToken", res.data.accessToken);
-          dispatch(signUpData(res.data));
-          toast.success("User registered successfully!")
-          navigate("/login");
-        }, 1000);
+        toast.success("User registered successfully!");
+        navigate("/login");
+        return res.data;
       }
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "These Credentials Exists";
-      toast.error(errorMessage)
-        setTimeout(() => {
-        dispatch({ type: "SIGN_UP_ERROR", payload: errorMessage });
-      }, 1000);
-
-      console.error(error);
+      const errorMessage = error.response?.data?.message || "These Credentials Exists";
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
     }
-  };
-};
+  }
+);
