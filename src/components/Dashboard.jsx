@@ -1,6 +1,4 @@
-import { useEffect } from "react";
-import toast from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styles from "../styles/dashboard.module.css";
 import { clearCookie } from "../redux/actions/logoutAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,7 +10,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   // Ensure state variables are accessed correctly
-  const { user, isLoggedIn } = useSelector((state) => state.auth);
+  // const {isLoggedIn } = useSelector((state) => state.auth);
   //  useEffect(() => {
   //   //  if (isLoggedIn && user) {
   //   //   //  toast.success(`Welcome ${user}!`);

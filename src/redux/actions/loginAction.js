@@ -29,7 +29,7 @@ export const handleLogin = createAsyncThunk(
         setTimeout(() => {
           localStorage.setItem("accessToken", res.data.accessToken);
           dispatch(loginSuccess(res.data));
-          toast.success("Login successful");
+          toast.success(`Welcome ${res.data.user}`);
           navigate("/");
         }, 1000);
 

@@ -28,10 +28,8 @@ const Login = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false); // State for password visibility
   const dispatch = useDispatch();
-  const { loading, isLoggedIn } = useSelector((state) => state.auth);
-
-  // console.log(isLoggedIn, "islogin");
-
+  const { loading, user } = useSelector((state) => state.auth);
+  console.log(user, "User");
   // Validation functions
   const validateEmail = (email) => {
     if (!email.trim()) return "Email is required";
@@ -63,27 +61,6 @@ const Login = () => {
 
     return "";
   };
-
-  // // Handle input changes with validation
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormState({
-  //     ...formState,
-  //     [name]: value,
-  //   });
-
-  //   // Validate on change if field has been touched
-  //   if (touched[name]) {
-  //     let errorMessage = "";
-  //     if (name === "email") errorMessage = validateEmail(value);
-  //     else if (name === "password") errorMessage = validatePassword(value);
-
-  //     setErrors({
-  //       ...errors,
-  //       [name]: errorMessage,
-  //     });
-  //   }
-  // };
 
   // Handle blur events to mark fields as touched
   const handleBlur = (e) => {
@@ -198,7 +175,10 @@ const Login = () => {
                     onChange={(e) => {
                       setFormState({ ...formState, password: e.target.value });
                       setTouched({ ...touched, password: true });
-                      setErrors({...errors, password: validatePassword(e.target.value)})
+                      setErrors({
+                        ...errors,
+                        password: validatePassword(e.target.value),
+                      });
                     }}
                     onBlur={handleBlur}
                     required
@@ -264,7 +244,7 @@ const Login = () => {
 
               <div className="m-auto">
                 <p>
-                  Dont have account?{" "}
+                  Don&apos;t have account?{" "}
                   <button
                     onClick={() => navigate("/signup")}
                     className={styles.linkBtn}
