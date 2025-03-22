@@ -7,7 +7,7 @@ export const getUsers = createAsyncThunk(
   async (_, { rejectWithValue, dispatch }) => {
     // Remove the destructuring of navigate
     try {
-      // console.log("Hiiiiii getting users");
+      // console.log("Hi getting users");
       const res = await axiosInstance.get(`/users`);
       // console.log(res, "get users");
       dispatch(loginSuccess(res.data));

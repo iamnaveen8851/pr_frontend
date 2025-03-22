@@ -12,7 +12,7 @@ const SignUp = () => {
   const dispatch = useDispatch();
 
   // Ensure state variables are accessed correctly
-  const { loading, isSignedUp, message } = useSelector((state) => state.auth);
+  const { loading} = useSelector((state) => state.auth);
 
   const [formState, setFormState] = useState({
     username: "",

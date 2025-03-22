@@ -1,7 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../../utils/axiosInstance";
-import { signUpRequest, signUpSuccess } from "../reducers/authSlice";
+import {
+  signUpError,
+  signUpRequest,
+  signUpSuccess,
+} from "../reducers/authSlice";
 
 export const handleSignUp = createAsyncThunk(
   "auth/signUp",
@@ -14,7 +18,7 @@ export const handleSignUp = createAsyncThunk(
       );
       if (res.status === 201) {
         setTimeout(() => {
-          toast.success("User registered successfully!");
+          toast.success(`${res.data.user.username} Registered Successfully!`);
           dispatch(signUpSuccess(res.data));
           navigate("/login");
         }, 1000);
@@ -23,6 +27,7 @@ export const handleSignUp = createAsyncThunk(
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "These Credentials Exists";
+      dispatch(signUpError());
       toast.error(errorMessage);
       return rejectWithValue(errorMessage);
     }

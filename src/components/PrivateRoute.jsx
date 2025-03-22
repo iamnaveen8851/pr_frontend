@@ -2,12 +2,12 @@
 import { Navigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { getUsers } from "../redux/actions/getUserAction";
 import { useEffect } from "react";
 
 const PrivateRoute = ({ children }) => {
-  const { isLoggedIn, isSignedUp } = useSelector((state) => state.auth);
+  // const { isLoggedIn, isSignedUp } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const token = localStorage.getItem("accessToken");
   useEffect(() => {
