@@ -30,19 +30,37 @@ const Login = () => {
   const dispatch = useDispatch();
   const { loading, isLoggedIn } = useSelector((state) => state.auth);
 
-  console.log(isLoggedIn, "islogin");
+  // console.log(isLoggedIn, "islogin");
 
   // Validation functions
   const validateEmail = (email) => {
     if (!email.trim()) return "Email is required";
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) return "Please enter a valid email address";
+    // Additional email validation
+    if (email.length > 100) return "Email must be less than 100 characters";
     return "";
   };
 
   const validatePassword = (password) => {
     if (!password) return "Password is required";
     if (password.length < 6) return "Password must be at least 6 characters";
+    if (password.length > 50) return "Password must be less than 50 characters";
+
+    // Add more comprehensive password validation
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumbers = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (!hasUpperCase)
+      return "Password must contain at least one uppercase letter";
+    if (!hasLowerCase)
+      return "Password must contain at least one lowercase letter";
+    if (!hasNumbers) return "Password must contain at least one number";
+    if (!hasSpecialChar)
+      return "Password must contain at least one special character";
+
     return "";
   };
 
@@ -111,13 +129,14 @@ const Login = () => {
     }
 
     setIsSubmitting(true);
-    console.log(formState, "formState");
+    // console.log(formState, "formState");
 
     dispatch(handleLogin({ formState, navigate }));
   };
 
   // To pass a message
   useEffect(() => {
+    console.log("Loading", loading);
     if (!loading) {
       setIsSubmitting(false);
     }
@@ -146,9 +165,14 @@ const Login = () => {
                   name="email"
                   placeholder="Email"
                   value={formState.email}
-                  onChange={(e) =>
-                    setFormState({ ...formState, email: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setFormState({ ...formState, email: e.target.value });
+                    setTouched({ ...touched, email: true });
+                    setErrors({
+                      ...errors,
+                      email: validateEmail(e.target.value),
+                    });
+                  }}
                   onBlur={handleBlur}
                   required
                 />
@@ -171,9 +195,11 @@ const Login = () => {
                     name="password"
                     placeholder="Password"
                     value={formState.password}
-                    onChange={(e) =>
-                      setFormState({ ...formState, password: e.target.value })
-                    }
+                    onChange={(e) => {
+                      setFormState({ ...formState, password: e.target.value });
+                      setTouched({ ...touched, password: true });
+                      setErrors({...errors, password: validatePassword(e.target.value)})
+                    }}
                     onBlur={handleBlur}
                     required
                   />
@@ -199,7 +225,13 @@ const Login = () => {
                     : ""
                 }`}
                 type="submit"
-                disabled={errors.email || errors.password || isSubmitting}
+                disabled={
+                  isSubmitting ||
+                  errors.email ||
+                  errors.password ||
+                  (!touched.email && !touched.password)
+                }
+                // disabled={errors.email || errors.password || isSubmitting}
               >
                 {isSubmitting ? (
                   <div className="flex items-center justify-center">

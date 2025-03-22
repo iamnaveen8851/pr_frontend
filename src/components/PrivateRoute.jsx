@@ -12,7 +12,7 @@ const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("accessToken");
   useEffect(() => {
     if (token) {
-      console.log("Dispatching getUsers from PrivateRoute");
+      // console.log("Dispatching getUsers from PrivateRoute");
       dispatch(getUsers());
     }
   }, [dispatch, token]);

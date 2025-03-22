@@ -38,6 +38,64 @@ const SignUp = () => {
     }
   }, [loading]);
 
+  // Validation functions
+  const validateUsername = (username) => {
+    if (!username.trim()) return "Username is required";
+    if (username.length < 3) return "Username must be at least 3 characters";
+    if (username.length > 20) return "Username must be less than 20 characters";
+    if (!/^[a-zA-Z0-9_]+$/.test(username))
+      return "Username can only contain letters, numbers and underscores";
+    return "";
+  };
+
+  const validateEmail = (email) => {
+    if (!email.trim()) return "Email is required";
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) return "Please enter a valid email address";
+    return "";
+  };
+
+  const validatePassword = (password) => {
+    if (!password) return "Password is required";
+    if (password.length < 6) return "Password must be at least 6 characters";
+    // Add more password validation rules if needed
+    // For example, check for uppercase, lowercase, numbers, special characters
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumbers = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (!hasUpperCase)
+      return "Password must contain at least one uppercase letter";
+    if (!hasLowerCase)
+      return "Password must contain at least one lowercase letter";
+    if (!hasNumbers) return "Password must contain at least one number";
+    if (!hasSpecialChar)
+      return "Password must contain at least one special character";
+
+    return "";
+  };
+  // Handle blur events to mark fields as touched
+  // Add the missing handleBlur function
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    setTouched({
+      ...touched,
+      [name]: true,
+    });
+
+    // Validate on blur
+    let errorMessage = "";
+    if (name === "username") errorMessage = validateUsername(value);
+    else if (name === "email") errorMessage = validateEmail(value);
+    else if (name === "password") errorMessage = validatePassword(value);
+
+    setErrors({
+      ...errors,
+      [name]: errorMessage,
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -93,7 +151,15 @@ const SignUp = () => {
                   name="username"
                   placeholder="Username"
                   value={formState.username}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    setFormState({ ...formState, username: e.target.value });
+                    // Mark as touched and validate on change
+                    setTouched({ ...touched, username: true });
+                    setErrors({
+                      ...errors,
+                      username: validateUsername(e.target.value),
+                    });
+                  }}
                   onBlur={handleBlur}
                   required
                 />
@@ -111,7 +177,15 @@ const SignUp = () => {
                   name="email"
                   placeholder="Email"
                   value={formState.email}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    setFormState({ ...formState, email: e.target.value });
+                    // Mark as touched and validate on change
+                    setTouched({ ...touched, email: true });
+                    setErrors({
+                      ...errors,
+                      email: validateEmail(e.target.value),
+                    });
+                  }}
                   onBlur={handleBlur}
                   required
                 />
@@ -132,7 +206,18 @@ const SignUp = () => {
                     name="password"
                     placeholder="Password"
                     value={formState.password}
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      setFormState({
+                        ...formState,
+                        password: e.target.value,
+                      });
+                      // Mark as touched and validate on change
+                      setTouched({ ...touched, password: true });
+                      setErrors({
+                        ...errors,
+                        password: validatePassword(e.target.value),
+                      });
+                    }}
                     onBlur={handleBlur}
                     required
                   />
