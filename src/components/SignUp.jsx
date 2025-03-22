@@ -4,15 +4,16 @@ import { handleSignUp } from "../redux/actions/signUpAction";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Import FontAwesomeIcon
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'; // Import eye icons
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 const SignUp = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, isSignedUp, message } = useSelector(
-    (state) => state.authReducer
-  );
+
+  // Ensure state variables are accessed correctly
+  const { loading, isSignedUp, message } = useSelector((state) => state.auth);
+
   const [formState, setFormState] = useState({
     username: "",
     email: "",
@@ -29,80 +30,13 @@ const SignUp = () => {
     password: false,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // State for password visibility
+  const [showPassword, setShowPassword] = useState(false);
 
-  // Validation functions
-  const validateUsername = (username) => {
-    if (!username.trim()) return "Username is required";
-    if (username.length < 3) return "Username must be at least 3 characters";
-    if (username.length > 20) return "Username must be less than 20 characters";
-    if (!/^[a-zA-Z0-9_]+$/.test(username))
-      return "Username can only contain letters, numbers and underscores";
-    return "";
-  };
-
-  const validateEmail = (email) => {
-    if (!email.trim()) return "Email is required";
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) return "Please enter a valid email address";
-    return "";
-  };
-
-  const validatePassword = (password) => {
-    if (!password) return "Password is required";
-    if (password.length < 8) return "Password must be at least 8 characters";
-    if (!/[A-Z]/.test(password))
-      return "Password must contain at least one uppercase letter";
-    if (!/[a-z]/.test(password))
-      return "Password must contain at least one lowercase letter";
-    if (!/[0-9]/.test(password))
-      return "Password must contain at least one number";
-    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password))
-      return "Password must contain at least one special character";
-    return "";
-  };
-
-  // Handle input changes with validation
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormState({
-      ...formState,
-      [name]: value,
-    });
-
-    // Validate on change if field has been touched
-    if (touched[name]) {
-      let errorMessage = "";
-      if (name === "username") errorMessage = validateUsername(value);
-      else if (name === "email") errorMessage = validateEmail(value);
-      else if (name === "password") errorMessage = validatePassword(value);
-
-      setErrors({
-        ...errors,
-        [name]: errorMessage,
-      });
+  useEffect(() => {
+    if (!loading) {
+      setIsSubmitting(false);
     }
-  };
-
-  // Handle blur events to mark fields as touched
-  const handleBlur = (e) => {
-    const { name, value } = e.target;
-    setTouched({
-      ...touched,
-      [name]: true,
-    });
-
-    // Validate on blur
-    let errorMessage = "";
-    if (name === "username") errorMessage = validateUsername(value);
-    else if (name === "email") errorMessage = validateEmail(value);
-    else if (name === "password") errorMessage = validatePassword(value);
-
-    setErrors({
-      ...errors,
-      [name]: errorMessage,
-    });
-  };
+  }, [loading]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -133,14 +67,8 @@ const SignUp = () => {
 
     setIsSubmitting(true);
     console.log("Sign up form submitted:", formState);
-    dispatch(handleSignUp(formState, navigate));
+    dispatch(handleSignUp({ formState, navigate }));
   };
-
-  useEffect(() => {
-    if (!loading) {
-      setIsSubmitting(false);
-    }
-  }, [isSignedUp, message, loading]);
 
   return (
     <>
@@ -196,7 +124,9 @@ const SignUp = () => {
                 <div className="relative">
                   <input
                     className={`${styles.inputBoxes} ${
-                      errors.password && touched.password ? styles.inputError : ""
+                      errors.password && touched.password
+                        ? styles.inputError
+                        : ""
                     }`}
                     type={showPassword ? "text" : "password"} // Toggle input type
                     name="password"
@@ -210,7 +140,8 @@ const SignUp = () => {
                     className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
                     onClick={() => setShowPassword(!showPassword)} // Toggle visibility
                   >
-                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} /> {/* Toggle icon */}
+                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />{" "}
+                    {/* Toggle icon */}
                   </span>
                 </div>
                 {errors.password && touched.password && (

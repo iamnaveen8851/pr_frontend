@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { handleLogin } from "../redux/actions/loginAction";
 import toast from "react-hot-toast";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Import FontAwesomeIcon
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'; // Import eye icons
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Import FontAwesomeIcon
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"; // Import eye icons
 
 const Login = () => {
   const navigate = useNavigate();
@@ -28,9 +28,9 @@ const Login = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false); // State for password visibility
   const dispatch = useDispatch();
-  const { loading, message, isLoggedIn } = useSelector(
-    (state) => state.authReducer
-  );
+  const { loading, isLoggedIn } = useSelector((state) => state.auth);
+
+  console.log(isLoggedIn, "islogin");
 
   // Validation functions
   const validateEmail = (email) => {
@@ -46,26 +46,26 @@ const Login = () => {
     return "";
   };
 
-  // Handle input changes with validation
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormState({
-      ...formState,
-      [name]: value,
-    });
+  // // Handle input changes with validation
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormState({
+  //     ...formState,
+  //     [name]: value,
+  //   });
 
-    // Validate on change if field has been touched
-    if (touched[name]) {
-      let errorMessage = "";
-      if (name === "email") errorMessage = validateEmail(value);
-      else if (name === "password") errorMessage = validatePassword(value);
+  //   // Validate on change if field has been touched
+  //   if (touched[name]) {
+  //     let errorMessage = "";
+  //     if (name === "email") errorMessage = validateEmail(value);
+  //     else if (name === "password") errorMessage = validatePassword(value);
 
-      setErrors({
-        ...errors,
-        [name]: errorMessage,
-      });
-    }
-  };
+  //     setErrors({
+  //       ...errors,
+  //       [name]: errorMessage,
+  //     });
+  //   }
+  // };
 
   // Handle blur events to mark fields as touched
   const handleBlur = (e) => {
@@ -111,7 +111,9 @@ const Login = () => {
     }
 
     setIsSubmitting(true);
-    dispatch(handleLogin(formState, navigate));
+    console.log(formState, "formState");
+
+    dispatch(handleLogin({ formState, navigate }));
   };
 
   // To pass a message
@@ -119,7 +121,7 @@ const Login = () => {
     if (!loading) {
       setIsSubmitting(false);
     }
-  }, [isLoggedIn, message, loading]);
+  }, [loading, isSubmitting]);
 
   return (
     <>
@@ -144,7 +146,9 @@ const Login = () => {
                   name="email"
                   placeholder="Email"
                   value={formState.email}
-                  onChange={handleChange}
+                  onChange={(e) =>
+                    setFormState({ ...formState, email: e.target.value })
+                  }
                   onBlur={handleBlur}
                   required
                 />
@@ -159,13 +163,17 @@ const Login = () => {
                 <div className="relative">
                   <input
                     className={`${styles.inputBoxes} ${
-                      errors.password && touched.password ? "border border-red-500" : ""
+                      errors.password && touched.password
+                        ? "border border-red-500"
+                        : ""
                     }`}
                     type={showPassword ? "text" : "password"} // Toggle input type
                     name="password"
                     placeholder="Password"
                     value={formState.password}
-                    onChange={handleChange}
+                    onChange={(e) =>
+                      setFormState({ ...formState, password: e.target.value })
+                    }
                     onBlur={handleBlur}
                     required
                   />
@@ -173,7 +181,8 @@ const Login = () => {
                     className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
                     onClick={() => setShowPassword(!showPassword)} // Toggle visibility
                   >
-                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} /> {/* Toggle icon */}
+                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />{" "}
+                    {/* Toggle icon */}
                   </span>
                 </div>
                 {errors.password && touched.password && (

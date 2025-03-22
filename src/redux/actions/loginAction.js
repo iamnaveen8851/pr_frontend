@@ -1,44 +1,38 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../../utils/axiosInstance";
+import { loginSuccess } from "../reducers/authSlice";
 
-const getLoginData = (data) => {
-  return {
-    type: "LOGIN_SUCCESS",
-    payload: data,
-  };
-};
-
-export const handleLogin = (formState, navigate) => {
-  return async (dispatch) => {
-    dispatch({ type: "LOGIN_REQUEST" });
+export const handleLogin = createAsyncThunk(
+  import.meta.env.VITE_LOGIN,
+  async ({ formState, navigate }, { rejectWithValue, dispatch }) => {
+    console.log(formState);
 
     try {
+      console.log("API Endpoint:", import.meta.env.VITE_LOGIN); // Log the endpoint
+      console.log(formState, "....formState");
       const res = await axiosInstance.post(
         import.meta.env.VITE_LOGIN,
-        formState
+        formState,
+        {
+          headers: {
+            "Content-Type": "application/json", // Ensure correct headers are set
+          },
+        }
       );
-
-      console.log(res, ".......res");
       if (res.status === 200) {
-        // To add a delay before the dashboard is visible to show the loading
-        setTimeout(() => {
-          dispatch(getLoginData(res.data));
-          localStorage.setItem("accessToken", res.data.accessToken);
-          console.log(res.data, "----");
+        localStorage.setItem("accessToken", res.data.accessToken);
+        toast.success("Login successful");
+        navigate("/");
+        dispatch(loginSuccess(res.data));
 
-          navigate("/");
-        }, 1000);
+        return res.data;
       }
     } catch (error) {
-      // Extract error message safely
-      console.log(error);
       const errorMessage =
         error.response?.data?.message || "Login failed. Please try again.";
       toast.error(errorMessage);
-      console.log(errorMessage, "............error");
-      setTimeout(() => {
-        dispatch({ type: "LOGIN_FAILURE", payload: errorMessage });
-      }, 1000);
+      return rejectWithValue(errorMessage);
     }
-  };
-};
+  }
+);
