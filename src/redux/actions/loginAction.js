@@ -1,16 +1,21 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../../utils/axiosInstance";
-import { loginSuccess } from "../reducers/authSlice";
+import {
+  loginFailure,
+  loginRequest,
+  loginSuccess,
+} from "../reducers/authSlice";
 
 export const handleLogin = createAsyncThunk(
   import.meta.env.VITE_LOGIN,
   async ({ formState, navigate }, { rejectWithValue, dispatch }) => {
-    console.log(formState);
+    // console.log(formState);
 
     try {
-      console.log("API Endpoint:", import.meta.env.VITE_LOGIN); // Log the endpoint
-      console.log(formState, "....formState");
+      dispatch(loginRequest());
+      // console.log("API Endpoint:", import.meta.env.VITE_LOGIN); // Log the endpoint
+      // console.log(formState, "....formState");
       const res = await axiosInstance.post(
         import.meta.env.VITE_LOGIN,
         formState,
@@ -21,16 +26,19 @@ export const handleLogin = createAsyncThunk(
         }
       );
       if (res.status === 200) {
-        localStorage.setItem("accessToken", res.data.accessToken);
-        toast.success("Login successful");
-        navigate("/");
-        dispatch(loginSuccess(res.data));
+        setTimeout(() => {
+          localStorage.setItem("accessToken", res.data.accessToken);
+          dispatch(loginSuccess(res.data));
+          toast.success("Login successful");
+          navigate("/");
+        }, 1000);
 
         return res.data;
       }
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "Login failed. Please try again.";
+      dispatch(loginFailure());
       toast.error(errorMessage);
       return rejectWithValue(errorMessage);
     }
