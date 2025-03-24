@@ -28,7 +28,7 @@ const Login = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false); // State for password visibility
   const dispatch = useDispatch();
-  const { loading, user } = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.auth);
 
   // Validation functions
   const validateEmail = (email) => {
