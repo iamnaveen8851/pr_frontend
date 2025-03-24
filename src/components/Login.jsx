@@ -29,7 +29,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false); // State for password visibility
   const dispatch = useDispatch();
   const { loading, user } = useSelector((state) => state.auth);
-  console.log(user, "User");
+
   // Validation functions
   const validateEmail = (email) => {
     if (!email.trim()) return "Email is required";

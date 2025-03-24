@@ -9,12 +9,13 @@ const PrivateRoute = ({ children }) => {
   // const { isLoggedIn, isSignedUp } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const token = localStorage.getItem("accessToken");
-  useEffect(() => {
-    if (token) {
-      // console.log("Dispatching getUsers from PrivateRoute");
-      dispatch(getUsers());
-    }
-  }, [dispatch, token]);
+  // useEffect(() => {
+  //   if (token) {
+  //     // console.log("Dispatching getUsers from PrivateRoute");
+
+  //     // dispatch(getUsers());
+  //   }
+  // }, [dispatch, token]);
   // Use ternary operator for conditional rendering
   return token ? children : <Navigate to="/login" />;
 };

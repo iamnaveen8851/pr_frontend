@@ -14,7 +14,6 @@ const Dashboard = () => {
     console.log("logout Clicked");
 
     dispatch(clearCookie({ navigate }));
-    // navigate("/login");
   };
 
   return (
