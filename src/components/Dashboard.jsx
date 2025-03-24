@@ -3,20 +3,13 @@ import styles from "../styles/dashboard.module.css";
 import { clearCookie } from "../redux/actions/logoutAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Ensure state variables are accessed correctly
-  // const {isLoggedIn } = useSelector((state) => state.auth);
-  //  useEffect(() => {
-  //   //  if (isLoggedIn && user) {
-  //   //   //  toast.success(`Welcome ${user}!`);
-  //   //  }
-  //  }, [isLoggedIn, user]);
-
+  // handle logout
   const handleLogout = () => {
     console.log("logout Clicked");
 
