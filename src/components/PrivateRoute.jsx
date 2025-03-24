@@ -1,21 +1,11 @@
 import { Navigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
-import { useDispatch } from "react-redux";
-import { getUsers } from "../redux/actions/getUserAction";
-import { useEffect } from "react";
-
 const PrivateRoute = ({ children }) => {
   // const { isLoggedIn, isSignedUp } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
-  const token = localStorage.getItem("accessToken");
-  // useEffect(() => {
-  //   if (token) {
-  //     // console.log("Dispatching getUsers from PrivateRoute");
 
-  //     // dispatch(getUsers());
-  //   }
-  // }, [dispatch, token]);
+  const token = localStorage.getItem("accessToken");
+
   // Use ternary operator for conditional rendering
   return token ? children : <Navigate to="/login" />;
 };
