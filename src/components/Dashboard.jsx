@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { clearCookie } from "../redux/actions/logoutAction";
+
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import TaskForm from "./TaskForm";
@@ -11,7 +11,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
   const [showTaskForm, setShowTaskForm] = useState(false);
   const { tasks, loading, error } = useSelector((state) => state.tasks);
   const [columns, setColumns] = useState({
