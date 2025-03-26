@@ -6,6 +6,7 @@ const initialState = {
   isLoggedIn: false,
   message: "",
   user: null,
+  // role: null,
 };
 
 const authSlice = createSlice({

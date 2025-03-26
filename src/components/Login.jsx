@@ -2,13 +2,22 @@ import { useEffect, useState } from "react";
 import styles from "../styles/login.module.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { handleLogin } from "../redux/actions/loginAction";
+import {
+  handleGithubLogin,
+  handleGoogleLogin,
+  handleLogin,
+} from "../redux/actions/loginAction";
 import toast from "react-hot-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Import FontAwesomeIcon
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"; // Import eye icons
+import { GoogleLogin } from "@react-oauth/google";
+import { signInWithPopup } from "firebase/auth";
+import { auth, githubProvider } from "../../config";
+import { GithubAuthProvider } from "firebase/auth/web-extension";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [formState, setFormState] = useState({
     email: "",
     password: "",
@@ -27,7 +36,7 @@ const Login = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false); // State for password visibility
-  const dispatch = useDispatch();
+
   const { loading } = useSelector((state) => state.auth);
 
   // Validation functions
@@ -109,6 +118,57 @@ const Login = () => {
     // console.log(formState, "formState");
 
     dispatch(handleLogin({ formState, navigate }));
+  };
+
+  // handle Google login
+  const handleGoogleLoginSuccess = (res) => {
+    console.log("login success", res);
+    dispatch(
+      handleGoogleLogin({
+        credential: res.credential,
+        clientId: res.clientId,
+        navigate,
+      })
+    );
+  };
+
+  const handleGoogleLoginError = () => {
+    toast.error("Google login failed. Please try again.");
+  };
+
+  // Github login handler
+  const handleGithubLoginClick = async () => {
+    try {
+      setIsSubmitting(true);
+      const result = await signInWithPopup(auth, githubProvider);
+
+      // Get GitHub access token
+      const credential = GithubAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+
+      // Get user info
+      const user = result.user;
+
+      console.log("GitHub login success:", user, token);
+
+      // Now send this data to your backend using Redux action
+      dispatch(
+        handleGithubLogin({
+          token,
+          user: {
+            uid: user.uid,
+            displayName: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+          },
+          navigate,
+        })
+      );
+    } catch (error) {
+      console.error("GitHub login error:", error);
+      toast.error("GitHub login failed. Please try again.");
+      setIsSubmitting(false);
+    }
   };
 
   // To pass a message
@@ -241,6 +301,44 @@ const Login = () => {
                   "Sign In"
                 )}
               </button>
+
+              {/* Social Login Options */}
+              <div className="mt-4 mb-4">
+                <div className="flex items-center justify-center mb-3">
+                  <div className="flex-grow border-t border-gray-300"></div>
+                  <span className="mx-4 text-sm text-gray-500">
+                    Or continue with
+                  </span>
+                  <div className="flex-grow border-t border-gray-300"></div>
+                </div>
+
+                <div className="w-full flex justify-center space-x-4">
+                  <div className="flex-1 max-w-[180px] flex justify-center">
+                    <GoogleLogin
+                      onSuccess={handleGoogleLoginSuccess}
+                      onError={handleGoogleLoginError}
+                      width="180px"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleGithubLoginClick}
+                    className="flex-1 max-w-[180px] h-[40px] flex items-center justify-center px-4 py-1 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  >
+                    <img
+                      src="/github-icon.png"
+                      alt="GitHub"
+                      className="h-4 w-4 mr-2"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src =
+                          "https://cdn-icons-png.flaticon.com/512/25/25231.png";
+                      }}
+                    />
+                    GitHub
+                  </button>
+                </div>
+              </div>
 
               <div className="m-auto">
                 <p>

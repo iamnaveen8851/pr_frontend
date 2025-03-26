@@ -44,3 +44,74 @@ export const handleLogin = createAsyncThunk(
     }
   }
 );
+
+export const handleGoogleLogin = createAsyncThunk(
+  "users/google-login",
+  async ({ credential, clientId, navigate }, { rejectWithValue, dispatch }) => {
+    try {
+      const res = await axiosInstance.post(
+        "/auth/google/verify-token",
+
+        {
+          credential,
+          clientId,
+        },
+        { withCredentials: true }
+      );
+
+      console.log("Res", res);
+
+      if (res.status === 200) {
+        setTimeout(() => {
+          localStorage.setItem("accessToken", res.data.accessToken);
+          dispatch(loginSuccess(res.data));
+          navigate("/");
+          // toast.success(`Welcome ${res.data.user}!`);
+        }, 1000);
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        "Google Login failed. Please try again.";
+      dispatch(loginFailure());
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const handleGithubLogin = createAsyncThunk(
+  "auth/githubLogin",
+  async ({ token, user, navigate }, { rejectWithValue, dispatch }) => {
+    try {
+      const res = await axiosInstance.post(
+        "/auth/github-firebase",
+        {
+          accessToken: token,
+          user: {
+            uid: user.uid,
+            displayName: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+          },
+        },
+        { withCredentials: true }
+      );
+
+      console.log("Github login res: ", res);
+
+      if (res.status === 200) {
+        setTimeout(() => {
+          localStorage.setItem("accessToken", res.data.accessToken);
+          dispatch(loginSuccess(res.data));
+          toast.success(`Welcome ${res.data.user}!`);
+          navigate("/");
+        }, 1000);
+        return res.data;
+      }
+    } catch (error) {
+      toast.error(error.message || "GitHub login failed");
+      return rejectWithValue(error.message || "GitHub login failed");
+    }
+  }
+);
