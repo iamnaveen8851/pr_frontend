@@ -118,6 +118,7 @@ const Login = () => {
     // console.log(formState, "formState");
 
     dispatch(handleLogin({ formState, navigate }));
+    console.log(formState, "for change");
   };
 
   // handle Google login
@@ -171,14 +172,12 @@ const Login = () => {
     }
   };
 
-  // To pass a message
   useEffect(() => {
     console.log("Loading", loading);
     if (!loading) {
       setIsSubmitting(false);
     }
-  }, [loading, isSubmitting]);
-
+  }, [loading]);
   return (
     <>
       <div className={styles.parentContainer}>
