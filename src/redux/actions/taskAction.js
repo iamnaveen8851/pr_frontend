@@ -36,7 +36,7 @@ export const updateTask = createAsyncThunk(
   async ({ id, taskData }, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.patch(
-        `/api/tasks/updateTask/${id}`,
+        `/tasks/updateTask/${id}`,
         taskData
       );
       return res.data;
@@ -67,7 +67,7 @@ export const deleteTask = createAsyncThunk(
   "tasks/deleteTask",
   async (id, { rejectWithValue }) => {
     try {
-      await axiosInstance.delete(`/api/tasks/${id}`);
+      await axiosInstance.delete(`/tasks/deleteTask/${id}`);
       return id;
     } catch (error) {
       return rejectWithValue(error.response.data);

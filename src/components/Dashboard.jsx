@@ -5,7 +5,12 @@ import Navbar from "./Navbar";
 import TaskForm from "./TaskForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faEllipsisH } from "@fortawesome/free-solid-svg-icons"; // Use horizontal three dots
-import { fetchTasks, updateTaskStatus, deleteTask, updateTask } from "../redux/actions/taskAction";
+import {
+  fetchTasks,
+  updateTaskStatus,
+  deleteTask,
+  updateTask,
+} from "../redux/actions/taskAction";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const Dashboard = () => {
@@ -22,6 +27,10 @@ const Dashboard = () => {
     Review: { id: "Review", title: "Review", tasks: [] },
     Completed: { id: "Completed", title: "Done", tasks: [] },
   });
+
+  // In your Dashboard.jsx
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [currentTask, setCurrentTask] = useState(null);
 
   useEffect(() => {
     dispatch(fetchTasks());
@@ -61,7 +70,7 @@ const Dashboard = () => {
 
       setColumns(newColumns);
     }
-  }, [tasks]);
+  }, [tasks]); // check this because to avoid maximum depth exceeded error
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -131,9 +140,14 @@ const Dashboard = () => {
     setMenuOpen(null); // Close menu after action
   };
 
+  // to update the task state variable and ieEditModalopen state
+  const handleEditClick = (task) => {
+    setCurrentTask(task);
+    setIsEditModalOpen(true);
+  };
   const handleEditTask = (task) => {
-    setTaskToEdit(task);
-    setShowTaskForm(true);
+    // Update to use the new edit modal approach
+    handleEditClick(task);
     setMenuOpen(null); // Close menu after action
   };
 
@@ -240,7 +254,9 @@ const Dashboard = () => {
                                   <div
                                     ref={menuRef}
                                     className="absolute top-0 right-0 mt-8 mr-2 w-32 bg-white rounded-md shadow-lg z-10 transition-opacity duration-300 ease-in-out opacity-0"
-                                    style={{ opacity: menuOpen === task._id ? 1 : 0 }}
+                                    style={{
+                                      opacity: menuOpen === task._id ? 1 : 0,
+                                    }}
                                   >
                                     <div className="py-1">
                                       <button
@@ -294,6 +310,18 @@ const Dashboard = () => {
             dispatch(fetchTasks());
           }}
           taskToEdit={taskToEdit}
+        />
+      )}
+
+      {isEditModalOpen && (
+        <TaskForm
+          onClose={() => {
+            setIsEditModalOpen(false);
+            dispatch(fetchTasks());
+          }}
+          isEditing={true}
+          initialData={currentTask}
+          onUpdate={handleTaskUpdate}
         />
       )}
     </div>
