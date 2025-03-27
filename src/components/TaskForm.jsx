@@ -380,7 +380,7 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
           console.error("Task ID is missing for update operation");
           return;
         }
-        
+
         // Pass the task ID and task data to the updateTask action
         dispatch(updateTask({ id: taskData._id, taskData }))
           .unwrap()
@@ -403,13 +403,34 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
     }
   };
 
-  // ... existing code ...
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setTaskData({
-      ...taskData,
-      [name]: value,
-    });
+    // Special handling for assignedTo and assignedBy to store both ID and username
+    if (name === 'assignedTo' || name === 'assignedBy') {
+      const selectedUser = users.find(user => user._id === value);
+      if (selectedUser) {
+        // Store username in the task data
+        setTaskData({
+          ...taskData,
+          [name]: value,
+          [`${name}Name`]: selectedUser.username
+        });
+        
+        // Also store in localStorage for reference
+        localStorage.setItem(`${name}Name`, selectedUser.username);
+        localStorage.setItem(`${name}Role`, selectedUser.role);
+      } else {
+        setTaskData({
+          ...taskData,
+          [name]: value
+        });
+      }
+    } else {
+      setTaskData({
+        ...taskData,
+        [name]: value,
+      });
+    }
   };
 
   const priorityOptions = ["Low", "Medium", "High"];

@@ -34,7 +34,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(fetchTasks());
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -70,7 +70,7 @@ const Dashboard = () => {
 
       setColumns(newColumns);
     }
-  }, [tasks]); // check this because to avoid maximum depth exceeded error
+  }, [tasks]);
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -209,14 +209,25 @@ const Dashboard = () => {
                                 className={`p-3 rounded-md shadow mb-2 ${
                                   snapshot.isDragging ? "opacity-75" : ""
                                 } group relative ${
-                                  task.status === "Pending" ? "bg-white" : 
-                                  task.status === "In Progress" ? "bg-blue-50" : 
-                                  task.status === "Review" ? "bg-yellow-50" : 
-                                  task.status === "Completed" ? "bg-green-50" : "bg-white"
+                                  task.status === "Pending"
+                                    ? "bg-white"
+                                    : task.status === "In Progress"
+                                    ? "bg-blue-50"
+                                    : task.status === "Review"
+                                    ? "bg-yellow-50"
+                                    : task.status === "Completed"
+                                    ? "bg-green-50"
+                                    : "bg-white"
                                 }`}
                               >
                                 <div className="flex justify-between items-center">
-                                  <div className={`font-medium ${task.status === "Completed" ? "line-through text-gray-500" : ""}`}>
+                                  <div
+                                    className={`font-medium ${
+                                      task.status === "Completed"
+                                        ? "line-through text-gray-500"
+                                        : ""
+                                    }`}
+                                  >
                                     {task.title}
                                   </div>
                                   <div className="p-1 w-[18%] rounded-md hover:bg-gray-200 transition-colors flex justify-center ">
@@ -230,9 +241,63 @@ const Dashboard = () => {
                                     />
                                   </div>
                                 </div>
-                                <div className={`text-sm text-gray-600 truncate ${task.status === "Completed" ? "line-through" : ""}`}>
+                                <div
+                                  className={`text-sm text-gray-600 truncate ${
+                                    task.status === "Completed"
+                                      ? "line-through"
+                                      : ""
+                                  }`}
+                                >
                                   {task.description}
                                 </div>
+
+                                {/* Assignment information */}
+                                <div className="mt-2 text-xs text-gray-500 flex flex-col gap-2">
+                                  {task.assignedTo && (
+                                    <div className="flex items-center">
+                                      <span className="font-semibold mr-1">
+                                        Assigned to:
+                                      </span>
+                                      <span>
+                                        {task.assignedToName ||
+                                          (typeof task.assignedTo ===
+                                            "object" &&
+                                            task.assignedTo.username) ||
+                                          "Unknown"}{" "}
+                                        <span className="bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded-full text-xs">
+                                          {task.assignedTo.role ||
+                                            (typeof task.assignedTo ===
+                                              "object" &&
+                                              task.assignedTo.role) ||
+                                            ""}
+                                        </span>
+                                      </span>
+                                    </div>
+                                  )}
+                                  {" "}
+                                  {task.assignedBy && (
+                                    <div className="flex items-center">
+                                      <span className="font-semibold mr-1">
+                                        Assigned by:
+                                      </span>
+                                      <span>
+                                        {task.assignedByName ||
+                                          (typeof task.assignedBy ===
+                                            "object" &&
+                                            task.assignedBy.username) ||
+                                          "Unknown"}{" "}
+                                        <span className="bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded-full text-xs">
+                                          {task.assignedBy.role ||
+                                            (typeof task.assignedBy ===
+                                              "object" &&
+                                              task.assignedBy.role) ||
+                                            ""}
+                                        </span>
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+
                                 <div className="flex justify-between items-center mt-2">
                                   <span
                                     className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
@@ -326,7 +391,6 @@ const Dashboard = () => {
           }}
           isEditing={true}
           initialData={currentTask}
-          
         />
       )}
     </div>
