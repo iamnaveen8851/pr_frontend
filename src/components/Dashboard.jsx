@@ -6,7 +6,7 @@ import Navbar from "./Navbar";
 import TaskForm from "./TaskForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { fetchTasks } from "../redux/actions/taskAction";
+import { fetchTasks, updateTaskStatus } from "../redux/actions/taskAction";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const Dashboard = () => {
@@ -85,6 +85,9 @@ const Dashboard = () => {
 
     setColumns(newColumns);
 
+    dispatch(
+      updateTaskStatus({ taskId: draggableId, status: destination.droppableId })
+    );
     // Here you would dispatch an action to update the task status in the backend
     // dispatch(updateTaskStatus({ taskId: draggableId, status: destination.droppableId }));
   };

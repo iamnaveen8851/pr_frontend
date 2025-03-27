@@ -18,12 +18,12 @@ export const fetchTasks = createAsyncThunk(
 
 export const createTask = createAsyncThunk(
   "tasks/createTask",
-  async (taskData, { rejectWithValue,  }) => {
+  async (taskData, { rejectWithValue }) => {
     // console.log("taskData", taskData);
     try {
       const res = await axiosInstance.post("/tasks/createTask", taskData);
       console.log("res of task created...", res.data.task);
-    
+
       return res.data.task;
     } catch (error) {
       return rejectWithValue(error.response.data);
