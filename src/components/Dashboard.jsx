@@ -1,18 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import TaskForm from "./TaskForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { fetchTasks, updateTaskStatus } from "../redux/actions/taskAction";
+import { faPlus, faEllipsisH } from "@fortawesome/free-solid-svg-icons"; // Use horizontal three dots
+import { fetchTasks, updateTaskStatus, deleteTask, updateTask } from "../redux/actions/taskAction";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-
   const [showTaskForm, setShowTaskForm] = useState(false);
+  const [taskToEdit, setTaskToEdit] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(null);
+  const menuRef = useRef(null); // Ref to track the menu
+
   const { tasks, loading, error } = useSelector((state) => state.tasks);
   const [columns, setColumns] = useState({
     Pending: { id: "Pending", title: "To Do", tasks: [] },
@@ -24,6 +26,19 @@ const Dashboard = () => {
   useEffect(() => {
     dispatch(fetchTasks());
   }, [dispatch]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuRef]);
 
   // Organize tasks into columns by status
   useEffect(() => {
@@ -111,6 +126,21 @@ const Dashboard = () => {
     return <Droppable {...props}>{children}</Droppable>;
   };
 
+  const handleDeleteTask = (taskId) => {
+    dispatch(deleteTask(taskId));
+    setMenuOpen(null); // Close menu after action
+  };
+
+  const handleEditTask = (task) => {
+    setTaskToEdit(task);
+    setShowTaskForm(true);
+    setMenuOpen(null); // Close menu after action
+  };
+
+  const toggleMenu = (taskId) => {
+    setMenuOpen(menuOpen === taskId ? null : taskId);
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <Navbar />
@@ -164,9 +194,23 @@ const Dashboard = () => {
                                 {...provided.dragHandleProps}
                                 className={`bg-white p-3 rounded-md shadow mb-2 ${
                                   snapshot.isDragging ? "opacity-75" : ""
-                                }`}
+                                } group relative`}
                               >
-                                <div className="font-medium">{task.title}</div>
+                                <div className="flex justify-between items-center">
+                                  <div className="font-medium">
+                                    {task.title}
+                                  </div>
+                                  <div className="p-1 w-[18%] rounded-md hover:bg-gray-200 transition-colors flex justify-center ">
+                                    <FontAwesomeIcon
+                                      icon={faEllipsisH}
+                                      className="cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        toggleMenu(task._id);
+                                      }}
+                                    />
+                                  </div>
+                                </div>
                                 <div className="text-sm text-gray-600 truncate">
                                   {task.description}
                                 </div>
@@ -190,6 +234,36 @@ const Dashboard = () => {
                                     ).toLocaleDateString()}
                                   </span>
                                 </div>
+
+                                {/* Menu for edit and delete actions - positioned relative to the task card */}
+                                {menuOpen === task._id && (
+                                  <div
+                                    ref={menuRef}
+                                    className="absolute top-0 right-0 mt-8 mr-2 w-32 bg-white rounded-md shadow-lg z-10 transition-opacity duration-300 ease-in-out opacity-0"
+                                    style={{ opacity: menuOpen === task._id ? 1 : 0 }}
+                                  >
+                                    <div className="py-1">
+                                      <button
+                                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          handleEditTask(task);
+                                        }}
+                                      >
+                                        Edit
+                                      </button>
+                                      <button
+                                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          handleDeleteTask(task._id);
+                                        }}
+                                      >
+                                        Delete
+                                      </button>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                             )}
                           </Draggable>
@@ -216,9 +290,10 @@ const Dashboard = () => {
         <TaskForm
           onClose={() => {
             setShowTaskForm(false);
-            // Refresh tasks after creating a new one
+            setTaskToEdit(null);
             dispatch(fetchTasks());
           }}
+          taskToEdit={taskToEdit}
         />
       )}
     </div>
