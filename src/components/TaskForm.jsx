@@ -319,6 +319,20 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
   const { loading: taskLoading } = useSelector((state) => state.tasks);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Get the current theme from localStorage
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
+  // Update theme when it changes in localStorage
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setTheme(localStorage.getItem("theme") || "light");
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
   const [taskData, setTaskData] = useState({
     title: "",
@@ -374,6 +388,7 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
+      onClose();
       if (isEditing) {
         // Make sure we have the task ID before dispatching the update action
         if (!taskData._id) {
@@ -406,23 +421,23 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     // Special handling for assignedTo and assignedBy to store both ID and username
-    if (name === 'assignedTo' || name === 'assignedBy') {
-      const selectedUser = users.find(user => user._id === value);
+    if (name === "assignedTo" || name === "assignedBy") {
+      const selectedUser = users.find((user) => user._id === value);
       if (selectedUser) {
         // Store username in the task data
         setTaskData({
           ...taskData,
           [name]: value,
-          [`${name}Name`]: selectedUser.username
+          [`${name}Name`]: selectedUser.username,
         });
-        
+
         // Also store in localStorage for reference
-        localStorage.setItem(`${name}Name`, selectedUser.username);
-        localStorage.setItem(`${name}Role`, selectedUser.role);
+        // localStorage.setItem(`${name}Name`, selectedUser.username);
+        // localStorage.setItem(`${name}Role`, selectedUser.role);
       } else {
         setTaskData({
           ...taskData,
-          [name]: value
+          [name]: value,
         });
       }
     } else {
@@ -464,12 +479,16 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
                 value={taskData.title}
                 onChange={handleChange}
                 className={`w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:text-white ${
-                  errors.title ? "border-red-500" : "border-gray-300 dark:border-gray-600"
+                  errors.title
+                    ? "border-red-500"
+                    : "border-gray-300 dark:border-gray-600"
                 }`}
                 placeholder="Enter task title"
               />
               {!isEditing && errors.title && (
-                <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.title}</p>
+                <p className="text-red-500 dark:text-red-400 text-xs mt-1">
+                  {errors.title}
+                </p>
               )}
             </div>
 
@@ -484,7 +503,9 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
                 onChange={handleChange}
                 rows="3"
                 className={`w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:text-white ${
-                  errors.description ? "border-red-500" : "border-gray-300 dark:border-gray-600"
+                  errors.description
+                    ? "border-red-500"
+                    : "border-gray-300 dark:border-gray-600"
                 }`}
                 placeholder="Describe the task"
               ></textarea>
@@ -505,7 +526,9 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
                 value={taskData.assignedTo}
                 onChange={handleChange}
                 className={`w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:text-white ${
-                  errors.assignedTo ? "border-red-500" : "border-gray-300 dark:border-gray-600"
+                  errors.assignedTo
+                    ? "border-red-500"
+                    : "border-gray-300 dark:border-gray-600"
                 }`}
               >
                 <option value="">Select Team Member</option>
@@ -520,7 +543,9 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
                 )}
               </select>
               {!isEditing && errors.assignedTo && (
-                <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.assignedTo}</p>
+                <p className="text-red-500 dark:text-red-400 text-xs mt-1">
+                  {errors.assignedTo}
+                </p>
               )}
             </div>
 
@@ -534,7 +559,9 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
                 value={taskData.assignedBy}
                 onChange={handleChange}
                 className={`w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:text-white ${
-                  errors.assignedBy ? "border-red-500" : "border-gray-300 dark:border-gray-600"
+                  errors.assignedBy
+                    ? "border-red-500"
+                    : "border-gray-300 dark:border-gray-600"
                 }`}
               >
                 <option value="">Select Assigner</option>
@@ -549,7 +576,9 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
                 )}
               </select>
               {!isEditing && errors.assignedBy && (
-                <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.assignedBy}</p>
+                <p className="text-red-500 dark:text-red-400 text-xs mt-1">
+                  {errors.assignedBy}
+                </p>
               )}
             </div>
 
@@ -563,13 +592,18 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
                 name="deadline"
                 value={taskData.deadline}
                 onChange={handleChange}
-                className={`w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:text-white ${
-                  errors.deadline ? "border-red-500" : "border-gray-300 dark:border-gray-600"
+                className={`w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:text-white dark-date-input ${
+                  errors.deadline
+                    ? "border-red-500"
+                    : "border-gray-300 dark:border-gray-600"
                 }`}
                 min={new Date().toISOString().split("T")[0]}
+                style={{ colorScheme: theme === "dark" ? "dark" : "light" }}
               />
               {!isEditing && errors.deadline && (
-                <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.deadline}</p>
+                <p className="text-red-500 dark:text-red-400 text-xs mt-1">
+                  {errors.deadline}
+                </p>
               )}
             </div>
 
@@ -624,7 +658,9 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
                 min="0.5"
                 step="0.5"
                 className={`w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:text-white ${
-                  errors.estimatedTime ? "border-red-500" : "border-gray-300 dark:border-gray-600"
+                  errors.estimatedTime
+                    ? "border-red-500"
+                    : "border-gray-300 dark:border-gray-600"
                 }`}
                 placeholder="Enter estimated hours"
               />

@@ -36,10 +36,10 @@ const Navbar = () => {
   return (
     <nav className="bg-white dark:bg-gray-800 shadow-md w-full px-6 py-3 flex justify-between items-center transition-colors duration-300">
       <div className="text-xl font-bold text-gray-800 dark:text-white">Task Management</div>
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-4 ">
         <button 
           onClick={toggleTheme}
-          className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
+          className="p-2 rounded-full  hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
           aria-label="Toggle theme"
         >
           <FontAwesomeIcon 
@@ -51,7 +51,7 @@ const Navbar = () => {
           <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center">
             <FontAwesomeIcon icon={faUser} className="text-gray-600 dark:text-gray-300" />
           </div>
-          <span className="font-medium text-gray-700 dark:text-gray-200">{user || "User"}</span>
+          <span className="font-medium text-gray-700 dark:text-gray-200">{user}</span>
         </div>
         <button
           onClick={handleLogout}

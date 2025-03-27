@@ -160,7 +160,9 @@ const Dashboard = () => {
       <Navbar />
       <div className="container mx-auto p-6">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Dashboard</h1>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+            Dashboard
+          </h1>
           <button
             onClick={() => setShowTaskForm(true)}
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center"
@@ -174,15 +176,14 @@ const Dashboard = () => {
           <div className="flex justify-center items-center p-8">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
           </div>
-        ) : error ? (
-          <div className="bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded">
-            <p>{error}</p>
-          </div>
         ) : tasks && tasks.length > 0 ? (
           <DragDropContext onDragEnd={onDragEnd}>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {Object.values(columns).map((column) => (
-                <div key={column.id} className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
+                <div
+                  key={column.id}
+                  className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4"
+                >
                   <h2 className="font-semibold text-lg mb-3 text-gray-800 dark:text-white">
                     {column.title} ({column.tasks.length})
                   </h2>
@@ -192,7 +193,9 @@ const Dashboard = () => {
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                         className={`min-h-[200px] transition-colors ${
-                          snapshot.isDraggingOver ? "bg-blue-50 dark:bg-blue-900/30" : ""
+                          snapshot.isDraggingOver
+                            ? "bg-blue-50 dark:bg-blue-900/30"
+                            : ""
                         }`}
                       >
                         {column.tasks.map((task, index) => (
@@ -273,8 +276,7 @@ const Dashboard = () => {
                                         </span>
                                       </span>
                                     </div>
-                                  )}
-                                  {" "}
+                                  )}{" "}
                                   {task.assignedBy && (
                                     <div className="flex items-center">
                                       <span className="font-semibold mr-1">
@@ -364,7 +366,9 @@ const Dashboard = () => {
           </DragDropContext>
         ) : (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Your Tasks</h2>
+            <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
+              Your Tasks
+            </h2>
             <p className="text-gray-500 dark:text-gray-400">
               No tasks available. Create a new task to get started.
             </p>

@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../utils/axiosInstance";
+import toast from "react-hot-toast";
 
 // Async thunks for API calls
 export const fetchTasks = createAsyncThunk(
@@ -20,12 +21,18 @@ export const createTask = createAsyncThunk(
   "tasks/createTask",
   async (taskData, { rejectWithValue }) => {
     // console.log("taskData", taskData);
+
     try {
       const res = await axiosInstance.post("/tasks/createTask", taskData);
+
       console.log("res of task created...", res.data.task);
+
+      toast.success(`MSG:---> ${res.data.message}`);
 
       return res.data.task;
     } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
       return rejectWithValue(error.response.data);
     }
   }
@@ -39,8 +46,10 @@ export const updateTask = createAsyncThunk(
         `/tasks/updateTask/${id}`,
         taskData
       );
+      toast.success(`${res.data.message}`);
       return res.data;
     } catch (error) {
+      toast.error("Failed to update task");
       return rejectWithValue(error.response.data);
     }
   }
@@ -56,8 +65,10 @@ export const updateTaskStatus = createAsyncThunk(
           status,
         }
       );
+      toast.success(`${response.data.message}`);
       return response.data;
     } catch (error) {
+      toast.error("Failed to update task status");
       return rejectWithValue(error.response.data);
     }
   }
@@ -68,8 +79,10 @@ export const deleteTask = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       await axiosInstance.delete(`/tasks/deleteTask/${id}`);
+      toast.success("Task deleted successfully");
       return id;
     } catch (error) {
+      toast.error("Failed to delete task");
       return rejectWithValue(error.response.data);
     }
   }

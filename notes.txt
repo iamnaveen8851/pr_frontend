@@ -1,3 +1,10 @@
+
+add loading indicator after creating the task
+
+
+
+NEXT WEEK: 
 for maximum depth exceed error --- remove all dependencies from useEffect and try to perform without useEffect
 
-fix deployment 
+fix deployment at last 
+
