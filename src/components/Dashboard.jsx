@@ -206,12 +206,17 @@ const Dashboard = () => {
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
-                                className={`bg-white p-3 rounded-md shadow mb-2 ${
+                                className={`p-3 rounded-md shadow mb-2 ${
                                   snapshot.isDragging ? "opacity-75" : ""
-                                } group relative`}
+                                } group relative ${
+                                  task.status === "Pending" ? "bg-white" : 
+                                  task.status === "In Progress" ? "bg-blue-50" : 
+                                  task.status === "Review" ? "bg-yellow-50" : 
+                                  task.status === "Completed" ? "bg-green-50" : "bg-white"
+                                }`}
                               >
                                 <div className="flex justify-between items-center">
-                                  <div className="font-medium">
+                                  <div className={`font-medium ${task.status === "Completed" ? "line-through text-gray-500" : ""}`}>
                                     {task.title}
                                   </div>
                                   <div className="p-1 w-[18%] rounded-md hover:bg-gray-200 transition-colors flex justify-center ">
@@ -225,7 +230,7 @@ const Dashboard = () => {
                                     />
                                   </div>
                                 </div>
-                                <div className="text-sm text-gray-600 truncate">
+                                <div className={`text-sm text-gray-600 truncate ${task.status === "Completed" ? "line-through" : ""}`}>
                                   {task.description}
                                 </div>
                                 <div className="flex justify-between items-center mt-2">
@@ -321,7 +326,7 @@ const Dashboard = () => {
           }}
           isEditing={true}
           initialData={currentTask}
-          onUpdate={handleTaskUpdate}
+          
         />
       )}
     </div>
