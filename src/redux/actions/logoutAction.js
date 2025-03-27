@@ -10,9 +10,10 @@ export const clearCookie = createAsyncThunk(
       console.log(res, "logout res");
       localStorage.removeItem("accessToken");
       
-      navigate("/login");
 
+      navigate("/login");
       dispatch(logoutSuccess());
+
     } catch (error) {
       console.log("Error while logging out", error.message);
       return rejectWithValue(error.message);

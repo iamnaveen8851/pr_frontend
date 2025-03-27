@@ -19,6 +19,7 @@ const Dashboard = () => {
   const [taskToEdit, setTaskToEdit] = useState(null);
   const [menuOpen, setMenuOpen] = useState(null);
   const menuRef = useRef(null); // Ref to track the menu
+  const [enabled, setEnabled] = useState(false);
 
   const { tasks, loading, error } = useSelector((state) => state.tasks);
   const [columns, setColumns] = useState({
@@ -34,20 +35,25 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(fetchTasks());
-  }, []);
+  }, [dispatch]);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setMenuOpen(null);
-      }
-    };
+  useEffect(
+    () => {
+      const handleClickOutside = (event) => {
+        if (menuRef.current && !menuRef.current.contains(event.target)) {
+          setMenuOpen(null);
+        }
+      };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [menuRef]);
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    },
+    [
+      // menuRef
+    ]
+  );
 
   // Organize tasks into columns by status
   useEffect(() => {
@@ -113,13 +119,10 @@ const Dashboard = () => {
       updateTaskStatus({ taskId: draggableId, status: destination.droppableId })
     );
     // Here you would dispatch an action to update the task status in the backend
-    // dispatch(updateTaskStatus({ taskId: draggableId, status: destination.droppableId }));
   };
 
   // Custom droppable component to avoid defaultProps warning
   const StrictModeDroppable = ({ children, ...props }) => {
-    const [enabled, setEnabled] = useState(false);
-
     useEffect(() => {
       const animation = requestAnimationFrame(() => setEnabled(true));
       return () => {

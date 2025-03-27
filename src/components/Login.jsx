@@ -172,14 +172,12 @@ const Login = () => {
     }
   };
 
-  // To pass a message
   useEffect(() => {
     console.log("Loading", loading);
     if (!loading) {
       setIsSubmitting(false);
     }
-  }, [loading, isSubmitting]);
-
+  }, [loading]);
   return (
     <>
       <div className={styles.parentContainer}>

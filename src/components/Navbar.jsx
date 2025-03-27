@@ -29,7 +29,7 @@ const Navbar = () => {
   // handle logout
   const handleLogout = () => {
     console.log("logout Clicked");
-    localStorage.removeItem("accessToken");
+    // localStorage.removeItem("accessToken");
     dispatch(clearCookie({ navigate }));
   };
 
