@@ -438,14 +438,14 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white">
             {isEditing ? "Update Task" : "Create New Task"}
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
           >
             <FontAwesomeIcon icon={faTimes} />
           </button>
@@ -455,7 +455,7 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Title */}
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Task Title{!isEditing && "*"}
               </label>
               <input
@@ -463,19 +463,19 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
                 name="title"
                 value={taskData.title}
                 onChange={handleChange}
-                className={`w-full p-2 border rounded-md ${
-                  errors.title ? "border-red-500" : "border-gray-300"
+                className={`w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:text-white ${
+                  errors.title ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                 }`}
                 placeholder="Enter task title"
               />
               {!isEditing && errors.title && (
-                <p className="text-red-500 text-xs mt-1">{errors.title}</p>
+                <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.title}</p>
               )}
             </div>
 
             {/* Description */}
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Description{!isEditing && "*"}
               </label>
               <textarea
@@ -483,13 +483,13 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
                 value={taskData.description}
                 onChange={handleChange}
                 rows="3"
-                className={`w-full p-2 border rounded-md ${
-                  errors.description ? "border-red-500" : "border-gray-300"
+                className={`w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:text-white ${
+                  errors.description ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                 }`}
                 placeholder="Describe the task"
               ></textarea>
               {!isEditing && errors.description && (
-                <p className="text-red-500 text-xs mt-1">
+                <p className="text-red-500 dark:text-red-400 text-xs mt-1">
                   {errors.description}
                 </p>
               )}
@@ -497,15 +497,15 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
 
             {/* Assigned To */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Assign To{!isEditing && "*"}
               </label>
               <select
                 name="assignedTo"
                 value={taskData.assignedTo}
                 onChange={handleChange}
-                className={`w-full p-2 border rounded-md ${
-                  errors.assignedTo ? "border-red-500" : "border-gray-300"
+                className={`w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:text-white ${
+                  errors.assignedTo ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                 }`}
               >
                 <option value="">Select Team Member</option>
@@ -520,21 +520,21 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
                 )}
               </select>
               {!isEditing && errors.assignedTo && (
-                <p className="text-red-500 text-xs mt-1">{errors.assignedTo}</p>
+                <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.assignedTo}</p>
               )}
             </div>
 
             {/* Assigned By */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Assigned By{!isEditing && "*"}
               </label>
               <select
                 name="assignedBy"
                 value={taskData.assignedBy}
                 onChange={handleChange}
-                className={`w-full p-2 border rounded-md ${
-                  errors.assignedBy ? "border-red-500" : "border-gray-300"
+                className={`w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:text-white ${
+                  errors.assignedBy ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                 }`}
               >
                 <option value="">Select Assigner</option>
@@ -549,13 +549,13 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
                 )}
               </select>
               {!isEditing && errors.assignedBy && (
-                <p className="text-red-500 text-xs mt-1">{errors.assignedBy}</p>
+                <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.assignedBy}</p>
               )}
             </div>
 
             {/* Deadline */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Deadline{!isEditing && "*"}
               </label>
               <input
@@ -563,26 +563,26 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
                 name="deadline"
                 value={taskData.deadline}
                 onChange={handleChange}
-                className={`w-full p-2 border rounded-md ${
-                  errors.deadline ? "border-red-500" : "border-gray-300"
+                className={`w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:text-white ${
+                  errors.deadline ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                 }`}
                 min={new Date().toISOString().split("T")[0]}
               />
               {!isEditing && errors.deadline && (
-                <p className="text-red-500 text-xs mt-1">{errors.deadline}</p>
+                <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.deadline}</p>
               )}
             </div>
 
             {/* Priority */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Priority
               </label>
               <select
                 name="priority"
                 value={taskData.priority}
                 onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded-md"
+                className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 dark:text-white"
               >
                 {priorityOptions.map((option) => (
                   <option key={option} value={option}>
@@ -594,14 +594,14 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
 
             {/* Status */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Status
               </label>
               <select
                 name="status"
                 value={taskData.status}
                 onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded-md"
+                className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 dark:text-white"
               >
                 {statusOptions.map((option) => (
                   <option key={option} value={option}>
@@ -613,7 +613,7 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
 
             {/* Estimated Time */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Estimated Time (hours){!isEditing && "*"}
               </label>
               <input
@@ -623,13 +623,13 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
                 onChange={handleChange}
                 min="0.5"
                 step="0.5"
-                className={`w-full p-2 border rounded-md ${
-                  errors.estimatedTime ? "border-red-500" : "border-gray-300"
+                className={`w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:text-white ${
+                  errors.estimatedTime ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                 }`}
                 placeholder="Enter estimated hours"
               />
               {!isEditing && errors.estimatedTime && (
-                <p className="text-red-500 text-xs mt-1">
+                <p className="text-red-500 dark:text-red-400 text-xs mt-1">
                   {errors.estimatedTime}
                 </p>
               )}
@@ -640,13 +640,13 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md"
             >
               {isEditing ? "Update Task" : "Create Task"}
             </button>

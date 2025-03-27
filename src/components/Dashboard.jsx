@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import TaskForm from "./TaskForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,7 +9,7 @@ import {
   fetchTasks,
   updateTaskStatus,
   deleteTask,
-  updateTask,
+  // updateTask,
 } from "../redux/actions/taskAction";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
@@ -156,11 +156,11 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       <Navbar />
       <div className="container mx-auto p-6">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Dashboard</h1>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Dashboard</h1>
           <button
             onClick={() => setShowTaskForm(true)}
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center"
@@ -175,15 +175,15 @@ const Dashboard = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
           </div>
         ) : error ? (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          <div className="bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded">
             <p>{error}</p>
           </div>
         ) : tasks && tasks.length > 0 ? (
           <DragDropContext onDragEnd={onDragEnd}>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {Object.values(columns).map((column) => (
-                <div key={column.id} className="bg-gray-100 rounded-lg p-4">
-                  <h2 className="font-semibold text-lg mb-3">
+                <div key={column.id} className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
+                  <h2 className="font-semibold text-lg mb-3 text-gray-800 dark:text-white">
                     {column.title} ({column.tasks.length})
                   </h2>
                   <StrictModeDroppable droppableId={column.id}>
@@ -192,7 +192,7 @@ const Dashboard = () => {
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                         className={`min-h-[200px] transition-colors ${
-                          snapshot.isDraggingOver ? "bg-blue-50" : ""
+                          snapshot.isDraggingOver ? "bg-blue-50 dark:bg-blue-900/30" : ""
                         }`}
                       >
                         {column.tasks.map((task, index) => (
@@ -210,30 +210,30 @@ const Dashboard = () => {
                                   snapshot.isDragging ? "opacity-75" : ""
                                 } group relative ${
                                   task.status === "Pending"
-                                    ? "bg-white"
+                                    ? "bg-white dark:bg-gray-700"
                                     : task.status === "In Progress"
-                                    ? "bg-blue-50"
+                                    ? "bg-blue-50 dark:bg-blue-900/30"
                                     : task.status === "Review"
-                                    ? "bg-yellow-50"
+                                    ? "bg-yellow-50 dark:bg-yellow-900/30"
                                     : task.status === "Completed"
-                                    ? "bg-green-50"
-                                    : "bg-white"
+                                    ? "bg-green-50 dark:bg-green-900/30"
+                                    : "bg-white dark:bg-gray-700"
                                 }`}
                               >
                                 <div className="flex justify-between items-center">
                                   <div
-                                    className={`font-medium ${
+                                    className={`font-medium text-gray-800 dark:text-gray-200 ${
                                       task.status === "Completed"
-                                        ? "line-through text-gray-500"
+                                        ? "line-through text-gray-500 dark:text-gray-400"
                                         : ""
                                     }`}
                                   >
                                     {task.title}
                                   </div>
-                                  <div className="p-1 w-[18%] rounded-md hover:bg-gray-200 transition-colors flex justify-center ">
+                                  <div className="p-1 w-[18%] rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex justify-center">
                                     <FontAwesomeIcon
                                       icon={faEllipsisH}
-                                      className="cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity"
+                                      className="cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity text-gray-600 dark:text-gray-300"
                                       onClick={(e) => {
                                         e.stopPropagation();
                                         toggleMenu(task._id);
@@ -242,7 +242,7 @@ const Dashboard = () => {
                                   </div>
                                 </div>
                                 <div
-                                  className={`text-sm text-gray-600 truncate ${
+                                  className={`text-sm text-gray-600 dark:text-gray-300 truncate ${
                                     task.status === "Completed"
                                       ? "line-through"
                                       : ""
@@ -252,7 +252,7 @@ const Dashboard = () => {
                                 </div>
 
                                 {/* Assignment information */}
-                                <div className="mt-2 text-xs text-gray-500 flex flex-col gap-2">
+                                <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 flex flex-col gap-2">
                                   {task.assignedTo && (
                                     <div className="flex items-center">
                                       <span className="font-semibold mr-1">
@@ -264,7 +264,7 @@ const Dashboard = () => {
                                             "object" &&
                                             task.assignedTo.username) ||
                                           "Unknown"}{" "}
-                                        <span className="bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded-full text-xs">
+                                        <span className="bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-1.5 py-0.5 rounded-full text-xs">
                                           {task.assignedTo.role ||
                                             (typeof task.assignedTo ===
                                               "object" &&
@@ -286,7 +286,7 @@ const Dashboard = () => {
                                             "object" &&
                                             task.assignedBy.username) ||
                                           "Unknown"}{" "}
-                                        <span className="bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded-full text-xs">
+                                        <span className="bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 px-1.5 py-0.5 rounded-full text-xs">
                                           {task.assignedBy.role ||
                                             (typeof task.assignedBy ===
                                               "object" &&
@@ -304,15 +304,15 @@ const Dashboard = () => {
                                     ${
                                       task.priority === "High" ||
                                       task.priority === "Urgent"
-                                        ? "bg-red-100 text-red-800"
+                                        ? "bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200"
                                         : task.priority === "Medium"
-                                        ? "bg-yellow-100 text-yellow-800"
-                                        : "bg-green-100 text-green-800"
+                                        ? "bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-200"
+                                        : "bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200"
                                     }`}
                                   >
                                     {task.priority}
                                   </span>
-                                  <span className="text-xs text-gray-500">
+                                  <span className="text-xs text-gray-500 dark:text-gray-400">
                                     {new Date(
                                       task.deadline
                                     ).toLocaleDateString()}
@@ -323,14 +323,14 @@ const Dashboard = () => {
                                 {menuOpen === task._id && (
                                   <div
                                     ref={menuRef}
-                                    className="absolute top-0 right-0 mt-8 mr-2 w-32 bg-white rounded-md shadow-lg z-10 transition-opacity duration-300 ease-in-out opacity-0"
+                                    className="absolute top-0 right-0 mt-8 mr-2 w-32 bg-white dark:bg-gray-700 rounded-md shadow-lg z-10 transition-opacity duration-300 ease-in-out opacity-0"
                                     style={{
                                       opacity: menuOpen === task._id ? 1 : 0,
                                     }}
                                   >
                                     <div className="py-1">
                                       <button
-                                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                        className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
                                         onClick={(e) => {
                                           e.stopPropagation();
                                           handleEditTask(task);
@@ -339,7 +339,7 @@ const Dashboard = () => {
                                         Edit
                                       </button>
                                       <button
-                                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                                        className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-600"
                                         onClick={(e) => {
                                           e.stopPropagation();
                                           handleDeleteTask(task._id);
@@ -363,9 +363,9 @@ const Dashboard = () => {
             </div>
           </DragDropContext>
         ) : (
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold mb-4">Your Tasks</h2>
-            <p className="text-gray-500">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Your Tasks</h2>
+            <p className="text-gray-500 dark:text-gray-400">
               No tasks available. Create a new task to get started.
             </p>
           </div>
