@@ -388,31 +388,54 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      onClose();
+      setIsSubmitting(true);
+      
+      // Create a new object without the name fields
+      const filteredTaskData = {
+        title: taskData.title,
+        description: taskData.description,
+        priority: taskData.priority,
+        status: taskData.status,
+        assignedTo: taskData.assignedTo,
+        assignedBy: taskData.assignedBy,
+        estimatedTime: taskData.estimatedTime,
+        deadline: taskData.deadline,
+      };
+      
+      // If editing, include the _id
+      if (isEditing && taskData._id) {
+        filteredTaskData._id = taskData._id;
+      }
+      
+      console.log("Filtered task data to submit:", filteredTaskData);
+      
       if (isEditing) {
         // Make sure we have the task ID before dispatching the update action
         if (!taskData._id) {
           console.error("Task ID is missing for update operation");
+          setIsSubmitting(false);
           return;
         }
 
-        // Pass the task ID and task data to the updateTask action
-        dispatch(updateTask({ id: taskData._id, taskData }))
+        // Pass the task ID and filtered task data to the updateTask action
+        dispatch(updateTask({ id: taskData._id, taskData: filteredTaskData }))
           .unwrap()
           .then(() => {
             onClose();
           })
           .catch((error) => {
             console.error("Failed to update task:", error);
+            setIsSubmitting(false);
           });
       } else {
-        dispatch(createTask(taskData))
+        dispatch(createTask(filteredTaskData))
           .unwrap()
           .then(() => {
             onClose();
           })
           .catch((error) => {
             console.error("Failed to create task:", error);
+            setIsSubmitting(false);
           });
       }
     }
