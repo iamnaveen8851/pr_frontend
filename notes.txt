@@ -16,7 +16,7 @@ work on
   - machine learning 
 
 
-for maximum depth exceed error --- remove all dependencies from useEffect and try to perform without useEffect
+for maximum depth exceed error --- remove all dependencies from useEffect and try to perform without useEffect --- done 
 
-fix deployment at last 
+fix deployment at last --- check OR review once
 

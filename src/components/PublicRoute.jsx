@@ -4,6 +4,7 @@ import Login from "./Login";
 import SignUp from "./SignUp";
 import PrivateRoute from "./PrivateRoute";
 
+
 const PublicRoute = () => {
   const token = localStorage.getItem("accessToken");
   const location = useLocation();
@@ -17,6 +18,7 @@ const PublicRoute = () => {
           path="/"
           element={
             <PrivateRoute>
+            
               <Dashboard />
             </PrivateRoute>
           }
@@ -31,10 +33,7 @@ const PublicRoute = () => {
           element={token ? <Navigate to="/" /> : <SignUp />}
         />
         {/* Catch-all route for any undefined routes */}
-        <Route
-          path="*"
-          element={<Navigate to={token ? "/" : "/login"} />}
-        />
+        <Route path="*" element={<Navigate to={token ? "/" : "/login"} />} />
       </Routes>
     </>
   );

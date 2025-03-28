@@ -11,7 +11,8 @@ import {
   deleteTask,
   // updateTask,
 } from "../redux/actions/taskAction";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import Sidebar from "./Sidebar";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -161,6 +162,7 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       <Navbar />
+      <Sidebar />
       <div className="container mx-auto p-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
