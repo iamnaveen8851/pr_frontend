@@ -31,7 +31,10 @@ const PublicRoute = () => {
           element={token ? <Navigate to="/" /> : <SignUp />}
         />
         {/* Catch-all route for any undefined routes */}
-        <Route path="*" element={<Navigate to={token ? "/" : "/login"} />} />
+        <Route
+          path="*"
+          element={<Navigate to={token ? "/" : "/login"} />}
+        />
       </Routes>
     </>
   );
