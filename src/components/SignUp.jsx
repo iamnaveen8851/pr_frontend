@@ -250,7 +250,7 @@ const SignUp = () => {
                   <option value="">Select Role</option>
                   <option value="Employee">Employee</option>
                   <option value="Manager">Manager</option>
-                  <option value="Admin">Admin</option>
+                  {/* <option value="Admin">Admin</option> */}
                 </select>
                 {errors.role && touched.role && (
                   <p className={styles.errorText}>{errors.role}</p>
