@@ -161,7 +161,14 @@ const Navbar = () => {
             </span>
           </button>
           
-          {/* Rest of mobile menu remains the same */}
+          {/* Logout button for mobile */}
+          <button
+            onClick={handleLogout}
+            className="flex items-center p-2 rounded-md bg-red-500 hover:bg-red-600 text-white transition-colors duration-300"
+          >
+            <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />
+            <span>Logout</span>
+          </button>
         </div>
       </div>
 
