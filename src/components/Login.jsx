@@ -311,8 +311,8 @@ const Login = () => {
                   <div className="flex-grow border-t border-gray-300"></div>
                 </div>
 
-                <div className="w-full flex justify-center space-x-4">
-                  <div className="flex-1 max-w-[180px] flex justify-center">
+                <div className="w-full flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
+                  <div className="flex justify-center">
                     <GoogleLogin
                       onSuccess={handleGoogleLoginSuccess}
                       onError={handleGoogleLoginError}
@@ -322,7 +322,7 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={handleGithubLoginClick}
-                    className="flex-1 max-w-[180px] h-[40px] flex items-center justify-center px-4 py-1 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    className="h-[40px] flex items-center justify-center px-4 py-1 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 mx-auto sm:mx-0 w-[180px]"
                   >
                     <img
                       src="/github-icon.png"
