@@ -1,409 +1,83 @@
-import { useState, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-// import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import Navbar from "./Navbar";
-import TaskForm from "./TaskForm";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faEllipsisH } from "@fortawesome/free-solid-svg-icons"; // Use horizontal three dots
-import {
-  fetchTasks,
-  updateTaskStatus,
-  deleteTask,
-  // updateTask,
-} from "../redux/actions/taskAction";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import Sidebar from "./Sidebar";
+import TaskComponent from "./TaskComponent";
+// Import other components when they're ready
+// import ProjectComponent from "./ProjectComponent";
+// import CalendarComponent from "./Calendar";
 
 const Dashboard = () => {
-  const dispatch = useDispatch();
-  const [showTaskForm, setShowTaskForm] = useState(false);
-  const [taskToEdit, setTaskToEdit] = useState(null);
-  const [menuOpen, setMenuOpen] = useState(null);
-  const menuRef = useRef(null); // Ref to track the menu
-  const [enabled, setEnabled] = useState(false);
+  const [activeView, setActiveView] = useState("tasks"); // Default view is tasks
 
-  const { tasks, loading, error } = useSelector((state) => state.tasks);
-  const [columns, setColumns] = useState({
-    Pending: { id: "Pending", title: "To Do", tasks: [] },
-    "In Progress": { id: "In Progress", title: "In Progress", tasks: [] },
-    Review: { id: "Review", title: "Review", tasks: [] },
-    Completed: { id: "Completed", title: "Done", tasks: [] },
-  });
-
-  // In your Dashboard.jsx
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [currentTask, setCurrentTask] = useState(null);
-
-  useEffect(() => {
-    dispatch(fetchTasks());
-  }, [dispatch]);
-
-  useEffect(
-    () => {
-      const handleClickOutside = (event) => {
-        if (menuRef.current && !menuRef.current.contains(event.target)) {
-          setMenuOpen(null);
-        }
-      };
-
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    },
-    [
-      // menuRef
-    ]
-  );
-
-  // Organize tasks into columns by status
-  useEffect(() => {
-    if (tasks && tasks.length > 0) {
-      const newColumns = {
-        Pending: { id: "Pending", title: "To Do", tasks: [] },
-        "In Progress": { id: "In Progress", title: "In Progress", tasks: [] },
-        Review: { id: "Review", title: "Review", tasks: [] },
-        Completed: { id: "Completed", title: "Done", tasks: [] },
-      };
-
-      tasks.forEach((task) => {
-        if (newColumns[task.status]) {
-          newColumns[task.status].tasks.push(task);
-        } else {
-          // Default to Pending if status doesn't match any column
-          newColumns["Pending"].tasks.push(task);
-        }
-      });
-
-      setColumns(newColumns);
+  // Function to render the appropriate component based on activeView
+  const renderView = () => {
+    switch (activeView) {
+      case "tasks":
+        return <TaskComponent />;
+      case "projects":
+        // Return ProjectComponent when it's ready
+        return <div className="text-center p-8">Projects view coming soon</div>;
+      case "calendar":
+        // Return CalendarComponent when it's ready
+        return <div className="text-center p-8">Calendar view coming soon</div>;
+      default:
+        return <TaskComponent />;
     }
-  }, [tasks]);
-
-  const onDragEnd = (result) => {
-    const { destination, source, draggableId } = result;
-
-    // If there's no destination or if the item was dropped back to its original position
-    if (
-      !destination ||
-      (destination.droppableId === source.droppableId &&
-        destination.index === source.index)
-    ) {
-      return;
-    }
-
-    // Find the task that was dragged
-    const task = columns[source.droppableId].tasks.find(
-      (task) => task._id === draggableId
-    );
-
-    if (!task) return;
-
-    // Create new columns object
-    const newColumns = { ...columns };
-
-    // Remove task from source column
-    newColumns[source.droppableId].tasks = newColumns[
-      source.droppableId
-    ].tasks.filter((t) => t._id !== draggableId);
-
-    // Add task to destination column with updated status
-    const updatedTask = { ...task, status: destination.droppableId };
-    newColumns[destination.droppableId].tasks.splice(
-      destination.index,
-      0,
-      updatedTask
-    );
-
-    setColumns(newColumns);
-
-    dispatch(
-      updateTaskStatus({ taskId: draggableId, status: destination.droppableId })
-    );
-    // Here you would dispatch an action to update the task status in the backend
-  };
-
-  // Custom droppable component to avoid defaultProps warning
-  const StrictModeDroppable = ({ children, ...props }) => {
-    useEffect(() => {
-      const animation = requestAnimationFrame(() => setEnabled(true));
-      return () => {
-        cancelAnimationFrame(animation);
-        setEnabled(false);
-      };
-    }, []);
-
-    if (!enabled) {
-      return null;
-    }
-
-    return <Droppable {...props}>{children}</Droppable>;
-  };
-
-  const handleDeleteTask = (taskId) => {
-    dispatch(deleteTask(taskId));
-    setMenuOpen(null); // Close menu after action
-  };
-
-  // to update the task state variable and ieEditModalopen state
-  const handleEditClick = (task) => {
-    setCurrentTask(task);
-    setIsEditModalOpen(true);
-  };
-  const handleEditTask = (task) => {
-    // Update to use the new edit modal approach
-    handleEditClick(task);
-    setMenuOpen(null); // Close menu after action
-  };
-
-  const toggleMenu = (taskId) => {
-    setMenuOpen(menuOpen === taskId ? null : taskId);
   };
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       <Navbar />
-      <Sidebar />
-      <div className="container mx-auto p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
-            Dashboard
-          </h1>
-          <button
-            onClick={() => setShowTaskForm(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center"
-          >
-            <FontAwesomeIcon icon={faPlus} className="mr-2" />
-            Create Task
-          </button>
+      
+      <div className="flex">
+        {/* Sidebar */}
+        <div className="w-16 bg-gray-800 text-white fixed left-0 top-16 bottom-0 z-10 hidden md:block">
+          {/* Sidebar content */}
         </div>
-
-        {loading ? (
-          <div className="flex justify-center items-center p-8">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        
+        {/* Main content */}
+        <div className="w-full md:ml-16 p-4 pt-20">
+          {/* View selector tabs */}
+          <div className="flex mb-4 border-b border-gray-200 dark:border-gray-700">
+            <button
+              className={`py-2 px-4 font-medium ${
+                activeView === "tasks"
+                  ? "text-blue-600 border-b-2 border-blue-600 dark:text-blue-400 dark:border-blue-400"
+                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              }`}
+              onClick={() => setActiveView("tasks")}
+            >
+              Tasks
+            </button>
+            <button
+              className={`py-2 px-4 font-medium ${
+                activeView === "projects"
+                  ? "text-blue-600 border-b-2 border-blue-600 dark:text-blue-400 dark:border-blue-400"
+                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              }`}
+              onClick={() => setActiveView("projects")}
+            >
+              Projects
+            </button>
+            <button
+              className={`py-2 px-4 font-medium ${
+                activeView === "calendar"
+                  ? "text-blue-600 border-b-2 border-blue-600 dark:text-blue-400 dark:border-blue-400"
+                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              }`}
+              onClick={() => setActiveView("calendar")}
+            >
+              Calendar
+            </button>
           </div>
-        ) : tasks && tasks.length > 0 ? (
-          <DragDropContext onDragEnd={onDragEnd}>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {Object.values(columns).map((column) => (
-                <div
-                  key={column.id}
-                  className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4"
-                >
-                  <h2 className="font-semibold text-lg mb-3 text-gray-800 dark:text-white">
-                    {column.title} ({column.tasks.length})
-                  </h2>
-                  <StrictModeDroppable droppableId={column.id}>
-                    {(provided, snapshot) => (
-                      <div
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        className={`min-h-[200px] transition-colors ${
-                          snapshot.isDraggingOver
-                            ? "bg-blue-50 dark:bg-blue-900/30"
-                            : ""
-                        }`}
-                      >
-                        {column.tasks.map((task, index) => (
-                          <Draggable
-                            key={task._id}
-                            draggableId={task._id}
-                            index={index}
-                          >
-                            {(provided, snapshot) => (
-                              <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                className={`p-3 rounded-md shadow mb-2 ${
-                                  snapshot.isDragging ? "opacity-75" : ""
-                                } group relative ${
-                                  task.status === "Pending"
-                                    ? "bg-white dark:bg-gray-700"
-                                    : task.status === "In Progress"
-                                    ? "bg-blue-50 dark:bg-blue-900/30"
-                                    : task.status === "Review"
-                                    ? "bg-yellow-50 dark:bg-yellow-900/30"
-                                    : task.status === "Completed"
-                                    ? "bg-green-50 dark:bg-green-900/30"
-                                    : "bg-white dark:bg-gray-700"
-                                }`}
-                              >
-                                <div className="flex justify-between items-center">
-                                  <div
-                                    className={`font-medium text-gray-800 dark:text-gray-200 ${
-                                      task.status === "Completed"
-                                        ? "line-through text-gray-500 dark:text-gray-400"
-                                        : ""
-                                    }`}
-                                  >
-                                    {task.title}
-                                  </div>
-                                  <div className="p-1 w-[18%] rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex justify-center">
-                                    <FontAwesomeIcon
-                                      icon={faEllipsisH}
-                                      className="cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity text-gray-600 dark:text-gray-300"
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        toggleMenu(task._id);
-                                      }}
-                                    />
-                                  </div>
-                                </div>
-                                <div
-                                  className={`text-sm text-gray-600 dark:text-gray-300 truncate ${
-                                    task.status === "Completed"
-                                      ? "line-through"
-                                      : ""
-                                  }`}
-                                >
-                                  {task.description}
-                                </div>
-
-                                {/* Assignment information */}
-                                <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 flex flex-col gap-2">
-                                  {task.assignedTo && (
-                                    <div className="flex items-center">
-                                      <span className="font-semibold mr-1">
-                                        Assigned to:
-                                      </span>
-                                      <span>
-                                        {task.assignedToName ||
-                                          (typeof task.assignedTo ===
-                                            "object" &&
-                                            task.assignedTo.username) ||
-                                          "Unknown"}{" "}
-                                        <span className="bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-1.5 py-0.5 rounded-full text-xs">
-                                          {task.assignedTo.role ||
-                                            (typeof task.assignedTo ===
-                                              "object" &&
-                                              task.assignedTo.role) ||
-                                            ""}
-                                        </span>
-                                      </span>
-                                    </div>
-                                  )}{" "}
-                                  {task.assignedBy && (
-                                    <div className="flex items-center">
-                                      <span className="font-semibold mr-1">
-                                        Assigned by:
-                                      </span>
-                                      <span>
-                                        {task.assignedByName ||
-                                          (typeof task.assignedBy ===
-                                            "object" &&
-                                            task.assignedBy.username) ||
-                                          "Unknown"}{" "}
-                                        <span className="bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 px-1.5 py-0.5 rounded-full text-xs">
-                                          {task.assignedBy.role ||
-                                            (typeof task.assignedBy ===
-                                              "object" &&
-                                              task.assignedBy.role) ||
-                                            ""}
-                                        </span>
-                                      </span>
-                                    </div>
-                                  )}
-                                </div>
-
-                                <div className="flex justify-between items-center mt-2">
-                                  <span
-                                    className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                    ${
-                                      task.priority === "High" ||
-                                      task.priority === "Urgent"
-                                        ? "bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200"
-                                        : task.priority === "Medium"
-                                        ? "bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-200"
-                                        : "bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200"
-                                    }`}
-                                  >
-                                    {task.priority}
-                                  </span>
-                                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                                    {new Date(
-                                      task.deadline
-                                    ).toLocaleDateString()}
-                                  </span>
-                                </div>
-
-                                {/* Menu for edit and delete actions - positioned relative to the task card */}
-                                {menuOpen === task._id && (
-                                  <div
-                                    ref={menuRef}
-                                    className="absolute top-0 right-0 mt-8 mr-2 w-32 bg-white dark:bg-gray-700 rounded-md shadow-lg z-10 transition-opacity duration-300 ease-in-out opacity-0"
-                                    style={{
-                                      opacity: menuOpen === task._id ? 1 : 0,
-                                    }}
-                                  >
-                                    <div className="py-1">
-                                      <button
-                                        className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          handleEditTask(task);
-                                        }}
-                                      >
-                                        Edit
-                                      </button>
-                                      <button
-                                        className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-600"
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          handleDeleteTask(task._id);
-                                        }}
-                                      >
-                                        Delete
-                                      </button>
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                          </Draggable>
-                        ))}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </StrictModeDroppable>
-                </div>
-              ))}
-            </div>
-          </DragDropContext>
-        ) : (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
-              Your Tasks
-            </h2>
-            <p className="text-gray-500 dark:text-gray-400">
-              No tasks available. Create a new task to get started.
-            </p>
-          </div>
-        )}
+          
+          {/* Render the active view */}
+          {renderView()}
+        </div>
       </div>
-
-      {showTaskForm && (
-        <TaskForm
-          onClose={() => {
-            setShowTaskForm(false);
-            setTaskToEdit(null);
-            dispatch(fetchTasks());
-          }}
-          taskToEdit={taskToEdit}
-        />
-      )}
-
-      {isEditModalOpen && (
-        <TaskForm
-          onClose={() => {
-            setIsEditModalOpen(false);
-            dispatch(fetchTasks());
-          }}
-          isEditing={true}
-          initialData={currentTask}
-        />
-      )}
     </div>
   );
 };
 
 export default Dashboard;
+
+

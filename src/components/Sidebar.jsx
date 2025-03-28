@@ -13,7 +13,6 @@ const Sidebar = () => {
   const location = useLocation();
   const [expanded, setExpanded] = useState(false); // Changed to false to be closed by default
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");  
-  // Use a more efficient approach to detect theme changes
   
   // Rest of the component remains unchanged
   useEffect(() => {
@@ -49,10 +48,10 @@ const Sidebar = () => {
 
   return (
     <div 
-      className={`h-[calc(100vh-4rem)] ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'} 
+      className={`h-[calc(100vh-4rem)] fixed top-16 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'} 
       ${theme === 'dark' ? 'text-white' : 'text-gray-800'} transition-all duration-300 ${
         expanded ? 'w-64' : 'w-16'
-      } fixed left-0 top-16 z-10`}
+      } left-0 z-20 shadow-lg`}
     >
       <div className="p-4 flex justify-between items-center">
         {expanded && <h2 className="text-xl font-bold">Menu</h2>}
@@ -65,11 +64,11 @@ const Sidebar = () => {
         </button>
       </div>
       
-      <nav className="mt-6">
+      <nav className="mt-6 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 12rem)' }}>
         <ul>
-          <li className={`mb-2 ${location.pathname === '/tasks' ? 'bg-blue-600 text-white' : ''}`}>
+          <li className={`mb-2 ${location.pathname === '/' ? 'bg-blue-600 text-white' : ''}`}>
             <Link 
-              to="/tasks" 
+              to="/" 
               className={`flex items-center p-4 ${theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-200'} rounded transition-colors`}
             >
               <FontAwesomeIcon icon={faTasks} className={expanded ? "mr-3" : "mx-auto"} />

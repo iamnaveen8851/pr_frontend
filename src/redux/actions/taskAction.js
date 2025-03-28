@@ -27,7 +27,7 @@ export const createTask = createAsyncThunk(
 
       console.log("res of task created...", res.data.task);
 
-      toast.success(`MSG:---> ${res.data.message}`);
+      toast.success(`${res.data.message}`);
 
       return res.data.task;
     } catch (error) {
