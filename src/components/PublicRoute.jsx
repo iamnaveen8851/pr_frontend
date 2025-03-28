@@ -6,6 +6,7 @@ import PrivateRoute from "./PrivateRoute";
 import Calendar from "./Calendar";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
+import Project from "./Project";
 
 const PublicRoute = () => {
   const token = localStorage.getItem("accessToken");
@@ -34,15 +35,25 @@ const PublicRoute = () => {
           }
         />
 
-        <Route 
-          path="/calendar" 
+        <Route
+          path="/calendar"
           element={
             <PrivateRoute>
               <AppLayout>
                 <Calendar />
               </AppLayout>
             </PrivateRoute>
-          } 
+          }
+        />
+        <Route
+          path="/projects"
+          element={
+            <PrivateRoute>
+              <AppLayout>
+                <Project />
+              </AppLayout>
+            </PrivateRoute>
+          }
         />
 
         <Route
