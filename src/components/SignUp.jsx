@@ -234,6 +234,29 @@ const SignUp = () => {
                 )}
               </div>
 
+              {/* Role Selection Dropdown */}
+              <div className={styles.inputGroup}>
+                <select
+                  className={styles.inputBoxes}
+                  name="role"
+                  value={formState.role}
+                  onChange={(e) => {
+                    setFormState({ ...formState, role: e.target.value });
+                    setTouched({ ...touched, role: true });
+                  }}
+                  onBlur={handleBlur}
+                  required
+                >
+                  <option value="">Select Role</option>
+                  <option value="Employee">Employee</option>
+                  <option value="Manager">Manager</option>
+                  <option value="Admin">Admin</option>
+                </select>
+                {errors.role && touched.role && (
+                  <p className={styles.errorText}>{errors.role}</p>
+                )}
+              </div>
+
               <button
                 className={`${styles.submitBtn} ${
                   errors.username ||
