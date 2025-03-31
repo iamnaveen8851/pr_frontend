@@ -7,12 +7,23 @@ import Calendar from "./Calendar";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Project from "./Project";
+import { useState, useEffect } from "react";
 
 const PublicRoute = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const token = localStorage.getItem("accessToken");
   const location = useLocation();
   console.log("Token", token);
   console.log("Current path:", location.pathname);
+
+  useEffect(() => {
+    // Short timeout to ensure token is properly checked
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   // Wrapper component for layout consistency
   const AppLayout = ({ children }) => (
@@ -23,6 +34,14 @@ const PublicRoute = () => {
     </div>
   );
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
   return (
     <>
       <Routes>
@@ -30,7 +49,9 @@ const PublicRoute = () => {
           path="/"
           element={
             <PrivateRoute>
-              <Dashboard />
+              <AppLayout>
+                <Dashboard />
+              </AppLayout>
             </PrivateRoute>
           }
         />
