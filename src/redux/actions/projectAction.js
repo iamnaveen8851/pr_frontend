@@ -94,7 +94,7 @@ export const updateProject = createAsyncThunk(
 
 export const deleteProject = createAsyncThunk(
   "projects/deleteTask",
-  async (id, { rejectWithValue }) => {
+  async ({ id }, { rejectWithValue }) => {
     try {
       await axiosInstance.delete(`/projects/deleteProject/${id}`);
       toast.success("Project deleted successfully");

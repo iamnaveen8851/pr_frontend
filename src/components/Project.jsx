@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ProjectForm from "./ProjectForm";
 import { useDispatch } from "react-redux";
-import { fetchProjects, updateProject } from "../redux/actions/projectAction";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import {
+  deleteProject,
+  fetchProjects,
+  updateProject,
+} from "../redux/actions/projectAction";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 const Project = () => {
   const { projects, loading, error } = useSelector((state) => state.projects);
@@ -124,6 +128,15 @@ const Project = () => {
     }
   };
 
+  const handleDeleteProject = (projectId) => {
+    // Here you would dispatch an action to delete the project
+    // For example: dispatch(deleteProject(projectId));
+    console.log("Delete project:", projectId);
+    dispatch(deleteProject({id: projectId}));
+    // After API call succeeds, you would refetch projects
+    // dispatch(fetchProjects());
+  };
+
   return (
     <div className="container w-[90%] mx-auto px-4 py-6 bg-white dark:bg-gray-900">
       <div className="flex justify-between items-center mb-6">
@@ -183,12 +196,50 @@ const Project = () => {
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
-                              className={`${getStatusColor(project.status)} rounded-lg shadow-md p-4 mb-3 hover:shadow-lg transition-shadow`}
+                              className={`${getStatusColor(
+                                project.status
+                              )} rounded-lg shadow-md p-4 mb-3 hover:shadow-lg transition-shadow`}
                             >
-                              <h3 className={`font-medium text-lg mb-2 text-gray-800 dark:text-white ${project.status === "Completed" ? "line-through" : ""}`}>
-                                {project.name}
-                              </h3>
-                              <p className={`text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2 ${project.status === "Completed" ? "line-through" : ""}`}>
+                              <div className="flex justify-between items-start mb-2">
+                                <h3
+                                  className={`font-medium text-lg text-gray-800 dark:text-white ${
+                                    project.status === "Completed"
+                                      ? "line-through"
+                                      : ""
+                                  }`}
+                                >
+                                  {project.name}
+                                </h3>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation(); // Prevent drag when clicking delete
+                                    handleDeleteProject(project._id);
+                                  }}
+                                  className="text-red-500 hover:text-red-700 transition-colors"
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-5 w-5"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                    />
+                                  </svg>
+                                </button>
+                              </div>
+                              <p
+                                className={`text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2 ${
+                                  project.status === "Completed"
+                                    ? "line-through"
+                                    : ""
+                                }`}
+                              >
                                 {project.description}
                               </p>
                               <div className="grid grid-cols-2 gap-2 text-xs mb-3">
@@ -196,13 +247,17 @@ const Project = () => {
                                   <span className="text-gray-500 dark:text-gray-300">
                                     Start:{" "}
                                   </span>
-                                  <span className="dark:text-white">{formatDate(project.startDate)}</span>
+                                  <span className="dark:text-white">
+                                    {formatDate(project.startDate)}
+                                  </span>
                                 </div>
                                 <div>
                                   <span className="text-gray-500 dark:text-gray-300">
                                     End:{" "}
                                   </span>
-                                  <span className="dark:text-white">{formatDate(project.endDate)}</span>
+                                  <span className="dark:text-white">
+                                    {formatDate(project.endDate)}
+                                  </span>
                                 </div>
                               </div>
                               <div className="flex justify-between items-center">
@@ -211,7 +266,8 @@ const Project = () => {
                                     Manager:{" "}
                                   </span>
                                   <span className="text-sm dark:text-white">
-                                    {project.manager?.username || "Not assigned"}
+                                    {project.manager?.username ||
+                                      "Not assigned"}
                                   </span>
                                 </div>
                                 <div className="flex -space-x-2">
