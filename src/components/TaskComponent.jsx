@@ -193,7 +193,7 @@ const TaskComponent = () => {
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
-                              className={`p-2 rounded-md shadow mb-2 ${
+                              className={`p-3 rounded-md shadow mb-2 ${
                                 snapshot.isDragging ? "opacity-75" : ""
                               } group relative ${
                                 task.status === "Pending"
@@ -209,7 +209,7 @@ const TaskComponent = () => {
                             >
                               <div className="flex justify-between items-center">
                                 <div
-                                  className={`font-medium text-sm text-gray-800 dark:text-gray-200 ${
+                                  className={`font-medium text-gray-800 dark:text-gray-200 ${
                                     task.status === "Completed"
                                       ? "line-through text-gray-500 dark:text-gray-400"
                                       : ""
@@ -220,7 +220,7 @@ const TaskComponent = () => {
                                 <div className="p-1 w-[18%] rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex justify-center">
                                   <FontAwesomeIcon
                                     icon={faEllipsisH}
-                                    className="cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity text-gray-600 dark:text-gray-300 text-xs"
+                                    className="cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity text-gray-600 dark:text-gray-300"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       toggleMenu(task._id);
