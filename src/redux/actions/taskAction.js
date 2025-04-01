@@ -8,7 +8,7 @@ export const fetchTasks = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.get("/tasks");
-      console.log("fetch Tasks", res.data.data);
+      // console.log("fetch Tasks", res.data.data);
       // Return the data in the format expected by the reducer
       return { tasks: res.data.data };
     } catch (error) {
