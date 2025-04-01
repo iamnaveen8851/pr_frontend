@@ -8,6 +8,7 @@ import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Project from "./Project";
 import { useState, useEffect } from "react";
+import CommentSection from "./CommentSection";
 
 const PublicRoute = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -21,7 +22,7 @@ const PublicRoute = () => {
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 100);
-    
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -77,6 +78,16 @@ const PublicRoute = () => {
           }
         />
 
+        <Route
+          path="/comments"
+          element={
+            <PrivateRoute>
+              <AppLayout>
+                <CommentSection />
+              </AppLayout>
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/login"
           element={token ? <Navigate to="/" /> : <Login />}
