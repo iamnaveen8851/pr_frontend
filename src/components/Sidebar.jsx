@@ -8,6 +8,7 @@ import {
   faChevronLeft, 
   faChevronRight
 } from '@fortawesome/free-solid-svg-icons';
+import { faComments } from '@fortawesome/free-solid-svg-icons'; // Import the comments icon
 
 const Sidebar = () => {
   const location = useLocation();
@@ -93,6 +94,16 @@ const Sidebar = () => {
             >
               <FontAwesomeIcon icon={faCalendarAlt} className={expanded ? "mr-3" : "mx-auto"} />
               {expanded && <span>Google Calendar</span>}
+            </Link>
+          </li>
+
+          <li className={`mb-2 ${location.pathname === '/comments' ? 'bg-blue-600 text-white' : ''}`}>
+            <Link 
+              to="/comments" 
+              className={`flex items-center p-4 ${theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-200'} rounded transition-colors`}
+            >
+              <FontAwesomeIcon icon={faComments} className={expanded ? "mr-3" : "mx-auto"} />
+              {expanded && <span>Comments</span>}
             </Link>
           </li>
         </ul>

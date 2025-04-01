@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import TaskComponent from "./TaskComponent";
 import Project from "./Project";
+import CommentSection from "./CommentSection";
 // Import Calendar component when it's ready
 // import Calendar from "./Calendar";
 
@@ -20,6 +21,8 @@ const Dashboard = () => {
       setActiveView("projects");
     } else if (path.includes("calendar")) {
       setActiveView("calendar");
+    } else if (path.includes("comments")) {
+      setActiveView("comments");
     }
   }, [location.pathname]);
 
@@ -43,6 +46,8 @@ const Dashboard = () => {
       case "calendar":
         // Temporarily using Project component for calendar view
         return <Project />;
+      case "comments":
+        return <CommentSection />;
       default:
         return <TaskComponent />;
     }
@@ -92,6 +97,18 @@ const Dashboard = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </button>
+
+            <button 
+              onClick={() => handleTabChange("comments")}
+              className={`w-12 h-12 mb-4 flex items-center justify-center rounded-lg ${
+                activeView === "comments" ? "bg-blue-600" : "hover:bg-gray-700"
+              }`}
+              title="Comments"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" />
+              </svg>
+            </button>
           </div>
         </div>
 
@@ -128,6 +145,16 @@ const Dashboard = () => {
               onClick={() => handleTabChange("calendar")}
             >
               Calendar
+            </button>
+            <button
+              className={`py-2 px-4 font-medium ${
+                activeView === "comments"
+                  ? "text-blue-600 border-b-2 border-blue-600 dark:text-blue-400 dark:border-blue-400"
+                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              }`}
+              onClick={() => handleTabChange("comments")}
+            >
+              Comments
             </button>
           </div>
 
