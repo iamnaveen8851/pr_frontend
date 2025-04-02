@@ -6,9 +6,10 @@ import {
   faProjectDiagram, 
   faCalendarAlt, 
   faChevronLeft, 
-  faChevronRight
+  faChevronRight,
+  faChartBar // Add chart icon import
 } from '@fortawesome/free-solid-svg-icons';
-import { faComments } from '@fortawesome/free-solid-svg-icons'; // Import the comments icon
+import { faComments } from '@fortawesome/free-solid-svg-icons';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -104,6 +105,17 @@ const Sidebar = () => {
             >
               <FontAwesomeIcon icon={faComments} className={expanded ? "mr-3" : "mx-auto"} />
               {expanded && <span>Comments</span>}
+            </Link>
+          </li>
+          
+          {/* Add new Analytics list item */}
+          <li className={`mb-2 ${location.pathname === '/analytics' ? 'bg-blue-600 text-white' : ''}`}>
+            <Link 
+              to="/analytics" 
+              className={`flex items-center p-4 ${theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-200'} rounded transition-colors`}
+            >
+              <FontAwesomeIcon icon={faChartBar} className={expanded ? "mr-3" : "mx-auto"} />
+              {expanded && <span>Analytics</span>}
             </Link>
           </li>
         </ul>

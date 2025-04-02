@@ -5,15 +5,22 @@ import { createComment, getComments } from "../redux/actions/commentAction";
 import { addNewComment, resetComments } from "../redux/reducers/commentSlice";
 import { fetchTasks } from "../redux/actions/taskAction";
 import { fetchProjects } from "../redux/actions/projectAction";
+import React from "react";
+import NavigationTabs from "./NavigationTabs"; // Import the NavigationTabs component
 
-const CommentSection = ({ taskId: initialTaskId, projectId: initialProjectId }) => {
+const CommentSection = ({
+  taskId: initialTaskId,
+  projectId: initialProjectId,
+}) => {
   const [newComment, setNewComment] = useState("");
   const [selectedTaskId, setSelectedTaskId] = useState(initialTaskId || "");
-  const [selectedProjectId, setSelectedProjectId] = useState(initialProjectId || "");
-  
+  const [selectedProjectId, setSelectedProjectId] = useState(
+    initialProjectId || ""
+  );
+
   const dispatch = useDispatch();
   const { comments, loading } = useSelector((state) => state.comments);
-  console.log(comments, "commeet...........")
+  console.log(comments, "commeet...........");
   const { tasks } = useSelector((state) => state.tasks);
   const { projects } = useSelector((state) => state.projects);
   const { user } = useSelector((state) => state.auth);
@@ -29,7 +36,7 @@ const CommentSection = ({ taskId: initialTaskId, projectId: initialProjectId }) 
   useEffect(() => {
     const taskId = selectedTaskId || initialTaskId;
     const projectId = selectedProjectId || initialProjectId;
-    
+
     if (taskId) {
       joinTaskRoom(taskId);
       dispatch(getComments({ taskId }));
@@ -46,7 +53,15 @@ const CommentSection = ({ taskId: initialTaskId, projectId: initialProjectId }) 
         dispatch(resetComments());
       }
     };
-  }, [initialTaskId, initialProjectId, selectedTaskId, selectedProjectId, dispatch, joinTaskRoom, joinProjectRoom]);
+  }, [
+    initialTaskId,
+    initialProjectId,
+    selectedTaskId,
+    selectedProjectId,
+    dispatch,
+    joinTaskRoom,
+    joinProjectRoom,
+  ]);
 
   // Listen for new comments via socket
   useEffect(() => {
@@ -80,7 +95,9 @@ const CommentSection = ({ taskId: initialTaskId, projectId: initialProjectId }) 
   };
 
   return (
-    <div className="container w-[90%] mx-auto mt-4 bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+    <div className="container w-[88%] mx-auto mt-12  bg-white dark:bg-gray-800 rounded-lg shadow p-5">
+      <NavigationTabs />
+      <br />
       <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
         Comments
       </h3>
@@ -108,14 +125,15 @@ const CommentSection = ({ taskId: initialTaskId, projectId: initialProjectId }) 
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
             >
               <option value="">None</option>
-              {tasks && tasks.map((task) => (
-                <option key={task._id} value={task._id}>
-                  {task.title}
-                </option>
-              ))}
+              {tasks &&
+                tasks.map((task) => (
+                  <option key={task._id} value={task._id}>
+                    {task.title}
+                  </option>
+                ))}
             </select>
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Select Project
@@ -126,11 +144,12 @@ const CommentSection = ({ taskId: initialTaskId, projectId: initialProjectId }) 
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
             >
               <option value="">None</option>
-              {projects && projects.map((project) => (
-                <option key={project._id} value={project._id}>
-                  {project.name}
-                </option>
-              ))}
+              {projects &&
+                projects.map((project) => (
+                  <option key={project._id} value={project._id}>
+                    {project.name}
+                  </option>
+                ))}
             </select>
           </div>
         </div>
@@ -139,7 +158,9 @@ const CommentSection = ({ taskId: initialTaskId, projectId: initialProjectId }) 
           <button
             type="submit"
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            disabled={!newComment.trim() || (!selectedTaskId && !selectedProjectId)}
+            disabled={
+              !newComment.trim() || (!selectedTaskId && !selectedProjectId)
+            }
           >
             Post Comment
           </button>
@@ -186,17 +207,21 @@ const CommentSection = ({ taskId: initialTaskId, projectId: initialProjectId }) 
                   <p className="text-gray-700 dark:text-gray-300">
                     {comment.content}
                   </p>
-                  
+
                   {/* Display task or project info if available */}
                   <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
                     {comment.task && tasks && tasks.length > 0 && (
                       <div className="inline-block bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-100 px-2 py-1 rounded mr-2">
-                        Task: {tasks.find(t => t._id === comment.task)?.title || 'Unknown Task'}
+                        Task:{" "}
+                        {tasks.find((t) => t._id === comment.task)?.title ||
+                          "Unknown Task"}
                       </div>
                     )}
                     {comment.project && projects && projects.length > 0 && (
                       <div className="inline-block bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-100 px-2 py-1 rounded">
-                        Project: {projects.find(p => p._id === comment.project)?.name || 'Unknown Project'}
+                        Project:{" "}
+                        {projects.find((p) => p._id === comment.project)
+                          ?.name || "Unknown Project"}
                       </div>
                     )}
                   </div>
