@@ -20,7 +20,7 @@ const Project = () => {
     Completed: [],
   });
 
-  console.log(projects, "Project state");
+  // console.log(projects, "Project state");
 
   const handleCreateProject = () => {
     setShowProjectForm(true);
@@ -161,7 +161,7 @@ const Project = () => {
         if (inProgressIndex !== -1 && completedIndex !== -1) {
           // Place between In Progress and Completed
           order = workflow[inProgressIndex].order + 
-                 (workflow[completedIndex].order - workflow[inProgressIndex].order) / 2;
+          (workflow[completedIndex].order - workflow[inProgressIndex].order) / 2;
         } else if (inProgressIndex !== -1) {
           // Place after In Progress
           order = workflow[inProgressIndex].order + 1;

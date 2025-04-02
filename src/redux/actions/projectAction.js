@@ -8,7 +8,7 @@ export const fetchProjects = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.get("/projects");
-      console.log("fetch Project", res.data.data);
+      // console.log("fetch Project", res.data.data);
       // Return the data in the format expected by the reducer
       return { projects: res.data.data };
     } catch (error) {
