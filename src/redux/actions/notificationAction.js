@@ -5,14 +5,14 @@ import toast from "react-hot-toast";
 export const getNotifications = createAsyncThunk(
   "notifications/getNotifications",
   async (_,{ rejectWithValue }) => {
-    console.log("i am api notification api function")
+    // console.log("i am api notification api function")
     try {
       // The backend already gets userId from the JWT token, so we don't need to pass it in the query
       const res = await axiosInstance.get(`/notifications`);
-      console.log("Notifications fetched:", res);
+    //   console.log("Notifications fetched:", res);
       return res.data.data || [];
     } catch (error) {
-      console.log("Error fetching notifications:", error.message);
+    //   console.log("Error fetching notifications:", error.message);
       if (error.response?.status === 404) {
         // Handle "No notifications found" gracefully
         return [];

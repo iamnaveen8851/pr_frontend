@@ -40,7 +40,7 @@ Implement real-time project dashboards with task completion rates, timelines, an
 
 Managers can generate custom reports (e.g., performance, resource usage, project progress).
 
-Use data visualization libraries (e.g., D3.js, Chart.js) to represent data visually.
+Use data visualization libraries (e.g., D3.js, Chart.js) to represent data visually.  - check[x]
 
 Integrations:
 

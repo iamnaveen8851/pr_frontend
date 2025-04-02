@@ -9,6 +9,7 @@ import {
 } from "../redux/actions/taskAction";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import TaskForm from "./TaskForm";
+import NavigationTabs from "./NavigationTabs";
 
 const TaskComponent = () => {
   const dispatch = useDispatch();
@@ -143,7 +144,8 @@ const TaskComponent = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center mb-4">
+      <div className="   flex justify-between items-center mb-4 ">
+        
         <h1 className="text-xl font-bold text-gray-800 dark:text-white">
           Tasks
         </h1>

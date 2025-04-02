@@ -8,6 +8,7 @@ import {
   updateProject,
 } from "../redux/actions/projectAction";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import NavigationTabs from "./NavigationTabs"; // Import the NavigationTabs component
 
 const Project = () => {
   const { projects, loading, error } = useSelector((state) => state.projects);
@@ -181,7 +182,9 @@ const Project = () => {
 };
 
   return (
-    <div className="container w-[90%] mx-auto px-4 py-6 bg-white dark:bg-gray-900">
+    <div className="container w-[88%] mx-auto  px-6 py-16 bg-white dark:bg-gray-900">
+
+        <NavigationTabs />
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
           Projects

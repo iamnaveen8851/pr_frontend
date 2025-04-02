@@ -9,6 +9,7 @@ import Sidebar from "./Sidebar";
 import Project from "./Project";
 import { useState, useEffect } from "react";
 import CommentSection from "./CommentSection";
+import TaskAnalytics from "./TaskAnalytics";
 
 const PublicRoute = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -88,6 +89,19 @@ const PublicRoute = () => {
             </PrivateRoute>
           }
         />
+
+        {/* Add Analytics route */}
+        <Route
+          path="/analytics"
+          element={
+            <PrivateRoute>
+              <AppLayout>
+                <TaskAnalytics />
+              </AppLayout>
+            </PrivateRoute>
+          }
+        />
+
         <Route
           path="/login"
           element={token ? <Navigate to="/" /> : <Login />}
