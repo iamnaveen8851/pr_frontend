@@ -9,7 +9,7 @@ import {
 } from "../redux/actions/taskAction";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import TaskForm from "./TaskForm";
-import { faRobot,   } from "@fortawesome/free-solid-svg-icons"; // Import AI icon
+import { faRobot } from "@fortawesome/free-solid-svg-icons"; // Import AI icon
 import { applyAIPriority } from "../redux/actions/aiPriorityAction";
 
 const TaskComponent = () => {
@@ -245,10 +245,16 @@ const TaskComponent = () => {
                                   />
                                   <FontAwesomeIcon
                                     icon={faRobot}
-                                    className={`cursor-pointer text-gray-600 dark:text-gray-300 mt-2 ${
-                                      loadingTasks[task._id] ? "animate-spin" : ""
+                                    className={`cursor-pointer text-gray-600 dark:text-gray-300 mt-2 hover:relative group ${
+                                      loadingTasks[task._id]
+                                        ? "animate-spin"
+                                        : ""
                                     }`}
-                                    onClick={() => handleApplyAIPriority(task._id)}
+                                    data-tooltip="AI Priority Check"
+                                    title="AI Priority Check"
+                                    onClick={() =>
+                                      handleApplyAIPriority(task._id)
+                                    }
                                   />
                                 </div>
                               </div>
