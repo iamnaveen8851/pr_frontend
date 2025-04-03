@@ -9,7 +9,8 @@ import {
 } from "../redux/actions/taskAction";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import TaskForm from "./TaskForm";
-import NavigationTabs from "./NavigationTabs";
+import { faRobot } from "@fortawesome/free-solid-svg-icons"; // Import AI icon
+import { applyAIPriority } from "../redux/actions/aiPriorityAction";
 
 const TaskComponent = () => {
   const dispatch = useDispatch();
@@ -19,7 +20,12 @@ const TaskComponent = () => {
   const menuRef = useRef(null);
   const [enabled, setEnabled] = useState(false);
 
-  const { tasks, loading, error } = useSelector((state) => state.tasks);
+  // Use tasks from Redux store
+  const { tasks, loading } = useSelector((state) => state.tasks);
+
+  // Add a loading state for each task
+  const [loadingTasks, setLoadingTasks] = useState({});
+
   const [columns, setColumns] = useState({
     Pending: { id: "Pending", title: "To Do", tasks: [] },
     "In Progress": { id: "In Progress", title: "In Progress", tasks: [] },
@@ -67,7 +73,7 @@ const TaskComponent = () => {
 
       setColumns(newColumns);
     }
-  }, [tasks]);
+  }, [tasks]); // Ensure this effect runs when tasks change
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -132,7 +138,7 @@ const TaskComponent = () => {
     setCurrentTask(task);
     setIsEditModalOpen(true);
   };
-  
+
   const handleEditTask = (task) => {
     handleEditClick(task);
     setMenuOpen(null);
@@ -142,10 +148,19 @@ const TaskComponent = () => {
     setMenuOpen(menuOpen === taskId ? null : taskId);
   };
 
+  const handleApplyAIPriority = (taskId) => {
+    // Set loading state for the task
+    setLoadingTasks((prev) => ({ ...prev, [taskId]: true }));
+
+    dispatch(applyAIPriority(taskId)).finally(() => {
+      // Clear loading state for the task
+      setLoadingTasks((prev) => ({ ...prev, [taskId]: false }));
+    });
+  };
+
   return (
     <>
       <div className="   flex justify-between items-center mb-4 ">
-        
         <h1 className="text-xl font-bold text-gray-800 dark:text-white">
           Tasks
         </h1>
@@ -219,7 +234,7 @@ const TaskComponent = () => {
                                 >
                                   {task.title}
                                 </div>
-                                <div className="p-1 w-[18%] rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex justify-center">
+                                <div className="flex flex-col items-center">
                                   <FontAwesomeIcon
                                     icon={faEllipsisH}
                                     className="cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity text-gray-600 dark:text-gray-300"
@@ -228,9 +243,22 @@ const TaskComponent = () => {
                                       toggleMenu(task._id);
                                     }}
                                   />
+                                  <FontAwesomeIcon
+                                    icon={faRobot}
+                                    className={`cursor-pointer text-gray-600 dark:text-gray-300 mt-2 hover:relative group ${
+                                      loadingTasks[task._id]
+                                        ? "animate-spin"
+                                        : ""
+                                    }`}
+                                    data-tooltip="AI Priority Check"
+                                    title="AI Priority Check"
+                                    onClick={() =>
+                                      handleApplyAIPriority(task._id)
+                                    }
+                                  />
                                 </div>
                               </div>
-                              
+
                               {/* Task content - same as in your original component */}
                               <div
                                 className={`text-sm text-gray-600 dark:text-gray-300 truncate ${
@@ -251,8 +279,7 @@ const TaskComponent = () => {
                                     </span>
                                     <span>
                                       {task.assignedToName ||
-                                        (typeof task.assignedTo ===
-                                          "object" &&
+                                        (typeof task.assignedTo === "object" &&
                                           task.assignedTo.username) ||
                                         "Unknown"}{" "}
                                       <span className="bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-1.5 py-0.5 rounded-full text-xs">
@@ -272,8 +299,7 @@ const TaskComponent = () => {
                                     </span>
                                     <span>
                                       {task.assignedByName ||
-                                        (typeof task.assignedBy ===
-                                          "object" &&
+                                        (typeof task.assignedBy === "object" &&
                                           task.assignedBy.username) ||
                                         "Unknown"}{" "}
                                       <span className="bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 px-1.5 py-0.5 rounded-full text-xs">
@@ -292,20 +318,22 @@ const TaskComponent = () => {
                                 <span
                                   className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
                                   ${
-                                    task.priority === "High" ||
-                                    task.priority === "Urgent"
+                                    loadingTasks[task._id]
+                                      ? "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
+                                      : task.priority === "High" ||
+                                        task.priority === "Urgent"
                                       ? "bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200"
                                       : task.priority === "Medium"
                                       ? "bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-200"
                                       : "bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200"
                                   }`}
                                 >
-                                  {task.priority}
+                                  {loadingTasks[task._id]
+                                    ? "Checking..."
+                                    : task?.priority}
                                 </span>
                                 <span className="text-xs text-gray-500 dark:text-gray-400">
-                                  {new Date(
-                                    task.deadline
-                                  ).toLocaleDateString()}
+                                  {new Date(task.deadline).toLocaleDateString()}
                                 </span>
                               </div>
 
