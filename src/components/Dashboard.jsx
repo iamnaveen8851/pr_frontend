@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import TaskComponent from "./TaskComponent";
 import Project from "./Project";
 import CommentSection from "./CommentSection";
 import TaskAnalytics from "./TaskAnalytics";
 import Sidebar from "./Sidebar";
-import NavigationTabs from "./NavigationTabs"; // Import the NavigationTabs component
+import NavigationTabs from "./NavigationTabs";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const [activeView, setActiveView] = useState("tasks");
 
@@ -47,17 +48,23 @@ const Dashboard = () => {
   };
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       <Navbar />
-      <Sidebar />
-      <div className="container w-[88%] m-auto mt-0 px-5 ">
-        {/* Use the NavigationTabs component */}
-        <NavigationTabs />
 
-        {/* Render the active view */}
-        {renderView()}
+      <div className="flex flex-1 relative">
+        {/* Sidebar is now self-contained with its own mobile responsiveness */}
+        <Sidebar />
+
+        {/* Main content - adjusted for responsive layout */}
+        <div className="flex-1 w-full transition-all duration-300 p-4 pt-20 md:ml-16">
+          {/* Navigation tabs */}
+          <NavigationTabs />
+
+          {/* Render the active view */}
+          {renderView()}
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
