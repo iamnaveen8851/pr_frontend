@@ -9,7 +9,8 @@ import {
   faChevronRight,
   faChartBar,
   faComments,
-  faBars, // Add hamburger menu icon
+  faBars,
+  faFileAlt, // Add hamburger menu icon
 } from "@fortawesome/free-solid-svg-icons";
 
 const Sidebar = () => {
@@ -205,6 +206,26 @@ const Sidebar = () => {
               </Link>
             </li>
 
+            <li
+              className={`mb-2 ${
+                location.pathname === "/analytics"
+                  ? "bg-blue-600 text-white"
+                  : ""
+              }`}
+            >
+              <Link
+                to="/reports"
+                className={`flex items-center p-4 ${
+                  theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-200"
+                } rounded transition-colors`}
+              >
+                <FontAwesomeIcon
+                  icon={faFileAlt}
+                  className={expanded ? "mr-3" : "mx-auto"}
+                />
+                {expanded && <span>Reports</span>}
+              </Link>
+            </li>
             <li
               className={`mb-2 ${
                 location.pathname === "/analytics"
