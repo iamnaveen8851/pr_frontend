@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faEllipsisH } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faEllipsisH, faMicrochip } from "@fortawesome/free-solid-svg-icons";
 import {
   fetchTasks,
   updateTaskStatus,
@@ -9,7 +9,7 @@ import {
 } from "../redux/actions/taskAction";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import TaskForm from "./TaskForm";
-import { faRobot } from "@fortawesome/free-solid-svg-icons"; // Import AI icon
+
 import { applyAIPriority } from "../redux/actions/aiPriorityAction";
 
 const TaskComponent = () => {
@@ -23,6 +23,7 @@ const TaskComponent = () => {
   // Use tasks from Redux store
   const { tasks, loading } = useSelector((state) => state.tasks);
 
+  console.log("Task data updated..............", tasks)
   // Add a loading state for each task
   const [loadingTasks, setLoadingTasks] = useState({});
 
@@ -244,20 +245,23 @@ const TaskComponent = () => {
                                     }}
                                   />
                                   <FontAwesomeIcon
-                                    icon={faRobot}
-                                    className={`cursor-pointer text-gray-600 dark:text-gray-300 mt-2 hover:relative group ${
-                                      loadingTasks[task._id]
-                                        ? "animate-spin"
-                                        : ""
+                                    icon={faMicrochip}
+                                    className={`cursor-pointer text-gray-600 dark:text-gray-300 mt-2 ${
+                                      loadingTasks[task._id] ? "animate-spin" : ""
                                     }`}
-                                    data-tooltip="AI Priority Check"
-                                    title="AI Priority Check"
-                                    onClick={() =>
-                                      handleApplyAIPriority(task._id)
-                                    }
+                                    onClick={() => handleApplyAIPriority(task._id)}
                                   />
                                 </div>
                               </div>
+
+                              {/* Project name with highlight */}
+                              {task.project && task.project.name && (
+                                <div className="mt-1 mb-1">
+                                  <span className="inline-block px-2 py-1 text-xs font-medium bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-200 rounded-md">
+                                    {task.project.name}
+                                  </span>
+                                </div>
+                              )}
 
                               {/* Task content - same as in your original component */}
                               <div
