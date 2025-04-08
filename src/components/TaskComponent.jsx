@@ -13,9 +13,10 @@ import {
   deleteTask,
   assignTask,
 } from "../redux/actions/taskAction";
+
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import TaskForm from "./TaskForm";
-import AIRecommendationModal from "./AIRecommendationModal";
+import AIRecommendationModal from "./AiRecommendationModal";
 
 import { applyAIPriority } from "../redux/actions/aiPriorityAction";
 
@@ -32,7 +33,7 @@ const TaskComponent = () => {
   // Use tasks from Redux store
   const { tasks, loading } = useSelector((state) => state.tasks);
 
-  console.log("Task data updated..............", tasks);
+  
   // Add a loading state for each task
   const [loadingTasks, setLoadingTasks] = useState({});
 

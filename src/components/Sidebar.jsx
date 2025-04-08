@@ -82,18 +82,6 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Mobile toggle button - fixed position */}
-      {isMobile &&
-        // <button
-        //   onClick={toggleSidebar}
-        //   className={`fixed top-20 left-4 z-30 p-2 rounded-full shadow-md ${
-        //     theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-800'
-        //   }`}
-        //   aria-label="Toggle sidebar"
-        // >
-        //   <FontAwesomeIcon icon={faBars} />
-        // </button>
-        ""}
 
       {/* Sidebar */}
       <div
@@ -137,7 +125,7 @@ const Sidebar = () => {
               >
                 <FontAwesomeIcon
                   icon={faTasks}
-                  className={expanded ? "mr-3" : "mx-auto"}
+                  className={expanded ? "mr-3 text-sm" : "mx-auto text-sm"}
                 />
                 {expanded && <span>Tasks</span>}
               </Link>
@@ -158,12 +146,13 @@ const Sidebar = () => {
               >
                 <FontAwesomeIcon
                   icon={faProjectDiagram}
-                  className={expanded ? "mr-3" : "mx-auto"}
+                  className={expanded ? "mr-3 text-sm" : "mx-auto text-sm"}
                 />
                 {expanded && <span>Projects</span>}
               </Link>
             </li>
 
+            {/* Continue updating the rest of the icons in the same way */}
             <li
               className={`mb-2 ${
                 location.pathname === "/calendar"
@@ -179,7 +168,7 @@ const Sidebar = () => {
               >
                 <FontAwesomeIcon
                   icon={faCalendarAlt}
-                  className={expanded ? "mr-3" : "mx-auto"}
+                  className={expanded ? "mr-3 text-sm" : "mx-auto text-sm"}
                 />
                 {expanded && <span>Google Calendar</span>}
               </Link>
@@ -200,7 +189,7 @@ const Sidebar = () => {
               >
                 <FontAwesomeIcon
                   icon={faComments}
-                  className={expanded ? "mr-3" : "mx-auto"}
+                  className={expanded ? "mr-3 text-sm" : "mx-auto text-sm"}
                 />
                 {expanded && <span>Comments</span>}
               </Link>
@@ -221,7 +210,7 @@ const Sidebar = () => {
               >
                 <FontAwesomeIcon
                   icon={faFileAlt}
-                  className={expanded ? "mr-3" : "mx-auto"}
+                  className={expanded ? "mr-3 text-sm" : "mx-auto text-sm"}
                 />
                 {expanded && <span>Reports</span>}
               </Link>
@@ -241,7 +230,7 @@ const Sidebar = () => {
               >
                 <FontAwesomeIcon
                   icon={faChartBar}
-                  className={expanded ? "mr-3" : "mx-auto"}
+                  className={expanded ? "mr-3 text-sm" : "mx-auto text-sm"}
                 />
                 {expanded && <span>Analytics</span>}
               </Link>

@@ -9,7 +9,7 @@ import Sidebar from "./Sidebar";
 import NavigationTabs from "./NavigationTabs";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
+ 
   const location = useLocation();
   const [activeView, setActiveView] = useState("tasks");
 
