@@ -4,7 +4,6 @@ import { BellIcon } from "@heroicons/react/24/outline";
 import {
   getNotifications,
   markNotificationAsRead,
- 
 } from "../redux/actions/notificationAction";
 
 const Notification = () => {
@@ -17,12 +16,12 @@ const Notification = () => {
   );
   // console.log(notifications, "notifications...........");
 
-  // Fetch notifications
-  useEffect(() => {
-    // console.log("Hit api for notificatons");
+// Fetch notifications only if we have unread notifications
+useEffect(() => {
+  if (unreadCount > 0) {
     dispatch(getNotifications());
-  }, []);
-
+  }
+}, [unreadCount]);
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -40,7 +39,7 @@ const Notification = () => {
   // Mark notification as read
   const handleMarkAsRead = (notificationId) => {
     console.log("mark as read", notificationId);
-    dispatch(markNotificationAsRead(notificationId)) //check it why its not invoking 
+    dispatch(markNotificationAsRead(notificationId)); //check it why its not invoking
   };
 
   // Format notification time
@@ -89,7 +88,9 @@ const Notification = () => {
             </h3>
             {unreadCount > 0 && (
               <button
-                onClick={()=> console.log("mark all as read make an api for that also")}
+                onClick={() =>
+                  console.log("mark all as read make an api for that also")
+                }
                 className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
               >
                 Mark all as read
@@ -127,7 +128,7 @@ const Notification = () => {
                         </span>
                       </div>
                     </div>
-                    <div 
+                    <div
                       className="ml-3 flex-1 cursor-pointer"
                       onClick={() => handleMarkAsRead(notification._id)}
                     >

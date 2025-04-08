@@ -1,7 +1,7 @@
 // Function to get Google Auth token using @react-oauth/google
 export const getGoogleAuthToken = async () => {
   // This assumes you're using the GoogleOAuthProvider and have a token available
-  const token = localStorage.getItem('googleToken');
+  const token = localStorage.getItem("googleAccessToken");
   return token;
 };
 
@@ -19,6 +19,8 @@ export const listCalendarEvents = async (timeMin, timeMax) => {
       });
     }
 
+    console.log("Token", token)
+
     // Set the auth token for the request
     window.gapi.client.setToken({ access_token: token });
 
@@ -33,7 +35,7 @@ export const listCalendarEvents = async (timeMin, timeMax) => {
 
     return response.result.items;
   } catch (error) {
-    console.error('Error fetching calendar events:', error);
+    // console.error('Error fetching calendar events:', error);
     return [];
   }
 };

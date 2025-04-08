@@ -20,7 +20,7 @@ const CommentSection = ({
 
   const dispatch = useDispatch();
   const { comments, loading } = useSelector((state) => state.comments);
-  console.log(comments, "commeet...........");
+  // console.log(comments, "commeet...........");
   const { tasks } = useSelector((state) => state.tasks);
   const { projects } = useSelector((state) => state.projects);
   const { user } = useSelector((state) => state.auth);
@@ -40,11 +40,11 @@ const CommentSection = ({
     if (taskId) {
       joinTaskRoom(taskId);
       dispatch(getComments({ taskId }));
-      console.log("Fetching comments for task:", taskId);
+      // console.log("Fetching comments for task:", taskId);
     } else if (projectId) {
       joinProjectRoom(projectId);
       dispatch(getComments({ projectId }));
-      console.log("Fetching comments for project:", projectId);
+      // console.log("Fetching comments for project:", projectId);
     }
 
     // Cleanup function

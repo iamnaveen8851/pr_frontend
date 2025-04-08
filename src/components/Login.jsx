@@ -123,7 +123,7 @@ const Login = () => {
 
   // handle Google login
   const handleGoogleLoginSuccess = (res) => {
-    console.log("login success", res);
+    // console.log("login success", res);
     dispatch(
       handleGoogleLogin({
         credential: res.credential,
@@ -150,7 +150,7 @@ const Login = () => {
       // Get user info
       const user = result.user;
 
-      console.log("GitHub login success:", user, token);
+      // console.log("GitHub login success:", user, token);
 
       // Now send this data to your backend using Redux action
       dispatch(
@@ -173,7 +173,7 @@ const Login = () => {
   };
 
   useEffect(() => {
-    console.log("Loading", loading);
+    // console.log("Loading", loading);
     if (!loading) {
       setIsSubmitting(false);
     }
@@ -316,7 +316,8 @@ const Login = () => {
                     <GoogleLogin
                       onSuccess={handleGoogleLoginSuccess}
                       onError={handleGoogleLoginError}
-                      width="180px"
+                      width="100px"
+                      text="sign in"
                     />
                   </div>
                   <button

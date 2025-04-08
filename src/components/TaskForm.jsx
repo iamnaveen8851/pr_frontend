@@ -11,7 +11,7 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
   const { user } = useSelector((state) => state.auth);
   const { loading: taskLoading } = useSelector((state) => state.tasks);
   const { projects } = useSelector((state) => state.projects);
-  console.log("Projects:", projects);
+  // console.log("Projects:", projects);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -106,7 +106,7 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
         filteredTaskData._id = taskData._id;
       }
 
-      console.log("Filtered task data to submit:", filteredTaskData);
+      // console.log("Filtered task data to submit:", filteredTaskData);
 
       if (isEditing) {
         // Make sure we have the task ID before dispatching the update action
