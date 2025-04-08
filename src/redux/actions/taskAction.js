@@ -24,7 +24,7 @@ export const createTask = createAsyncThunk(
 
     try {
       const res = await axiosInstance.post("/tasks/createTask", taskData);
-      console.log("Res", res)
+      console.log("Res", res);
       console.log("res of task created...", res.data.task);
 
       toast.success(`${res.data.message}`);
@@ -84,6 +84,47 @@ export const deleteTask = createAsyncThunk(
     } catch (error) {
       toast.error("Failed to delete task");
       return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const assignTask = createAsyncThunk(
+  "tasks/assignTask",
+  async ({ taskId, userId }, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.post(
+        `/task-allocation/${taskId}/allocate`,
+        {
+          userId,
+        }
+      );
+
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to assign task"
+      );
+    }
+  }
+);
+
+export const getUsersByAI = createAsyncThunk(
+  "tasks/getUsersByAI",
+  async ( taskId , { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.get(
+        `/task-allocation/${taskId}/recommendations`
+      );
+
+      console.log("GET RES", res.data)
+
+      toast.success("Users recommended successfully")
+
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to assign task"
+      );
     }
   }
 );

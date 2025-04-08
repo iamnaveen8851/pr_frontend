@@ -10,6 +10,7 @@ import Project from "./Project";
 import { useState, useEffect } from "react";
 import CommentSection from "./CommentSection";
 import TaskAnalytics from "./TaskAnalytics";
+import Reports from "./Reports";
 
 const PublicRoute = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -97,6 +98,17 @@ const PublicRoute = () => {
             <PrivateRoute>
               <AppLayout>
                 <TaskAnalytics />
+              </AppLayout>
+            </PrivateRoute>
+          }
+        />
+        {/* Add Analytics route */}
+        <Route
+          path="/reports"
+          element={
+            <PrivateRoute>
+              <AppLayout>
+                <Reports />
               </AppLayout>
             </PrivateRoute>
           }

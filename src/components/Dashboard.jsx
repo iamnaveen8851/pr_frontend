@@ -9,7 +9,7 @@ import Sidebar from "./Sidebar";
 import NavigationTabs from "./NavigationTabs";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
+ 
   const location = useLocation();
   const [activeView, setActiveView] = useState("tasks");
 
@@ -56,7 +56,7 @@ const Dashboard = () => {
         <Sidebar />
 
         {/* Main content - adjusted for responsive layout */}
-        <div className="flex-1 w-full transition-all duration-300 p-4 pt-20 md:ml-16">
+        <div className="flex-1 w-full transition-all duration-300 p-4 pt-0 md:ml-16">
           {/* Navigation tabs */}
           <NavigationTabs />
 

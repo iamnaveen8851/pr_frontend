@@ -1,14 +1,22 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faEllipsisH, faMicrochip } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlus,
+  faEllipsisH,
+  faMicrochip,
+  faUserPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   fetchTasks,
   updateTaskStatus,
   deleteTask,
+  assignTask,
 } from "../redux/actions/taskAction";
+
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import TaskForm from "./TaskForm";
+import AIRecommendationModal from "./AiRecommendationModal";
 
 import { applyAIPriority } from "../redux/actions/aiPriorityAction";
 
@@ -19,11 +27,13 @@ const TaskComponent = () => {
   const [menuOpen, setMenuOpen] = useState(null);
   const menuRef = useRef(null);
   const [enabled, setEnabled] = useState(false);
+  const [showAIRecommendations, setShowAIRecommendations] = useState(false);
+  const [selectedTaskForAI, setSelectedTaskForAI] = useState(null);
 
   // Use tasks from Redux store
   const { tasks, loading } = useSelector((state) => state.tasks);
 
-  console.log("Task data updated..............", tasks)
+  
   // Add a loading state for each task
   const [loadingTasks, setLoadingTasks] = useState({});
 
@@ -36,6 +46,24 @@ const TaskComponent = () => {
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [currentTask, setCurrentTask] = useState(null);
+
+  const handleShowAIRecommendations = (task) => {
+    setSelectedTaskForAI(task);
+    setShowAIRecommendations(true);
+    setMenuOpen(null);
+  };
+
+  const handleAssignTask = (userId) => {
+    if (selectedTaskForAI && userId) {
+      dispatch(assignTask({ taskId: selectedTaskForAI._id, userId }))
+        .then(() => {
+          dispatch(fetchTasks());
+        })
+        .catch((error) => {
+          console.error("Error assigning task:", error);
+        });
+    }
+  };
 
   useEffect(() => {
     dispatch(fetchTasks());
@@ -247,9 +275,13 @@ const TaskComponent = () => {
                                   <FontAwesomeIcon
                                     icon={faMicrochip}
                                     className={`cursor-pointer text-gray-600 dark:text-gray-300 mt-2 ${
-                                      loadingTasks[task._id] ? "animate-spin" : ""
+                                      loadingTasks[task._id]
+                                        ? "animate-spin"
+                                        : ""
                                     }`}
-                                    onClick={() => handleApplyAIPriority(task._id)}
+                                    onClick={() =>
+                                      handleApplyAIPriority(task._id)
+                                    }
                                   />
                                 </div>
                               </div>
@@ -342,10 +374,11 @@ const TaskComponent = () => {
                               </div>
 
                               {/* Menu for edit and delete actions */}
+
                               {menuOpen === task._id && (
                                 <div
                                   ref={menuRef}
-                                  className="absolute top-0 right-0 mt-8 mr-2 w-32 bg-white dark:bg-gray-700 rounded-md shadow-lg z-10 transition-opacity duration-300 ease-in-out opacity-0"
+                                  className="absolute top-0 right-0 mt-8 mr-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg z-10 transition-opacity duration-300 ease-in-out opacity-0"
                                   style={{
                                     opacity: menuOpen === task._id ? 1 : 0,
                                   }}
@@ -359,6 +392,19 @@ const TaskComponent = () => {
                                       }}
                                     >
                                       Edit
+                                    </button>
+                                    <button
+                                      className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleShowAIRecommendations(task);
+                                      }}
+                                    >
+                                      <FontAwesomeIcon
+                                        icon={faUserPlus}
+                                        className="mr-2"
+                                      />
+                                      AI Recommendations
                                     </button>
                                     <button
                                       className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-600"
@@ -414,6 +460,15 @@ const TaskComponent = () => {
           }}
           isEditing={true}
           initialData={currentTask}
+        />
+      )}
+
+      {showAIRecommendations && (
+        <AIRecommendationModal
+          isOpen={showAIRecommendations}
+          onClose={() => setShowAIRecommendations(false)}
+          taskId={selectedTaskForAI?._id}
+          onAssign={handleAssignTask}
         />
       )}
     </>
