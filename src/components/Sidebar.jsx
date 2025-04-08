@@ -9,7 +9,7 @@ import {
   faChevronRight,
   faChartBar,
   faComments,
-  faBars,
+  
   faFileAlt, // Add hamburger menu icon
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -197,7 +197,7 @@ const Sidebar = () => {
 
             <li
               className={`mb-2 ${
-                location.pathname === "/analytics"
+                location.pathname === "/reports"
                   ? "bg-blue-600 text-white"
                   : ""
               }`}
