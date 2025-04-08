@@ -6,15 +6,18 @@ import { createTask, updateTask } from "../redux/actions/taskAction";
 import { axiosInstance } from "../utils/axiosInstance";
 import { fetchProjects } from "../redux/actions/projectAction";
 
+import PropTypes from 'prop-types';
+
 const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
+
+
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const { loading: taskLoading } = useSelector((state) => state.tasks);
+
   const { projects } = useSelector((state) => state.projects);
   // console.log("Projects:", projects);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Get the current theme from localStorage
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
@@ -86,8 +89,6 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      setIsSubmitting(true);
-
       // Create a new object without the name fields
       const filteredTaskData = {
         title: taskData.title,
@@ -112,7 +113,7 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
         // Make sure we have the task ID before dispatching the update action
         if (!taskData._id) {
           console.error("Task ID is missing for update operation");
-          setIsSubmitting(false);
+         
           return;
         }
 
@@ -124,7 +125,7 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
           })
           .catch((error) => {
             console.error("Failed to update task:", error);
-            setIsSubmitting(false);
+          
           });
       } else {
         dispatch(createTask(filteredTaskData))
@@ -134,7 +135,7 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
           })
           .catch((error) => {
             console.error("Failed to create task:", error);
-            setIsSubmitting(false);
+           
           });
       }
     }
@@ -448,4 +449,20 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
   );
 };
 
+TaskForm.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  isEditing: PropTypes.bool,
+  initialData: PropTypes.shape({
+    _id: PropTypes.string,
+    title: PropTypes.string,
+    description: PropTypes.string,
+    priority: PropTypes.string,
+    status: PropTypes.string,
+    assignedTo: PropTypes.string,
+    assignedBy: PropTypes.string,
+    estimatedTime: PropTypes.string,
+    deadline: PropTypes.string,
+    project: PropTypes.string,
+  }),
+};
 export default TaskForm;

@@ -109,7 +109,7 @@ const Project = () => {
       const date = new Date(dateString);
       return date.toLocaleDateString();
     } catch (error) {
-      return "Invalid date";
+      return `Invalid date ${error}`;
     }
   };
 

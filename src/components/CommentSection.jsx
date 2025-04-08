@@ -5,11 +5,10 @@ import { createComment, getComments } from "../redux/actions/commentAction";
 import { addNewComment, resetComments } from "../redux/reducers/commentSlice";
 import { fetchTasks } from "../redux/actions/taskAction";
 import { fetchProjects } from "../redux/actions/projectAction";
-import React from "react";
+
 import NavigationTabs from "./NavigationTabs"; // Import the NavigationTabs component
 import { axiosInstance } from "../utils/axiosInstance";
-
-
+import PropTypes from "prop-types";
 
 const CommentSection = ({
   taskId: initialTaskId,
@@ -23,7 +22,7 @@ const CommentSection = ({
 
   // New state variables for mentions feature
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(false);
+
   const [showMentions, setShowMentions] = useState(false);
   const [mentionQuery, setMentionQuery] = useState("");
   const [mentionPosition, setMentionPosition] = useState(0);
@@ -39,13 +38,10 @@ const CommentSection = ({
   // Function to fetch users
   const fetchUsers = async () => {
     try {
-      setLoading(true);
       const response = await axiosInstance.get("/users");
       setUsers(response.data.data || []);
     } catch (error) {
       console.error("Error fetching users:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -387,3 +383,7 @@ const formatCommentWithMentions = (content, users) => {
 };
 
 export default CommentSection;
+CommentSection.propTypes = {
+  taskId: PropTypes.string,
+  projectId: PropTypes.string,
+};

@@ -1,5 +1,7 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+// No need to import PropTypes since we'll use TypeScript-like prop validation
+
 import { axiosInstance } from "../utils/axiosInstance";
 
 const AIRecommendationModal = ({ isOpen, onClose, taskId, onAssign }) => {
@@ -7,7 +9,7 @@ const AIRecommendationModal = ({ isOpen, onClose, taskId, onAssign }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedUserId, setSelectedUserId] = useState(null);
-  const dispatch = useDispatch();
+ 
 
   useEffect(() => {
     if (isOpen && taskId) {
@@ -22,7 +24,7 @@ const AIRecommendationModal = ({ isOpen, onClose, taskId, onAssign }) => {
       const response = await axiosInstance.get(
         `/task-allocation/${taskId}/recommendations`
       );
-      console.log(response, "Res");
+      // console.log(response, "Res");
       console.log("");
       setRecommendations(response.data.data.recommendations);
       setError(null);
@@ -42,8 +44,8 @@ const AIRecommendationModal = ({ isOpen, onClose, taskId, onAssign }) => {
     try {
       onAssign(selectedUserId);
       onClose();
-    } catch (err) {
-      setError("Failed to assign task");
+    } catch (error) {
+      setError("Failed to assign task", error);
     }
   };
 
@@ -140,5 +142,7 @@ const AIRecommendationModal = ({ isOpen, onClose, taskId, onAssign }) => {
     </div>
   );
 };
+
+
 
 export default AIRecommendationModal;

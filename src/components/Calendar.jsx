@@ -23,7 +23,7 @@ const Calendar = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [calendarDays, setCalendarDays] = useState([]);
   const [tasksByDate, setTasksByDate] = useState({});
-  const [googleEvents, setGoogleEvents] = useState([]);
+  const [setGoogleEvents] = useState([]);
   const [isLoadingEvents, setIsLoadingEvents] = useState(false);
   const [isGoogleAuthenticated, setIsGoogleAuthenticated] = useState(false);
 

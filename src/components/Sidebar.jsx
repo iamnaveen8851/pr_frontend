@@ -9,7 +9,7 @@ import {
   faChevronRight,
   faChartBar,
   faComments,
-  faBars,
+  
   faFileAlt, // Add hamburger menu icon
 } from "@fortawesome/free-solid-svg-icons";
 

@@ -96,8 +96,7 @@ const taskSlice = createSlice({
             }
             return task;
           });
-          // console.log(index, "index");
-          console.log(state.tasks, "state.tasks[index]");
+        
         } else {
           console.error(
             "applyAIPriority response does not contain expected data or taskId is missing:",
