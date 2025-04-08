@@ -21,7 +21,7 @@ const Notification = () => {
   useEffect(() => {
     // console.log("Hit api for notificatons");
     dispatch(getNotifications());
-  }, [dispatch]);
+  }, []);
 
   // Close dropdown when clicking outside
   useEffect(() => {
