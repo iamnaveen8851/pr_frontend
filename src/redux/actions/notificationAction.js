@@ -17,7 +17,7 @@ export const getNotifications = createAsyncThunk(
         // Handle "No notifications found" gracefully
         return [];
       }
-      toast.error("Failed to fetch notifications");
+      // toast.error("Failed to fetch notifications");
       return rejectWithValue(error.response?.data || error.message);
     }
   }
