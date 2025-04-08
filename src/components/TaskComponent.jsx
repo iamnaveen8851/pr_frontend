@@ -189,7 +189,8 @@ const TaskComponent = () => {
 
   return (
     <>
-      <div className="   flex justify-between items-center mb-4 ">
+      <div className="flex justify-between items-center mb-4">
+        {/* Removed extra whitespace in className above */}
         <h1 className="text-xl font-bold text-gray-800 dark:text-white">
           Tasks
         </h1>
@@ -378,9 +379,11 @@ const TaskComponent = () => {
                               {menuOpen === task._id && (
                                 <div
                                   ref={menuRef}
-                                  className="absolute top-0 right-0 mt-8 mr-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg z-10 transition-opacity duration-300 ease-in-out opacity-0"
+                                  className="absolute top-0 right-0 mt-8 mr-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg z-50"
+                                  /* Increased z-index from z-10 to z-50 and removed opacity-0 class */
                                   style={{
-                                    opacity: menuOpen === task._id ? 1 : 0,
+                                    opacity: 1, /* Set default opacity to 1 instead of conditional */
+                                    transition: "opacity 300ms ease-in-out"
                                   }}
                                 >
                                   <div className="py-1">
