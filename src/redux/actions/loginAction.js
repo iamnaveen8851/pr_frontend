@@ -59,7 +59,7 @@ export const handleGoogleLogin = createAsyncThunk(
         { withCredentials: true }
       );
 
-      console.log("Res", res);
+      // console.log("Res", res);
 
       if (res.status === 200) {
         setTimeout(() => {
@@ -67,8 +67,26 @@ export const handleGoogleLogin = createAsyncThunk(
           dispatch(loginSuccess(res.data));
           navigate("/");
           // toast.success(`Welcome ${res.data.user}!`);
-        }, 1000);
+        }, 800);
       }
+      const tokenClient = window.google.accounts.oauth2.initTokenClient({
+        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID, // same one you already use
+        scope: "https://www.googleapis.com/auth/calendar.readonly",
+        callback: (tokenResponse) => {
+          console.log(
+            "Google Calendar OAuth Access Token:",
+            tokenResponse.access_token
+          );
+          localStorage.setItem(
+            "googleAccessToken",
+            tokenResponse.access_token
+          );
+        },
+      });
+
+      console.log("Token Client", tokenClient);
+
+      tokenClient.requestAccessToken();
     } catch (error) {
       const errorMessage =
         error.response?.data?.message ||

@@ -77,7 +77,7 @@ const taskSlice = createSlice({
 
       .addCase(applyAIPriority.fulfilled, (state, action) => {
         const updatedTaskId = action.meta.arg; // Verify taskId is passed as arg
-        console.log(updatedTaskId, "updatedTaskId");
+        // console.log(updatedTaskId, "updatedTaskId");
         // Ensure action.payload and action.payload.priority are defined
         if (updatedTaskId && action.payload && action.payload.priority) {
           console.log(action.payload.priority, "priority");

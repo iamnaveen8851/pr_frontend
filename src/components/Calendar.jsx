@@ -46,16 +46,19 @@ const Calendar = () => {
     dispatch(fetchTasks());
 
     // Check if already authenticated with Google
-    const token = localStorage.getItem("googleToken");
+    const token = localStorage.getItem("accessToken");
+
     if (token) {
       setIsGoogleAuthenticated(true);
       fetchGoogleCalendarEvents();
+      // console.log("Token", token)
     }
-  }, [dispatch]);
+  }, []);
 
   // Fetch Google Calendar events
   const fetchGoogleCalendarEvents = async () => {
     setIsLoadingEvents(true);
+
     try {
       // Calculate first and last day of the month for the API request
       const year = currentDate.getFullYear();
@@ -67,6 +70,8 @@ const Calendar = () => {
         firstDay.toISOString(),
         lastDay.toISOString()
       );
+
+      // console.log("Google Calendar events", events);
       setGoogleEvents(events || []);
 
       // Merge Google events with tasks

@@ -183,8 +183,7 @@ const Project = () => {
 
   return (
     <div className="container w-[88%] mx-auto  px-6 py-16 bg-white dark:bg-gray-900">
-
-        <NavigationTabs />
+      <NavigationTabs />
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
           Projects
@@ -202,17 +201,22 @@ const Project = () => {
         <h2 className="text-lg font-semibold mb-4 text-left text-gray-800 dark:text-white">
           Project Workflow
         </h2>
-        <div className="flex justify-center items-center">
-          <div className="flex items-center justify-center w-full ">
+        <div className="flex justify-center items-center m-auto p-5">
+          <div className="flex  justify-between items-center m-auto  w-[95%]   ">
             {getWorkflowStages().map((stage, index, array) => {
               const stageName = stage.name;
-              const count = projectsByStatus[stageName] ? projectsByStatus[stageName].length : 0;
-              
+              const count = projectsByStatus[stageName]
+                ? projectsByStatus[stageName].length
+                : 0;
+
               return (
-                <div key={stage._id || index} className="flex items-center flex-grow">
+                <div
+                  key={stage._id || index}
+                  className=" flex items-center flex-grow "
+                >
                   <div className="flex flex-col items-center">
                     <div
-                      className={`rounded-full p-3 flex items-center justify-center w-10 h-10 ${
+                      className={`rounded-full p-3 flex items-center justify-center  w-10 h-10 ${
                         stageName === "Planning" || stageName === "Pending"
                           ? "bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-200"
                           : stageName === "In Progress"
@@ -235,8 +239,16 @@ const Project = () => {
                     <div className="flex-grow mx-4 relative">
                       <div className="h-0.5 bg-gray-300 dark:bg-gray-600 w-full absolute top-5"></div>
                       <div className="absolute right-0 top-3.5 transform translate-x-1/2">
-                        <svg className="h-4 w-4 text-gray-400 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                        <svg
+                          className="h-4 w-4 text-gray-400 dark:text-gray-500"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                       </div>
                     </div>

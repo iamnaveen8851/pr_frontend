@@ -7,6 +7,7 @@ const initialState = {
   message: "",
   user: null,
   // role: null,
+  token: null,
 };
 
 const authSlice = createSlice({
@@ -36,6 +37,7 @@ const authSlice = createSlice({
       state.isLoggedIn = true;
       state.message = action.payload.message;
       state.user = action.payload.user;
+      state.token = action.payload.accessToken;
     },
     logoutSuccess: (state) => {
       state.loading = false;

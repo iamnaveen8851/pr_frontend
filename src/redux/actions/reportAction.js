@@ -7,7 +7,7 @@ export const getTimeSpent = createAsyncThunk(
     try {
       const res = await axiosInstance.get(`/reports/time-spent`);
 
-      console.log(res, "res............for apply recommendation");
+      // console.log(res, "res............for apply recommendation");
       return res.data;
     } catch (error) {
       return rejectWithValue(
@@ -23,7 +23,7 @@ export const getPendingTasks = createAsyncThunk(
     try {
       const res = await axiosInstance.get(`/reports/pending-tasks`);
 
-      console.log(res, "res............for apply recommendation");
+      // console.log(res, "res............for apply recommendation");
       return res.data;
     } catch (error) {
       return rejectWithValue(
@@ -39,7 +39,7 @@ export const getTeamPerformance = createAsyncThunk(
     try {
       const res = await axiosInstance.get(`/reports/team-performance`);
 
-      console.log(res, "res............for apply recommendation");
+      // console.log(res, "res............for apply recommendation");
       return res.data;
     } catch (error) {
       return rejectWithValue(
