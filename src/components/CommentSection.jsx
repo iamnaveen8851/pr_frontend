@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useSocket } from "./SocketContext";
 import { createComment, getComments } from "../redux/actions/commentAction";
@@ -7,6 +7,9 @@ import { fetchTasks } from "../redux/actions/taskAction";
 import { fetchProjects } from "../redux/actions/projectAction";
 import React from "react";
 import NavigationTabs from "./NavigationTabs"; // Import the NavigationTabs component
+import { axiosInstance } from "../utils/axiosInstance";
+
+
 
 const CommentSection = ({
   taskId: initialTaskId,
@@ -18,18 +21,39 @@ const CommentSection = ({
     initialProjectId || ""
   );
 
+  // New state variables for mentions feature
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [showMentions, setShowMentions] = useState(false);
+  const [mentionQuery, setMentionQuery] = useState("");
+  const [mentionPosition, setMentionPosition] = useState(0);
+  const commentInputRef = useRef(null);
+
   const dispatch = useDispatch();
-  const { comments, loading } = useSelector((state) => state.comments);
-  // console.log(comments, "commeet...........");
+  const { comments, commentsLoading } = useSelector((state) => state.comments);
   const { tasks } = useSelector((state) => state.tasks);
   const { projects } = useSelector((state) => state.projects);
   const { user } = useSelector((state) => state.auth);
   const { socket, joinTaskRoom, joinProjectRoom } = useSocket();
 
-  // Fetch tasks and projects
+  // Function to fetch users
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get("/users");
+      setUsers(response.data.data || []);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch tasks, projects, and users
   useEffect(() => {
     dispatch(fetchTasks());
     dispatch(fetchProjects());
+    fetchUsers();
   }, [dispatch]);
 
   // Join appropriate room based on context and fetch comments
@@ -40,11 +64,9 @@ const CommentSection = ({
     if (taskId) {
       joinTaskRoom(taskId);
       dispatch(getComments({ taskId }));
-      // console.log("Fetching comments for task:", taskId);
     } else if (projectId) {
       joinProjectRoom(projectId);
       dispatch(getComments({ projectId }));
-      // console.log("Fetching comments for project:", projectId);
     }
 
     // Cleanup function
@@ -79,15 +101,78 @@ const CommentSection = ({
     }
   }, [socket, user, dispatch]);
 
+  // Handle text input and detect @ mentions
+  const handleCommentChange = (e) => {
+    const value = e.target.value;
+    setNewComment(value);
+
+    // Check for mention
+    const lastAtSymbol = value.lastIndexOf("@");
+    if (lastAtSymbol !== -1 && lastAtSymbol >= 0) {
+      const textAfterAt = value.substring(lastAtSymbol + 1);
+      // Only show mention suggestions if there's no space after @ or if query is continuing
+      if (!textAfterAt.includes(" ")) {
+        setMentionQuery(textAfterAt.toLowerCase());
+        setMentionPosition(lastAtSymbol);
+        setShowMentions(true);
+      } else {
+        setShowMentions(false);
+      }
+    } else {
+      setShowMentions(false);
+    }
+  };
+
+  // Filter users based on mention query
+  const filteredUsers = useMemo(() => {
+    if (!mentionQuery) return users;
+    return users
+      .filter((user) => user.username.toLowerCase().includes(mentionQuery))
+      .slice(0, 5); // Limit to 5 suggestions
+  }, [mentionQuery, users]);
+
+  // Handle user selection from mention dropdown
+  const handleUserSelect = (selectedUser) => {
+    const beforeMention = newComment.substring(0, mentionPosition);
+    const afterMention = newComment.substring(
+      mentionPosition + mentionQuery.length + 1
+    );
+
+    // Replace with the mention format
+    const updatedComment = `${beforeMention}@${selectedUser.username} ${afterMention}`;
+    setNewComment(updatedComment);
+    setShowMentions(false);
+
+    // Focus back on the input
+    setTimeout(() => {
+      if (commentInputRef.current) {
+        commentInputRef.current.focus();
+      }
+    }, 0);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!newComment.trim()) return;
+
+    // Extract mentions from the comment
+    const mentionRegex = /@(\w+)/g;
+    const mentions = [];
+    let match;
+    while ((match = mentionRegex.exec(newComment)) !== null) {
+      const mentionedUsername = match[1];
+      const mentionedUser = users.find((u) => u.username === mentionedUsername);
+      if (mentionedUser) {
+        mentions.push(mentionedUser._id);
+      }
+    }
 
     const commentData = {
       content: newComment,
       taskId: selectedTaskId || initialTaskId,
       projectId: selectedProjectId || initialProjectId,
       attachments: [],
+      mentions: mentions, // Add mentions to the comment data
     };
 
     dispatch(createComment(commentData));
@@ -95,7 +180,7 @@ const CommentSection = ({
   };
 
   return (
-    <div className="container w-[88%] mx-auto mt-12  bg-white dark:bg-gray-800 rounded-lg shadow p-5">
+    <div className="container w-[88%] mx-auto mt-12 bg-white dark:bg-gray-800 rounded-lg shadow p-5">
       <NavigationTabs />
       <br />
       <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
@@ -104,14 +189,44 @@ const CommentSection = ({
 
       {/* Comment form */}
       <form onSubmit={handleSubmit} className="mb-4">
-        <div className="mb-3">
+        <div className="mb-3 relative">
           <textarea
+            ref={commentInputRef}
             value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Add a comment..."
+            onChange={handleCommentChange}
+            placeholder="Add a comment... (Use @ to mention users)"
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
             rows="3"
           />
+
+          {/* Mention suggestions dropdown */}
+          {showMentions && filteredUsers.length > 0 && (
+            <div className="absolute z-10 mt-1 w-64 bg-white dark:bg-gray-700 rounded-md shadow-lg max-h-60 overflow-auto">
+              <ul className="py-1">
+                {filteredUsers.map((user) => (
+                  <li
+                    key={user._id}
+                    onClick={() => handleUserSelect(user)}
+                    className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer flex items-center"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-blue-200 dark:bg-blue-600 flex items-center justify-center mr-2">
+                      <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                        {user.username.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-800 dark:text-white">
+                        {user.username}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {user.role}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-4 mb-3">
@@ -168,7 +283,7 @@ const CommentSection = ({
       </form>
 
       {/* Comments list */}
-      {loading ? (
+      {commentsLoading ? (
         <div className="flex justify-center py-4">
           <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
         </div>
@@ -205,7 +320,8 @@ const CommentSection = ({
                   </div>
 
                   <p className="text-gray-700 dark:text-gray-300">
-                    {comment.content}
+                    {/* Display formatted comment with highlighted mentions */}
+                    {formatCommentWithMentions(comment.content, users)}
                   </p>
 
                   {/* Display task or project info if available */}
@@ -237,6 +353,37 @@ const CommentSection = ({
       )}
     </div>
   );
+};
+
+// Helper function to format comments with highlighted mentions
+const formatCommentWithMentions = (content, users) => {
+  if (!content) return "";
+
+  // Split the content by mention pattern
+  const parts = content.split(/(@\w+)/g);
+
+  return parts.map((part, index) => {
+    // Check if this part is a mention
+    if (part.startsWith("@")) {
+      const username = part.substring(1);
+      const mentionedUser = users.find((u) => u.username === username);
+
+      if (mentionedUser) {
+        // Return highlighted mention
+        return (
+          <span
+            key={index}
+            className="bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-100 px-1 rounded"
+          >
+            {part}
+          </span>
+        );
+      }
+    }
+
+    // Return regular text
+    return <span key={index}>{part}</span>;
+  });
 };
 
 export default CommentSection;

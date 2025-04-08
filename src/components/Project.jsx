@@ -137,49 +137,64 @@ const Project = () => {
 
   // Add this function to get workflow stages from projects
   const getWorkflowStages = () => {
-  // Default workflow if no projects have workflow data
-  const defaultWorkflow = [
-    { name: 'Planning', order: 1 },
-    { name: 'In Progress', order: 2 },
-    { name: 'On Hold', order: 3 },
-    { name: 'Completed', order: 4 }
-  ];
-  
-  // Try to get workflow from the first project that has it
-  if (projects && projects.length > 0) {
-    const projectWithWorkflow = projects.find(p => p.workflow && p.workflow.length > 0);
-    if (projectWithWorkflow && projectWithWorkflow.workflow) {
-      const workflow = [...projectWithWorkflow.workflow].sort((a, b) => a.order - b.order);
-      
-      // Check if "On Hold" is missing and add it if needed
-      if (!workflow.some(stage => stage.name === "On Hold")) {
-        // Find the position to insert "On Hold" (typically between "In Progress" and "Completed")
-        const inProgressIndex = workflow.findIndex(stage => stage.name === "In Progress");
-        const completedIndex = workflow.findIndex(stage => stage.name === "Completed");
-        
-        // Calculate the appropriate order value
-        let order = 3;
-        if (inProgressIndex !== -1 && completedIndex !== -1) {
-          // Place between In Progress and Completed
-          order = workflow[inProgressIndex].order + 
-          (workflow[completedIndex].order - workflow[inProgressIndex].order) / 2;
-        } else if (inProgressIndex !== -1) {
-          // Place after In Progress
-          order = workflow[inProgressIndex].order + 1;
+    // Default workflow if no projects have workflow data
+    const defaultWorkflow = [
+      { name: "Planning", order: 1 },
+      { name: "In Progress", order: 2 },
+      { name: "On Hold", order: 3 },
+      { name: "Completed", order: 4 },
+    ];
+
+    // Try to get workflow from the first project that has it
+    if (projects && projects.length > 0) {
+      const projectWithWorkflow = projects.find(
+        (p) => p.workflow && p.workflow.length > 0
+      );
+      if (projectWithWorkflow && projectWithWorkflow.workflow) {
+        const workflow = [...projectWithWorkflow.workflow].sort(
+          (a, b) => a.order - b.order
+        );
+
+        // Check if "On Hold" is missing and add it if needed
+        if (!workflow.some((stage) => stage.name === "On Hold")) {
+          // Find the position to insert "On Hold" (typically between "In Progress" and "Completed")
+          const inProgressIndex = workflow.findIndex(
+            (stage) => stage.name === "In Progress"
+          );
+          const completedIndex = workflow.findIndex(
+            (stage) => stage.name === "Completed"
+          );
+
+          // Calculate the appropriate order value
+          let order = 3;
+          if (inProgressIndex !== -1 && completedIndex !== -1) {
+            // Place between In Progress and Completed
+            order =
+              workflow[inProgressIndex].order +
+              (workflow[completedIndex].order -
+                workflow[inProgressIndex].order) /
+                2;
+          } else if (inProgressIndex !== -1) {
+            // Place after In Progress
+            order = workflow[inProgressIndex].order + 1;
+          }
+
+          // Insert "On Hold" at the appropriate position
+          workflow.push({
+            name: "On Hold",
+            order: order,
+            _id: "custom-on-hold",
+          });
+          // Re-sort the workflow after adding the new stage
+          workflow.sort((a, b) => a.order - b.order);
         }
-        
-        // Insert "On Hold" at the appropriate position
-        workflow.push({ name: "On Hold", order: order, _id: "custom-on-hold" });
-        // Re-sort the workflow after adding the new stage
-        workflow.sort((a, b) => a.order - b.order);
+
+        return workflow;
       }
-      
-      return workflow;
     }
-  }
-  
-  return defaultWorkflow;
-};
+
+    return defaultWorkflow;
+  };
 
   return (
     <div className="container w-[88%] mx-auto  px-6 py-16 bg-white dark:bg-gray-900">
@@ -197,7 +212,7 @@ const Project = () => {
       </div>
 
       {/* Workflow Graph */}
-      <div className="mb-8 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+      {/* <div className="mb-8 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
         <h2 className="text-lg font-semibold mb-4 text-left text-gray-800 dark:text-white">
           Project Workflow
         </h2>
@@ -241,6 +256,72 @@ const Project = () => {
                       <div className="absolute right-0 top-3.5 transform translate-x-1/2">
                         <svg
                           className="h-4 w-4 text-gray-400 dark:text-gray-500"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div> */}
+      {/* Workflow Graph */}
+      <div className="mb-8 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+        <h2 className="text-lg font-semibold mb-4 text-center text-gray-800 dark:text-white">
+          Project Workflow
+        </h2>
+
+        <div className="flex justify-center items-center p-2 sm:p-5">
+          <div className="flex items-center justify-center w-full max-w-3xl">
+            {getWorkflowStages().map((stage, index, array) => {
+              const stageName = stage.name;
+              const count = projectsByStatus[stageName]
+                ? projectsByStatus[stageName].length
+                : 0;
+
+              return (
+                <div
+                  key={stage._id || index}
+                  className="flex items-center flex-grow"
+                >
+                  <div className="flex flex-col items-center gap-1 sm:gap-2">
+                    <div
+                      className={`rounded-full p-2 sm:p-3 flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 ${
+                        stageName === "Planning" || stageName === "Pending"
+                          ? "bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-200"
+                          : stageName === "In Progress"
+                          ? "bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200"
+                          : stageName === "On Hold"
+                          ? "bg-orange-100 dark:bg-orange-900/50 text-orange-800 dark:text-orange-200"
+                          : "bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200"
+                      }`}
+                    >
+                      <span className="font-medium text-xs sm:text-sm">
+                        {count}
+                      </span>
+                    </div>
+                    <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mt-1 sm:mt-2 text-center">
+                      {stageName}
+                    </span>
+                    <span className="text-xs text-gray-500 hidden xs:block">
+                      Stage {stage.order}
+                    </span>
+                  </div>
+                  {index < array.length - 1 && (
+                    <div className="flex-grow mx-2 sm:mx-4 relative">
+                      <div className="h-0.5 bg-gray-300 dark:bg-gray-600 w-full absolute top-4 sm:top-5"></div>
+                      <div className="absolute right-0 top-3 sm:top-3.5 transform translate-x-1/2">
+                        <svg
+                          className="h-3 w-3 sm:h-4 sm:w-4 text-gray-400 dark:text-gray-500"
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >

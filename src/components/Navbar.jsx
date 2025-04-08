@@ -68,10 +68,8 @@ const Navbar = () => {
     <>
       {/* Navbar */}
       <nav className="bg-white dark:bg-gray-800 shadow-md w-full px-4 sm:px-6 py-3 flex justify-between items-center transition-colors duration-300 fixed top-0 z-30">
-        <div className="flex items-center">
-          <div className="text-xl font-bold text-gray-800 dark:text-white">
-            Task Management
-          </div>
+        <div className="text-xl md:text-2xl lg:text-2xl  font-bold text-gray-800 dark:text-white  m-auto md:m-0 lg:m-0 ">
+          Task Management
         </div>
 
         {/* Mobile menu button */}

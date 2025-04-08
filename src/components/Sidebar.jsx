@@ -197,7 +197,7 @@ const Sidebar = () => {
 
             <li
               className={`mb-2 ${
-                location.pathname === "/analytics"
+                location.pathname === "/reports"
                   ? "bg-blue-600 text-white"
                   : ""
               }`}
