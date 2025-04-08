@@ -16,8 +16,8 @@ const PublicRoute = () => {
   const [isLoading, setIsLoading] = useState(true);
   const token = localStorage.getItem("accessToken");
   const location = useLocation();
-  console.log("Token", token);
-  console.log("Current path:", location.pathname);
+  // console.log("Token", token);
+  // console.log("Current path:", location.pathname);
 
   useEffect(() => {
     // Short timeout to ensure token is properly checked

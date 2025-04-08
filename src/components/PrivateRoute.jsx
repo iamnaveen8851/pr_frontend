@@ -6,7 +6,7 @@ const PrivateRoute = ({ children }) => {
   // const { isLoggedIn, isSignedUp } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const token = localStorage.getItem("accessToken");
-  console.log("Access token", token);
+  // console.log("Access token", token);
 
   // Use ternary operator for conditional rendering
   useEffect(() => {
