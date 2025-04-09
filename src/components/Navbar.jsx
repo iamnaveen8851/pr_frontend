@@ -87,7 +87,7 @@ const Navbar = () => {
           <Notification />
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
+            className="px-3 py-2 rounded-full hover:bg-gray-200 hover:rounded-full dark:hover:bg-gray-700 transition-colors duration-300"
             aria-label="Toggle theme"
           >
             <FontAwesomeIcon
