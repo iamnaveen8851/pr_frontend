@@ -38,6 +38,7 @@ const CommentSection = ({
   // Function to fetch users
   const fetchUsers = async () => {
     try {
+      ;
       const response = await axiosInstance.get("/users");
       setUsers(response.data.data || []);
     } catch (error) {

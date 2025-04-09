@@ -52,11 +52,10 @@ const Dashboard = () => {
       <Navbar />
 
       <div className="flex flex-1 relative">
-        {/* Sidebar is now self-contained with its own mobile responsiveness */}
-        <Sidebar />
+      
 
         {/* Main content - adjusted for responsive layout */}
-        <div className="flex-1 w-full transition-all duration-300 p-4 pt-0 md:ml-16">
+        <div className="flex-1 w-full transition-all duration-300 p-6 pt-0 lg:ml-16">
           {/* Navigation tabs */}
           <NavigationTabs />
 

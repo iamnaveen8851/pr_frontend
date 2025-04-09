@@ -9,7 +9,6 @@ import {
   faChevronRight,
   faChartBar,
   faComments,
-  
   faFileAlt, // Add hamburger menu icon
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -17,27 +16,36 @@ const Sidebar = () => {
   const location = useLocation();
   const [expanded, setExpanded] = useState(false);
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [isVisible, setIsVisible] = useState(!isMobile); // Hide by default on mobile
+  // Near the top of your component
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(window.innerWidth < 1024);
+  const [isVisible, setIsVisible] = useState(window.innerWidth >= 1024); // Only visible on desktop initially
 
   // Handle window resize
   useEffect(() => {
     const handleResize = () => {
-      const mobile = window.innerWidth < 768;
-      setIsMobile(mobile);
+      const mobileOrTablet = window.innerWidth < 1024;
+      const wasMobileOrTablet = isMobileOrTablet;
+      
+      setIsMobileOrTablet(mobileOrTablet);
 
-      // Auto-hide on mobile, auto-show on desktop
-      if (!mobile && !isVisible) {
+      // If transitioning from desktop to mobile/tablet, hide the sidebar
+      if (mobileOrTablet && !wasMobileOrTablet) {
+        setIsVisible(false);
+      }
+      // If transitioning from mobile/tablet to desktop, show the sidebar
+      else if (!mobileOrTablet && wasMobileOrTablet) {
         setIsVisible(true);
-      } else if (mobile && isVisible && expanded) {
-        // On mobile, collapse the sidebar when resizing
+      }
+      
+      // On mobile/tablet, collapse the sidebar when resizing
+      if (mobileOrTablet && expanded) {
         setExpanded(false);
       }
     };
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [isVisible, expanded]);
+  }, [isMobileOrTablet, expanded]);
 
   // Theme detection logic
   useEffect(() => {
@@ -72,17 +80,17 @@ const Sidebar = () => {
   }, []);
 
   // Toggle sidebar visibility (for mobile)
+
   const toggleSidebar = () => {
     setIsVisible(!isVisible);
-    // When showing sidebar on mobile, start with collapsed state
-    if (!isVisible && isMobile) {
+    // When showing sidebar on mobile/tablet, start with collapsed state
+    if (!isVisible && isMobileOrTablet) {
       setExpanded(false);
     }
   };
 
   return (
     <>
-
       {/* Sidebar */}
       <div
         className={`h-[calc(100vh-4rem)] fixed top-16 ${
@@ -197,9 +205,7 @@ const Sidebar = () => {
 
             <li
               className={`mb-2 ${
-                location.pathname === "/reports"
-                  ? "bg-blue-600 text-white"
-                  : ""
+                location.pathname === "/reports" ? "bg-blue-600 text-white" : ""
               }`}
             >
               <Link
@@ -240,7 +246,8 @@ const Sidebar = () => {
       </div>
 
       {/* Overlay to close sidebar on mobile when clicked outside */}
-      {isMobile && isVisible && (
+      {/* Overlay to close sidebar on mobile/tablet when clicked outside */}
+      {isMobileOrTablet && isVisible && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-10"
           onClick={toggleSidebar}

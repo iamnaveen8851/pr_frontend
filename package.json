@@ -16,6 +16,7 @@
     "@heroicons/react": "^2.2.0",
     "@react-oauth/google": "^0.12.1",
     "@reduxjs/toolkit": "^2.6.1",
+    "aos": "^2.3.4",
     "axios": "^1.8.3",
     "chart.js": "^4.4.8",
     "firebase": "^11.5.0",
