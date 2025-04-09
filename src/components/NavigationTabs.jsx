@@ -55,10 +55,10 @@ const NavigationTabs = () => {
   return (
     <>
       {/* Mobile dropdown (visible on small screens) */}
-      <div className="md:hidden relative mb-4">
+      <div className="md:hidden relative mb-4 ">
         <button
           onClick={toggleDropdown}
-          className="w-full flex justify-between items-center py-2 px-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+          className="w-full flex justify-between items-center py-2 px-4 bg-white dark:bg-gray-800 dark:text-gray-400 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
         >
           <span className="font-medium">{getActiveViewName()}</span>
           <FontAwesomeIcon icon={dropdownOpen ? faChevronUp : faChevronDown} />
@@ -69,8 +69,8 @@ const NavigationTabs = () => {
             <button
               className={`w-full text-left py-2 px-4 ${
                 activeView === "tasks"
-                  ? "bg-blue-50 dark:bg-blue-900 text-blue-600 dark:text-blue-400"
-                  : ""
+                  ? "text-blue-600 dark:text-blue-400"
+                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
               }`}
               onClick={() => {
                 navigate("/");
@@ -83,8 +83,8 @@ const NavigationTabs = () => {
             <button
               className={`w-full text-left py-2 px-4 ${
                 activeView === "projects"
-                  ? "bg-blue-50 dark:bg-blue-900 text-blue-600 dark:text-blue-400"
-                  : ""
+                  ? "text-blue-600 dark:text-blue-400"
+                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
               }`}
               onClick={() => {
                 navigate("/projects");
@@ -97,8 +97,8 @@ const NavigationTabs = () => {
             <button
               className={`w-full text-left py-2 px-4 ${
                 activeView === "calendar"
-                  ? "bg-blue-50 dark:bg-blue-900 text-blue-600 dark:text-blue-400"
-                  : ""
+                  ? "text-blue-600 dark:text-blue-400"
+                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
               }`}
               onClick={() => {
                 navigate("/calendar");
@@ -111,8 +111,8 @@ const NavigationTabs = () => {
             <button
               className={`w-full text-left py-2 px-4 ${
                 activeView === "comments"
-                  ? "bg-blue-50 dark:bg-blue-900 text-blue-600 dark:text-blue-400"
-                  : ""
+                  ? "text-blue-600 dark:text-blue-400"
+                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
               }`}
               onClick={() => {
                 navigate("/comments");
@@ -125,8 +125,8 @@ const NavigationTabs = () => {
             <button
               className={`w-full text-left py-2 px-4 ${
                 activeView === "analytics"
-                  ? "bg-blue-50 dark:bg-blue-900 text-blue-600 dark:text-blue-400"
-                  : ""
+                  ? "text-blue-600 dark:text-blue-400"
+                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
               }`}
               onClick={() => {
                 navigate("/analytics");
@@ -137,9 +137,9 @@ const NavigationTabs = () => {
             </button>
             <button
               className={`w-full text-left py-2 px-4 ${
-                activeView === "analytics"
-                  ? "bg-blue-50 dark:bg-blue-900 text-blue-600 dark:text-blue-400"
-                  : ""
+                activeView === "reports"
+                  ? "text-blue-600 dark:text-blue-400"
+                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
               }`}
               onClick={() => {
                 navigate("/reports");

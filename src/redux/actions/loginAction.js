@@ -84,7 +84,7 @@ export const handleGoogleLogin = createAsyncThunk(
         },
       });
 
-      console.log("Token Client", tokenClient);
+      // console.log("Token Client", tokenClient);
 
       tokenClient.requestAccessToken();
     } catch (error) {
