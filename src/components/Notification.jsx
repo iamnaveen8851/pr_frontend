@@ -18,10 +18,8 @@ const Notification = () => {
 
 // Fetch notifications only if we have unread notifications
 useEffect(() => {
-  if (unreadCount > 0) {
-    dispatch(getNotifications());
-  }
-}, [unreadCount]);
+ dispatch(getNotifications());
+}, []);
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
