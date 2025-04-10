@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import CommentSection from "./CommentSection";
 import TaskAnalytics from "./TaskAnalytics";
 import Reports from "./Reports";
+import ResetPassword from "./ResetPassword";
 
 const PublicRoute = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -118,6 +119,7 @@ const PublicRoute = () => {
           path="/login"
           element={token ? <Navigate to="/" /> : <Login />}
         />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route
           path="/signup"
           element={token ? <Navigate to="/" /> : <SignUp />}

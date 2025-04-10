@@ -10,8 +10,6 @@ import {
   faTasks,
   faProjectDiagram,
   faCalendarAlt,
-  faChevronLeft,
-  faChevronRight,
   faBars,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";

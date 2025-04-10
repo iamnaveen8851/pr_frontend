@@ -1,7 +1,10 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_PRO_URL, // change url into PRO for deployment
+  baseURL:
+    import.meta.env.VITE_ENV === "production"
+      ? import.meta.env.VITE_PRO_URL
+      : import.meta.env.VITE_DEV_URL, // change url into PRO for deployment
   withCredentials: true,
 });
 
@@ -16,11 +19,5 @@ axiosInstance.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
-
-
-
-
-
-
 
 export { axiosInstance };
