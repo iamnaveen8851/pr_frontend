@@ -7,13 +7,14 @@ import {
   handleGoogleLogin,
   handleLogin,
 } from "../redux/actions/loginAction";
-import toast from "react-hot-toast";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Import FontAwesomeIcon
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"; // Import eye icons
+// import toast from "react-hot-toast";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { GoogleLogin } from "@react-oauth/google";
 import { signInWithPopup } from "firebase/auth";
 import { auth, githubProvider } from "../../config";
 import { GithubAuthProvider } from "firebase/auth/web-extension";
+import ForgotPassword from "./ForgotPassword"; // Import ForgotPassword component
 
 const Login = () => {
   const navigate = useNavigate();
@@ -22,6 +23,9 @@ const Login = () => {
     email: "",
     password: "",
   });
+
+  // Add state for forgot password modal
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   // to store the errors
   const [errors, setErrors] = useState({
@@ -108,9 +112,9 @@ const Login = () => {
       password: true,
     });
 
-    // Check if there are any errors
+    // // Check if there are any errors
     if (emailError || passwordError) {
-      toast.error("Please fix the errors in the form");
+      // toast.error("Please fix the errors in the form");
       return;
     }
 
@@ -134,7 +138,8 @@ const Login = () => {
   };
 
   const handleGoogleLoginError = () => {
-    toast.error("Google login failed. Please try again.");
+    // toast.error("Google login failed. Please try again.");
+    return
   };
 
   // Github login handler
@@ -167,19 +172,27 @@ const Login = () => {
       );
     } catch (error) {
       console.error("GitHub login error:", error);
-      toast.error("GitHub login failed. Please try again.");
+      // toast.error("GitHub login failed. Please try again.");
       setIsSubmitting(false);
     }
   };
 
+
+  
   useEffect(() => {
     // console.log("Loading", loading);
     if (!loading) {
       setIsSubmitting(false);
     }
   }, [loading]);
+
+
+
   return (
     <>
+      {showForgotPassword && (
+        <ForgotPassword onClose={() => setShowForgotPassword(false)} />
+      )}
       <div className={styles.parentContainer}>
         {/* left div for image */}
         <div className={styles.leftChild}>
@@ -203,14 +216,8 @@ const Login = () => {
                   value={formState.email}
                   onChange={(e) => {
                     setFormState({ ...formState, email: e.target.value });
-                    setTouched({ ...touched, email: true });
-                    setErrors({
-                      ...errors,
-                      email: validateEmail(e.target.value),
-                    });
                   }}
                   onBlur={handleBlur}
-                  required
                 />
                 {errors.email && touched.email && (
                   <p className="text-red-500 text-xs mt-1 text-left">
@@ -219,7 +226,7 @@ const Login = () => {
                 )}
               </div>
 
-              <div className="w-full mb-4">
+              <div className="w-full">
                 <div className="relative">
                   <input
                     className={`${styles.inputBoxes} ${
@@ -227,27 +234,20 @@ const Login = () => {
                         ? "border border-red-500"
                         : ""
                     }`}
-                    type={showPassword ? "text" : "password"} // Toggle input type
+                    type={showPassword ? "text" : "password"}
                     name="password"
                     placeholder="Password"
                     value={formState.password}
                     onChange={(e) => {
                       setFormState({ ...formState, password: e.target.value });
-                      setTouched({ ...touched, password: true });
-                      setErrors({
-                        ...errors,
-                        password: validatePassword(e.target.value),
-                      });
                     }}
                     onBlur={handleBlur}
-                    required
                   />
                   <span
                     className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
-                    onClick={() => setShowPassword(!showPassword)} // Toggle visibility
+                    onClick={() => setShowPassword(!showPassword)}
                   >
                     <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />{" "}
-                    {/* Toggle icon */}
                   </span>
                 </div>
                 {errors.password && touched.password && (
@@ -255,6 +255,17 @@ const Login = () => {
                     {errors.password}
                   </p>
                 )}
+              </div>
+
+              {/* Add Forgot Password link */}
+              <div className="w-full  text-right">
+                <button
+                  type="button"
+                  className="text-orange-500 hover:text-orange-700 text-sm"
+                  onClick={() => setShowForgotPassword(true)}
+                >
+                  Forgot Password?
+                </button>
               </div>
 
               <button
@@ -266,11 +277,8 @@ const Login = () => {
                 type="submit"
                 disabled={
                   isSubmitting ||
-                  errors.email ||
-                  errors.password ||
                   (!touched.email && !touched.password)
                 }
-                // disabled={errors.email || errors.password || isSubmitting}
               >
                 {isSubmitting ? (
                   <div className="flex items-center justify-center">

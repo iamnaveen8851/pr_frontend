@@ -3,7 +3,7 @@ import styles from "../styles/signup.module.css";
 import { handleSignUp } from "../redux/actions/signUpAction";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
@@ -12,22 +12,25 @@ const SignUp = () => {
   const dispatch = useDispatch();
 
   // Ensure state variables are accessed correctly
-  const { loading} = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.auth);
 
   const [formState, setFormState] = useState({
     username: "",
     email: "",
     password: "",
+    role: "", // Add role to formState
   });
   const [errors, setErrors] = useState({
     username: "",
     email: "",
     password: "",
+    role: "", // Add role to errors
   });
   const [touched, setTouched] = useState({
     username: false,
     email: false,
     password: false,
+    role: false, // Add role to touched
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -75,8 +78,14 @@ const SignUp = () => {
 
     return "";
   };
+
+  // Add the missing validateRole function
+  const validateRole = (role) => {
+    if (!role) return "Please select a role";
+    return "";
+  };
+
   // Handle blur events to mark fields as touched
-  // Add the missing handleBlur function
   const handleBlur = (e) => {
     const { name, value } = e.target;
     setTouched({
@@ -89,6 +98,7 @@ const SignUp = () => {
     if (name === "username") errorMessage = validateUsername(value);
     else if (name === "email") errorMessage = validateEmail(value);
     else if (name === "password") errorMessage = validatePassword(value);
+    else if (name === "role") errorMessage = validateRole(value);
 
     setErrors({
       ...errors,
@@ -103,11 +113,13 @@ const SignUp = () => {
     const usernameError = validateUsername(formState.username);
     const emailError = validateEmail(formState.email);
     const passwordError = validatePassword(formState.password);
+    const roleError = validateRole(formState.role);
 
     const newErrors = {
       username: usernameError,
       email: emailError,
       password: passwordError,
+      role: roleError,
     };
 
     setErrors(newErrors);
@@ -115,11 +127,12 @@ const SignUp = () => {
       username: true,
       email: true,
       password: true,
+      role: true,
     });
 
     // Check if there are any errors
-    if (usernameError || emailError || passwordError) {
-      toast.error("Please fix the errors in the form");
+    if (usernameError || emailError || passwordError || roleError) {
+      // toast.error("Please fix the errors in the form");
       return;
     }
 
@@ -154,14 +167,13 @@ const SignUp = () => {
                   onChange={(e) => {
                     setFormState({ ...formState, username: e.target.value });
                     // Mark as touched and validate on change
-                    setTouched({ ...touched, username: true });
-                    setErrors({
-                      ...errors,
-                      username: validateUsername(e.target.value),
-                    });
+                    // setTouched({ ...touched, username: true });
+                    // setErrors({
+                    //   ...errors,
+                    //   username: validateUsername(e.target.value),
+                    // });
                   }}
                   onBlur={handleBlur}
-                  required
                 />
                 {errors.username && touched.username && (
                   <p className={styles.errorText}>{errors.username}</p>
@@ -180,14 +192,13 @@ const SignUp = () => {
                   onChange={(e) => {
                     setFormState({ ...formState, email: e.target.value });
                     // Mark as touched and validate on change
-                    setTouched({ ...touched, email: true });
-                    setErrors({
-                      ...errors,
-                      email: validateEmail(e.target.value),
-                    });
+                    // setTouched({ ...touched, email: true });
+                    // setErrors({
+                    //   ...errors,
+                    //   email: validateEmail(e.target.value),
+                    // });
                   }}
                   onBlur={handleBlur}
-                  required
                 />
                 {errors.email && touched.email && (
                   <p className={styles.errorText}>{errors.email}</p>
@@ -212,14 +223,13 @@ const SignUp = () => {
                         password: e.target.value,
                       });
                       // Mark as touched and validate on change
-                      setTouched({ ...touched, password: true });
-                      setErrors({
-                        ...errors,
-                        password: validatePassword(e.target.value),
-                      });
+                      // setTouched({ ...touched, password: true });
+                      // setErrors({
+                      //   ...errors,
+                      //   password: validatePassword(e.target.value),
+                      // });
                     }}
                     onBlur={handleBlur}
-                    required
                   />
                   <span
                     className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
@@ -242,10 +252,9 @@ const SignUp = () => {
                   value={formState.role}
                   onChange={(e) => {
                     setFormState({ ...formState, role: e.target.value });
-                    setTouched({ ...touched, role: true });
+                    // setTouched({ ...touched, role: true });
                   }}
                   onBlur={handleBlur}
-                  required
                 >
                   <option value="">Select Role</option>
                   <option value="Employee">Employee</option>
@@ -262,16 +271,18 @@ const SignUp = () => {
                   errors.username ||
                   errors.email ||
                   errors.password ||
+                  errors.role ||
                   isSubmitting
                     ? "opacity-50 cursor-not-allowed"
                     : ""
                 }`}
                 type="submit"
                 disabled={
-                  errors.username ||
-                  errors.email ||
-                  errors.password ||
-                  isSubmitting
+                  isSubmitting ||
+                  (touched.username && errors.username) ||
+                  (touched.email && errors.email) ||
+                  (touched.password && errors.password) ||
+                  (touched.role && errors.role)
                 }
               >
                 {isSubmitting ? (

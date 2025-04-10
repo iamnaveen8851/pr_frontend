@@ -5,7 +5,7 @@ import TaskComponent from "./TaskComponent";
 import Project from "./Project";
 import CommentSection from "./CommentSection";
 import TaskAnalytics from "./TaskAnalytics";
-import Sidebar from "./Sidebar";
+
 import NavigationTabs from "./NavigationTabs";
 
 const Dashboard = () => {
