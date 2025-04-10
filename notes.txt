@@ -1,22 +1,19 @@
 
- add one side bar for the following options:
-   - google Calendar
-   - project 
-        - show the task title 
-        - description
-        - work flow graph
-
-
-
 NEXT WEEK: 
 
 work on 
-  - AI 
   - Real Time Communication - using web socket.io
+  - AI 
   - machine learning 
 
 
-for maximum depth exceed error --- remove all dependencies from useEffect and try to perform without useEffect
 
-fix deployment at last 
+
+fix deployment at last --- check OR review once 
+OR 
+Redeploy the frontend again and integrate it with all following
+    - google console
+    - firebase
+    - pro url add in server 
+    - test it again 
 

@@ -14,11 +14,11 @@ Users can create tasks, assign them to team members, and define task deadlines. 
 
 Each task has customizable fields (Priority, Status, Estimated Time, etc.). --- check[x]
 
-Tasks are organized within projects, and each project can have different workflows. 
+Tasks are organized within projects, and each project can have different workflows.  --- check this once because task should organised in project 
 
 Drag-and-drop functionality for task reordering and status updates (Kanban board view). -- check[x]
 
-AI-Powered Task Prioritization:
+AI-Powered Task Prioritization: ---- check[x]
 
 Use an AI model (possibly GPT-4 or a custom model) to automatically suggest task prioritization based on factors such as urgency, dependencies, and historical task completion data.
 
@@ -32,13 +32,7 @@ Generate reports for managers on time spent, pending tasks, and team performance
 
 Use machine learning to optimize task allocation based on team members' strengths and historical performance.
 
-Real-time Collaboration and Communication:
 
-Enable real-time messaging within tasks or projects. Users can leave comments, mention colleagues, and attach files.
-
-Support notifications (push and email) when there are updates or comments on tasks.
-
-Implement @mentions, and link related tasks to create a network of dependencies.
 
 Advanced Reporting and Analytics:
 
@@ -46,7 +40,7 @@ Implement real-time project dashboards with task completion rates, timelines, an
 
 Managers can generate custom reports (e.g., performance, resource usage, project progress).
 
-Use data visualization libraries (e.g., D3.js, Chart.js) to represent data visually.
+Use data visualization libraries (e.g., D3.js, Chart.js) to represent data visually.  - check[x]
 
 Integrations:
 

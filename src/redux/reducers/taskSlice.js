@@ -6,6 +6,7 @@ import {
   updateTaskStatus,
   deleteTask,
 } from "../actions/taskAction";
+import { applyAIPriority } from "../actions/aiPriorityAction";
 
 const initialState = {
   tasks: [],
@@ -72,6 +73,36 @@ const taskSlice = createSlice({
       // Delete task
       .addCase(deleteTask.fulfilled, (state, action) => {
         state.tasks = state.tasks.filter((task) => task._id !== action.payload);
+      })
+
+      .addCase(applyAIPriority.fulfilled, (state, action) => {
+        const updatedTaskId = action.meta.arg; // Verify taskId is passed as arg
+        // console.log(updatedTaskId, "updatedTaskId");
+        // Ensure action.payload and action.payload.priority are defined
+        if (updatedTaskId && action.payload && action.payload.priority) {
+          console.log(action.payload.priority, "priority");
+          const updatedPriority = action.payload.priority;
+
+          // const index = state.tasks.findIndex(
+          //   (task) => task._id === updatedTaskId
+          // );
+          // if (index !== -1) {
+          //   state.tasks[index].priority = updatedPriority;
+          // }
+
+          state.tasks = state.tasks.map((task) => {
+            if (task._id === updatedTaskId) {
+              return { ...task, priority: updatedPriority };
+            }
+            return task;
+          });
+        
+        } else {
+          console.error(
+            "applyAIPriority response does not contain expected data or taskId is missing:",
+            action.payload
+          );
+        }
       });
   },
 });
