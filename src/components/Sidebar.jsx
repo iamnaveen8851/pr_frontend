@@ -94,7 +94,7 @@ const Sidebar = () => {
       {/* Sidebar */}
       <div
         className={`h-[calc(100vh-4rem)] fixed top-16 ${
-          theme === "dark" ? "bg-gray-800" : "bg-gray-100"
+          theme === "dark" ? "bg-gray-800" : "bg--100"
         } 
         ${
           theme === "dark" ? "text-white" : "text-gray-800"
@@ -107,7 +107,7 @@ const Sidebar = () => {
           <button
             onClick={() => setExpanded(!expanded)}
             className={`p-2 rounded ${
-              theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-200"
+              theme === "dark" ? "hover:bg-blue-600" : "hover:bg-blue-600"
             } transition-colors`}
             aria-label={expanded ? "Collapse sidebar" : "Expand sidebar"}
           >
@@ -122,13 +122,15 @@ const Sidebar = () => {
           <ul>
             <li
               className={`mb-2 ${
-                location.pathname === "/" ? "bg-blue-600 text-white" : ""
+                location.pathname === "/" ? "bg-orange-500 text-white" : ""
               }`}
             >
               <Link
                 to="/"
                 className={`flex items-center p-4 ${
-                  theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-200"
+                  theme === "dark"
+                    ? "hover:bg-blue-600"
+                    : "hover:bg-blue-600  hover:text-white"
                 } rounded transition-colors`}
               >
                 <FontAwesomeIcon
@@ -142,14 +144,16 @@ const Sidebar = () => {
             <li
               className={`mb-2 ${
                 location.pathname === "/projects"
-                  ? "bg-blue-600 text-white"
+                  ? "bg-orange-500 text-white"
                   : ""
               }`}
             >
               <Link
                 to="/projects"
                 className={`flex items-center p-4 ${
-                  theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-200"
+                  theme === "dark"
+                    ? "hover:bg-blue-600"
+                    : "hover:bg-blue-600  hover:text-white"
                 } rounded transition-colors`}
               >
                 <FontAwesomeIcon
@@ -164,14 +168,16 @@ const Sidebar = () => {
             <li
               className={`mb-2 ${
                 location.pathname === "/calendar"
-                  ? "bg-blue-600 text-white"
+                  ? "bg-orange-500 text-white"
                   : ""
               }`}
             >
               <Link
                 to="/calendar"
                 className={`flex items-center p-4 ${
-                  theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-200"
+                  theme === "dark"
+                    ? "hover:bg-blue-600"
+                    : "hover:bg-blue-600  hover:text-white"
                 } rounded transition-colors`}
               >
                 <FontAwesomeIcon
@@ -185,14 +191,16 @@ const Sidebar = () => {
             <li
               className={`mb-2 ${
                 location.pathname === "/comments"
-                  ? "bg-blue-600 text-white"
+                  ? "bg-orange-500 text-white"
                   : ""
               }`}
             >
               <Link
                 to="/comments"
                 className={`flex items-center p-4 ${
-                  theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-200"
+                  theme === "dark"
+                    ? "hover:bg-blue-600"
+                    : "hover:bg-blue-600  hover:text-white"
                 } rounded transition-colors`}
               >
                 <FontAwesomeIcon
@@ -205,13 +213,17 @@ const Sidebar = () => {
 
             <li
               className={`mb-2 ${
-                location.pathname === "/reports" ? "bg-blue-600 text-white" : ""
+                location.pathname === "/reports"
+                  ? "bg-orange-500 text-white"
+                  : ""
               }`}
             >
               <Link
                 to="/reports"
                 className={`flex items-center p-4 ${
-                  theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-200"
+                  theme === "dark"
+                    ? "hover:bg-blue-600"
+                    : "hover:bg-blue-600  hover:text-white"
                 } rounded transition-colors`}
               >
                 <FontAwesomeIcon
@@ -224,15 +236,17 @@ const Sidebar = () => {
             <li
               className={`mb-2 ${
                 location.pathname === "/analytics"
-                  ? "bg-blue-600 text-white"
+                  ? "bg-orange-500 text-white"
                   : ""
               }`}
             >
               <Link
                 to="/analytics"
                 className={`flex items-center p-4 ${
-                  theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-200"
-                } rounded transition-colors`}
+                  theme === "dark"
+                    ? "hover:bg-blue-600"
+                    : "hover:bg-blue-600  hover:text-white"
+                }  rounded transition-colors`}
               >
                 <FontAwesomeIcon
                   icon={faChartBar}
