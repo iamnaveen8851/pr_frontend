@@ -49,9 +49,11 @@ const Dashboard = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-      <Navbar />
+      {/* <Navbar /> */}
 
-      <div className="flex flex-1 relative">
+      <div className="flex flex-1
+       ">
+         {/* relative */}
       
 
         {/* Main content - adjusted for responsive layout */}
