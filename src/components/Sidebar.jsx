@@ -89,25 +89,41 @@ const Sidebar = () => {
     }
   };
 
+  // Add this function to handle sidebar expansion
+  const handleExpand = () => {
+    const newExpandedState = !expanded;
+    setExpanded(newExpandedState);
+    
+    // Store in localStorage for persistence
+    localStorage.setItem("sidebarExpanded", newExpandedState.toString());
+    
+    // Dispatch custom event for other components to listen to
+    window.dispatchEvent(
+      new CustomEvent('sidebar-toggle', { 
+        detail: { expanded: newExpandedState } 
+      })
+    );
+  };
+
   return (
     <>
       {/* Sidebar */}
       <div
         className={`h-[calc(100vh-4rem)] fixed top-16 ${
-          theme === "dark" ? "bg-gray-800" : "bg--100"
+          theme === "dark" ? "bg-gray-800" : "bg-white"
         } 
         ${
           theme === "dark" ? "text-white" : "text-gray-800"
-        } transition-all duration-300 ${expanded ? "w-64" : "w-16"} ${
+        } transition-all duration-300 ${expanded ? "w-45" : "w-16"} ${
           isVisible ? "left-0" : "-left-20"
         } z-20 shadow-lg`}
       >
         <div className="p-4 flex justify-between items-center">
           {expanded && <h2 className="text-xl font-bold">Menu</h2>}
           <button
-            onClick={() => setExpanded(!expanded)}
+            onClick={handleExpand}
             className={`p-2 rounded ${
-              theme === "dark" ? "hover:bg-blue-600" : "hover:bg-blue-600"
+              theme === "dark" ? "hover:bg-blue-600" : "hover:bg-gray-200"
             } transition-colors`}
             aria-label={expanded ? "Collapse sidebar" : "Expand sidebar"}
           >
