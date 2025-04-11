@@ -25,7 +25,7 @@ const ProjectForm = ({
   const [projectData, setProjectData] = useState({
     name: initialData?.name || "",
     description: initialData?.description || "",
-    status: initialData?.status || "Planning",
+    status: initialData?.status || "",
     startDate: initialData?.startDate
       ? new Date(initialData.startDate).toISOString().split("T")[0]
       : "",
@@ -246,6 +246,7 @@ const ProjectForm = ({
                 onChange={handleChange}
                 className="w-3/4 p-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
               >
+                <option value="">Select-Status</option>
                 <option value="Planning">Planning</option>
                 <option value="In Progress">In Progress</option>
                 <option value="Completed">Completed</option>
