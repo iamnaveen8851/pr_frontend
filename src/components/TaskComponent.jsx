@@ -953,7 +953,6 @@ const TaskComponent = () => {
           onClose={() => {
             setShowTaskForm(false);
             setTaskToEdit(null);
-            dispatch(fetchTasks());
           }}
           taskToEdit={taskToEdit}
         />
