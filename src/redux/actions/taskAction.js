@@ -82,7 +82,7 @@ export const deleteTask = createAsyncThunk(
       toast.success("Task deleted successfully");
       return id;
     } catch (error) {
-      toast.error("Failed to delete task");
+      toast.error(error.response.data.message);
       return rejectWithValue(error.response.data);
     }
   }
@@ -110,15 +110,15 @@ export const assignTask = createAsyncThunk(
 
 export const getUsersByAI = createAsyncThunk(
   "tasks/getUsersByAI",
-  async ( taskId , { rejectWithValue }) => {
+  async (taskId, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.get(
         `/task-allocation/${taskId}/recommendations`
       );
 
-      console.log("GET RES", res.data)
+      console.log("GET RES", res.data);
 
-      toast.success("Users recommended successfully")
+      toast.success("Users recommended successfully");
 
       return res.data;
     } catch (error) {
