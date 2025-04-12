@@ -114,7 +114,7 @@ const Sidebar = () => {
         } 
         ${
           theme === "dark" ? "text-white" : "text-gray-800"
-        } transition-all duration-300 ${expanded ? "w-45" : "w-16"} ${
+        } transition-all duration-500 ease-in ${expanded ? "w-45" : "w-16"} ${
           isVisible ? "left-0" : "-left-20"
         } z-20 shadow-lg`}
       >
