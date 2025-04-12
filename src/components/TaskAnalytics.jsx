@@ -62,14 +62,12 @@ const TaskAnalytics = () => {
   // Process task data when tasks or projects change
   useEffect(() => {
     if (tasks && tasks.length > 0) {
-      // Count tasks by status
-      const statusCounts = {
-        "To Do": tasks.filter((task) => task.status === "To Do").length,
-        "In Progress": tasks.filter((task) => task.status === "In Progress")
-          .length,
-        "In Review": tasks.filter((task) => task.status === "In Review").length,
-        Completed: tasks.filter((task) => task.status === "Completed").length,
-      };
+      // Count tasks by status - fixing the status values to match what's in your data
+      const statusCounts = {};
+
+      tasks.forEach((task) => {
+        statusCounts[task.status] = (statusCounts[task.status] || 0) + 1;
+      });
 
       // Count tasks by priority
       const priorityCounts = {
@@ -82,9 +80,24 @@ const TaskAnalytics = () => {
       const projectTaskCounts = {};
       if (projects && projects.length > 0) {
         projects.forEach((project) => {
-          projectTaskCounts[project.name] = tasks.filter(
-            (task) => task.project === project._id
-          ).length;
+          // Debug the project data
+          console.log("Project:", project.name, "ID:", project._id);
+          
+          // Check if tasks have project IDs and count them properly
+          const tasksInProject = tasks.filter(task => {
+            // Debug task project relationship
+            if (task.project) {
+              console.log("Task project ID:", task.project, "comparing with:", project._id);
+            }
+            
+            // Check for both string and object ID comparison
+            return task.project === project._id || 
+                  (task.project && task.project._id === project._id) ||
+                  (typeof task.project === 'object' && task.project && task.project.toString() === project._id);
+          });
+          
+          projectTaskCounts[project.name] = tasksInProject.length;
+          console.log(`Found ${tasksInProject.length} tasks for project ${project.name}`);
         });
       }
 
