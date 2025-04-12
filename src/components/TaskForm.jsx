@@ -45,6 +45,25 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
 
   const [errors, setErrors] = useState({});
 
+  // Add this useEffect to properly handle initialData when editing
+  useEffect(() => {
+    if (isEditing && initialData) {
+      // Format the task data properly for the form
+      const formattedTaskData = {
+        ...initialData,
+        // Handle object references for IDs
+        assignedTo: initialData.assignedTo?._id || initialData.assignedTo || "",
+        assignedBy: initialData.assignedBy?._id || initialData.assignedBy || "",
+        project: initialData.project?._id || initialData.project || "",
+        // Format the date for the date input (remove time portion)
+        deadline: initialData.deadline ? initialData.deadline.split('T')[0] : "",
+      };
+      
+      console.log("Formatted task data for editing:", formattedTaskData);
+      setTaskData(formattedTaskData);
+    }
+  }, [isEditing, initialData]);
+  
   // Fetch users for assignment
   useEffect(() => {
     const fetchUsers = async () => {
@@ -63,6 +82,8 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
     dispatch(fetchProjects());
   }, []);
 
+
+  
   const validateForm = () => {
     // Skip validation if we're editing
     if (isEditing) return true;
