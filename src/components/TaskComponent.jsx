@@ -486,6 +486,7 @@ const TaskComponent = () => {
   // Use tasks from Redux store
   const { tasks, loading } = useSelector((state) => state.tasks);
 
+
   // Add a loading state for each task
   const [loadingTasks, setLoadingTasks] = useState({});
 

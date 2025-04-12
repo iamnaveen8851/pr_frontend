@@ -19,15 +19,15 @@ export const fetchTasks = createAsyncThunk(
 
 export const createTask = createAsyncThunk(
   "tasks/createTask",
-  async (taskData, { rejectWithValue }) => {
+  async (taskData, { rejectWithValue, dispatch }) => {
     console.log("taskData", taskData);
 
     try {
       const res = await axiosInstance.post("/tasks/createTask", taskData);
       console.log("Res", res);
       console.log("res of task created...", res.data.task);
-
       toast.success(`${res.data.message}`);
+      dispatch(fetchTasks()); // Dispatch fetchTasks action to update the state with the new task
 
       return res.data.task;
     } catch (error) {

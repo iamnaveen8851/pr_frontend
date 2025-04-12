@@ -59,7 +59,7 @@ export const handleGoogleLogin = createAsyncThunk(
         { withCredentials: true }
       );
 
-      // console.log("Res", res);
+      console.log("Res", res);
 
       if (res.status === 200) {
         setTimeout(() => {
@@ -77,10 +77,7 @@ export const handleGoogleLogin = createAsyncThunk(
             "Google Calendar OAuth Access Token:",
             tokenResponse.access_token
           );
-          localStorage.setItem(
-            "googleAccessToken",
-            tokenResponse.access_token
-          );
+          localStorage.setItem("googleAccessToken", tokenResponse.access_token);
         },
       });
 
@@ -133,3 +130,15 @@ export const handleGithubLogin = createAsyncThunk(
     }
   }
 );
+
+// export const getUser = createAsyncThunk(
+//   "auth/getUser",
+//   async (_, { rejectWithValue }) => {
+//     try {
+//       const res = await axiosInstance.get("/users/user");
+//       return res.data;
+//     } catch (error) {
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );
