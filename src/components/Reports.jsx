@@ -141,7 +141,7 @@ const Reports = () => {
               className="bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden"
             >
               <div className="bg-gray-100 dark:bg-gray-600 p-4 flex justify-between items-center">
-                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                <h2 className="text-md font-semibold text-gray-800 dark:text-gray-200">
                   {userTasks.username}
                 </h2>
                 <div className="flex space-x-4">
@@ -252,7 +252,7 @@ const Reports = () => {
               className="bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden"
             >
               <div className="bg-gray-100 dark:bg-gray-600 p-4 flex justify-between items-center">
-                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                <h2 className="text-nd font-semibold text-gray-800 dark:text-gray-200">
                   {userData.username}
                 </h2>
                 <div>
