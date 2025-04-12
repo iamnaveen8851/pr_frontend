@@ -41,9 +41,54 @@ const taskSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
+      // Create task
       .addCase(createTask.fulfilled, (state, action) => {
         state.loading = false;
-        state.tasks.push(action.payload);
+
+        // Ensure the assignedTo and assignedBy are properly formatted with names
+        const newTask = action.payload;
+
+        // Process assignedTo information if it exists
+        if (newTask.assignedTo) {
+          if (typeof newTask.assignedTo === "object") {
+            // If the backend already returned the full object, make sure username is available
+            newTask.assignedToName = newTask.assignedTo.username || "Unknown";
+          } else {
+            // If it's just an ID, try to find the user in existing tasks
+            const existingUserTask = state.tasks.find(
+              (task) =>
+                task.assignedTo &&
+                (task.assignedTo._id === newTask.assignedTo ||
+                  task.assignedTo === newTask.assignedTo)
+            );
+
+            if (existingUserTask && existingUserTask.assignedToName) {
+              newTask.assignedToName = existingUserTask.assignedToName;
+            }
+          }
+        }
+
+        // Process assignedBy information if it exists
+        if (newTask.assignedBy) {
+          if (typeof newTask.assignedBy === "object") {
+            // If the backend already returned the full object, make sure username is available
+            newTask.assignedByName = newTask.assignedBy.username || "Unknown";
+          } else {
+            // If it's just an ID, try to find the user in existing tasks
+            const existingUserTask = state.tasks.find(
+              (task) =>
+                task.assignedBy &&
+                (task.assignedBy._id === newTask.assignedBy ||
+                  task.assignedBy === newTask.assignedBy)
+            );
+
+            if (existingUserTask && existingUserTask.assignedByName) {
+              newTask.assignedByName = existingUserTask.assignedByName;
+            }
+          }
+        }
+
+        state.tasks.push(newTask);
       })
       .addCase(createTask.rejected, (state, action) => {
         state.loading = false;
@@ -96,7 +141,6 @@ const taskSlice = createSlice({
             }
             return task;
           });
-        
         } else {
           console.error(
             "applyAIPriority response does not contain expected data or taskId is missing:",

@@ -20,11 +20,12 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useSelector((state) => state.auth);
+  const { user, profilePicture } = useSelector((state) => state.auth);
+  // console.log("user:", user);
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+  // console.log("profilePicture:", profilePicture);
   // Initialize theme from localStorage on component mount
   useEffect(() => {
     if (theme === "dark") {
@@ -33,7 +34,7 @@ const Navbar = () => {
       document.documentElement.classList.remove("dark");
     }
     localStorage.setItem("theme", theme);
-  }, [theme]);
+  }, [theme, profilePicture]);
 
   // Toggle theme function
   const toggleTheme = () => {
@@ -98,11 +99,25 @@ const Navbar = () => {
             />
           </button>
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center">
-              <FontAwesomeIcon
-                icon={faUser}
-                className="text-gray-600 dark:text-gray-300"
-              />
+            <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-600 flex items-center justify-center">
+              {profilePicture ? (
+                <img
+                  src={profilePicture}
+                  alt={user}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    // Fallback to user icon if image fails to load
+                    e.target.onerror = null;
+                    e.target.style.display = "none";
+                    // You could also set a state here to show the fallback icon
+                  }}
+                />
+              ) : (
+                <FontAwesomeIcon
+                  icon={faUser}
+                  className="text-gray-600 dark:text-gray-300"
+                />
+              )}
             </div>
             <span className="font-medium text-gray-700 dark:text-gray-200">
               {user}
