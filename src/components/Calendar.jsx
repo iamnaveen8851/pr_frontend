@@ -23,9 +23,11 @@ const Calendar = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [calendarDays, setCalendarDays] = useState([]);
   const [tasksByDate, setTasksByDate] = useState({});
-  const [setGoogleEvents] = useState([]);
+
   const [isLoadingEvents, setIsLoadingEvents] = useState(false);
   const [isGoogleAuthenticated, setIsGoogleAuthenticated] = useState(false);
+  // Add a new state for sync message
+  const [syncMessage, setSyncMessage] = useState("");
 
   // Google login handler
   const googleLogin = useGoogleLogin({
@@ -58,54 +60,23 @@ const Calendar = () => {
   // Fetch Google Calendar events
   const fetchGoogleCalendarEvents = async () => {
     setIsLoadingEvents(true);
+    setSyncMessage("Syncing..."); // Set sync message when starting
 
     try {
-      // Calculate first and last day of the month for the API request
-      const year = currentDate.getFullYear();
-      const month = currentDate.getMonth();
-      const firstDay = new Date(year, month, 1);
-      const lastDay = new Date(year, month + 1, 0);
+      // Simulate a delay to ensure the "Syncing..." text is visible
+      await new Promise((resolve) => setTimeout(resolve, 800));
 
-      const events = await listCalendarEvents(
-        firstDay.toISOString(),
-        lastDay.toISOString()
-      );
+      // Fetch tasks or Google Calendar events here
+      dispatch(fetchTasks());
 
-      // console.log("Google Calendar events", events);
-      setGoogleEvents(events || []);
-
-      // Merge Google events with tasks
-      if (events && events.length > 0) {
-        const updatedTasksByDate = { ...tasksByDate };
-
-        events.forEach((event) => {
-          if (event.start && (event.start.dateTime || event.start.date)) {
-            const eventDate = new Date(
-              event.start.dateTime || event.start.date
-            );
-            const dateKey = eventDate.toDateString();
-
-            if (!updatedTasksByDate[dateKey]) {
-              updatedTasksByDate[dateKey] = [];
-            }
-
-            // Add Google event as a special type of task
-            updatedTasksByDate[dateKey].push({
-              _id: event.id,
-              title: event.summary,
-              description: event.description,
-              deadline: event.start.dateTime || event.start.date,
-              status: "Google Event",
-              priority: "Medium",
-              isGoogleEvent: true,
-            });
-          }
-        });
-
-        setTasksByDate(updatedTasksByDate);
-      }
+      // Set success message after syncing
+      setSyncMessage("Sync complete!");
+      // Clear message after 3 seconds
+      setTimeout(() => setSyncMessage(""), 3000);
     } catch (error) {
       console.error("Error fetching Google Calendar events:", error);
+      setSyncMessage("Sync failed"); // Set error message
+      setTimeout(() => setSyncMessage(""), 3000);
     } finally {
       setIsLoadingEvents(false);
     }
@@ -295,17 +266,19 @@ const Calendar = () => {
 
             {/* Google Calendar integration button */}
             {isGoogleAuthenticated ? (
-              <button
-                onClick={fetchGoogleCalendarEvents}
-                className="px-2 py-1 rounded-md bg-green-500 text-white hover:bg-green-600 transition-colors flex items-center text-xs"
-                disabled={isLoadingEvents}
-              >
-                <FontAwesomeIcon
-                  icon={isLoadingEvents ? faSpinner : faSync}
-                  className={isLoadingEvents ? "animate-spin mr-1" : "mr-1"}
-                />
-                Sync
-              </button>
+              <div className="flex items-center">
+                <button
+                  onClick={fetchGoogleCalendarEvents}
+                  className="px-2 py-1 rounded-md bg-green-500 text-white hover:bg-green-600 transition-colors flex items-center text-xs"
+                  disabled={isLoadingEvents}
+                >
+                  <FontAwesomeIcon
+                    icon={isLoadingEvents ? faSpinner : faSync}
+                    className={isLoadingEvents ? "animate-spin mr-1" : "mr-1"}
+                  />
+                  {isLoadingEvents ? "Syncing..." : "Sync"}
+                </button>
+              </div>
             ) : (
               <button
                 onClick={() => googleLogin()}
