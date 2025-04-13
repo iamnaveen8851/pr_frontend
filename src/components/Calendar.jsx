@@ -63,10 +63,8 @@ const Calendar = () => {
     setSyncMessage("Syncing..."); // Set sync message when starting
 
     try {
-      // Simulate a delay to ensure the "Syncing..." text is visible
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      // Calculate first and last day of the month for the API request
 
-      // Fetch tasks or Google Calendar events here
       dispatch(fetchTasks());
 
       // Set success message after syncing
@@ -252,7 +250,7 @@ const Calendar = () => {
               </button>
               <button
                 onClick={goToToday}
-                className="px-2 md:px-5  py-1 rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-colors text-sm"
+                className="px-2 py-1 rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-colors text-xs"
               >
                 Today
               </button>
@@ -269,7 +267,7 @@ const Calendar = () => {
               <div className="flex items-center">
                 <button
                   onClick={fetchGoogleCalendarEvents}
-                  className="px-2 md:px-5 py-2  rounded-md bg-green-500 text-white hover:bg-green-600 transition-colors flex items-center text-sm"
+                  className="px-2 py-1 rounded-md bg-green-500 text-white hover:bg-green-600 transition-colors flex items-center text-xs"
                   disabled={isLoadingEvents}
                 >
                   <FontAwesomeIcon
@@ -396,9 +394,7 @@ const Calendar = () => {
                 Tasks for {selectedDate.toLocaleDateString()}
               </h3>
 
-              {/* 
-            
-            {isGoogleAuthenticated &&
+              {isGoogleAuthenticated &&
                 getTasksForDate(selectedDate).filter((t) => !t.isGoogleEvent)
                   .length > 0 && (
                   <button
@@ -413,10 +409,9 @@ const Calendar = () => {
                     className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-200 rounded-md text-sm flex items-center"
                   >
                     <FontAwesomeIcon icon={faPlus} className="mr-1" />
-                    
+                    Add to Google
                   </button>
                 )}
-            */}
             </div>
 
             {getTasksForDate(selectedDate).length > 0 ? (

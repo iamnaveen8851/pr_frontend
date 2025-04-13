@@ -15,7 +15,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import Notification from "./Notification";
-
+import * as avatars from "@dicebear/avatars";
+// Change this import to use initials sprites
+import * as style from "@dicebear/avatars-initials-sprites";
+import { avataaarsNeutral, funEmoji } from "@dicebear/collection";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -90,6 +93,12 @@ const Navbar = () => {
     setMobileMenuOpen(false);
     setProfileModalOpen(false);
   };
+  // Generate avatar using DiceBear with Initials style
+  const avatarSvg = avatars.createAvatar(funEmoji, {
+    seed: funEmoji, // Use the username as seed for consistent emoji
+    dataUri: true,
+    flip: true,
+  });
 
   return (
     <>
@@ -135,9 +144,10 @@ const Navbar = () => {
                     }}
                   />
                 ) : (
-                  <FontAwesomeIcon
-                    icon={faUser}
-                    className="text-gray-600 dark:text-gray-300"
+                  <img
+                    src={avatarSvg}
+                    alt="Avatar"
+                    className="w-full h-full object-cover"
                   />
                 )}
               </div>
@@ -157,9 +167,10 @@ const Navbar = () => {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <FontAwesomeIcon
-                            icon={faUser}
-                            className="text-gray-600 dark:text-gray-300"
+                          <img
+                            src={avatarSvg}
+                            alt="Avatar"
+                            className="w-full h-full object-cover"
                           />
                         </div>
                       )}
@@ -319,6 +330,5 @@ const Navbar = () => {
     </>
   );
 };
-
 
 export default Navbar;
