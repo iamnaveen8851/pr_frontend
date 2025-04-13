@@ -4,15 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getTeamPerformance,
   getPendingTasks,
-  getTimeSpent
+  getTimeSpent,
 } from "../redux/actions/reportAction";
 import NavigationTabs from "./NavigationTabs";
 
 const Reports = () => {
   const dispatch = useDispatch();
-  const { teamPerformance, pendingTasks, timeSpent, loading, error } = useSelector(
-    (state) => state.reports
-  );
+  const { teamPerformance, pendingTasks, timeSpent, loading, error } =
+    useSelector((state) => state.reports);
 
   useEffect(() => {
     dispatch(getTeamPerformance());
@@ -29,7 +28,7 @@ const Reports = () => {
         Team Performance Report
       </h1>
 
-      {loading && (
+      {loading && !teamPerformance && (
         <div className="text-center dark:text-gray-300">
           Loading team performance data...
         </div>
@@ -116,7 +115,7 @@ const Reports = () => {
 
       {teamPerformance && teamPerformance.length === 0 && (
         <div className="text-center text-gray-500 dark:text-gray-400 mb-12">
-          No team performance data available
+          Loading team performance data...
         </div>
       )}
 
@@ -127,7 +126,7 @@ const Reports = () => {
         Pending Tasks Report
       </h1>
 
-      {loading && (
+      {loading && !pendingTasks && (
         <div className="text-center dark:text-gray-300">
           Loading pending tasks data...
         </div>
@@ -238,7 +237,7 @@ const Reports = () => {
         Time Spent Report
       </h1>
 
-      {loading && (
+      {loading && !timeSpent && (
         <div className="text-center dark:text-gray-300">
           Loading time spent data...
         </div>
