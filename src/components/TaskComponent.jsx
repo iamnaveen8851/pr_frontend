@@ -19,7 +19,10 @@ import TaskForm from "./TaskForm";
 import AIRecommendationModal from "./AiRecommendationModal";
 
 import { applyAIPriority } from "../redux/actions/aiPriorityAction";
-
+import * as avatars from "@dicebear/avatars";
+// Change this import to use initials sprites
+import * as style from "@dicebear/avatars-initials-sprites";
+import { avataaarsNeutral, bottts, funEmoji } from "@dicebear/collection";
 
 const TaskComponent = () => {
   const dispatch = useDispatch();
@@ -33,7 +36,6 @@ const TaskComponent = () => {
 
   // Use tasks from Redux store
   const { tasks, loading } = useSelector((state) => state.tasks);
-
 
   // Add a loading state for each task
   const [loadingTasks, setLoadingTasks] = useState({});
@@ -208,6 +210,10 @@ const TaskComponent = () => {
     });
   };
 
+  const avatarSvg = avatars.createAvatar(bottts, {
+    dataUri: true,
+    eyes: ["roundFrame02"],
+  });
   return (
     <>
       <div className="flex justify-between items-center mb-4">
@@ -294,16 +300,19 @@ const TaskComponent = () => {
                                       toggleMenu(task._id);
                                     }}
                                   />
-                                  <FontAwesomeIcon
-                                    icon={faMicrochip}
-                                    className={`cursor-pointer text-gray-600 dark:text-gray-300 mt-2 hover:text-gray-800 dark:hover:text-gray-100 ${
+                                  
+                                  <img
+                                    src={avatarSvg}
+                                    alt="Avatar"
+                                    onClick={() =>
+                                      handleApplyAIPriority(task._id)
+                                    }
+                                    title="Ask AI to set priority"
+                                    className={`w-5 h-5 cursor-pointer text-gray-600 dark:text-gray-300 mt-2 hover:text-gray-800 dark:hover:text-gray-100 hover:scale-110 transition-transform ${
                                       loadingTasks[task._id]
                                         ? "animate-spin"
                                         : ""
                                     }`}
-                                    onClick={() =>
-                                      handleApplyAIPriority(task._id)
-                                    }
                                   />
 
                                   {/* Improved positioning for the menu */}
