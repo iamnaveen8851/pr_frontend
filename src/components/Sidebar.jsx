@@ -14,7 +14,11 @@ import {
 
 const Sidebar = () => {
   const location = useLocation();
-  const [expanded, setExpanded] = useState(false);
+  // Initialize expanded state from localStorage
+  const [expanded, setExpanded] = useState(() => {
+    const savedState = localStorage.getItem("sidebarExpanded");
+    return savedState ? savedState === "true" : false;
+  });
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   // Near the top of your component
   const [isMobileOrTablet, setIsMobileOrTablet] = useState(window.innerWidth < 1024);
@@ -114,7 +118,7 @@ const Sidebar = () => {
         } 
         ${
           theme === "dark" ? "text-white" : "text-gray-800"
-        } transition-all duration-500 ease-in-out ${expanded ? "w-45" : "w-16"} ${
+        } transition-all duration-400 ease-in-out ${expanded ? "w-48" : "w-16"} ${
           isVisible ? "left-0" : "-left-20"
         } z-20 shadow-lg`}
       >

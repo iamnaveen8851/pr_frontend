@@ -24,8 +24,7 @@ const AIRecommendationModal = ({ isOpen, onClose, taskId, onAssign }) => {
       const response = await axiosInstance.get(
         `/task-allocation/${taskId}/recommendations`
       );
-      // console.log(response, "Res");
-      console.log("");
+      
       setRecommendations(response.data.data.recommendations);
       setError(null);
     } catch (err) {

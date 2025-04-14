@@ -50,8 +50,7 @@ const TaskAnalytics = () => {
     workflowCounts: {},
   });
 
-  //   console.log(tasks, "tasks data");
-  //   console.log(projects, "project data");
+ 
 
   // Fetch tasks and projects when the component mounts
   useEffect(() => {
@@ -81,15 +80,12 @@ const TaskAnalytics = () => {
       if (projects && projects.length > 0) {
         projects.forEach((project) => {
           // Debug the project data
-          console.log("Project:", project.name, "ID:", project._id);
+          // console.log("Project:", project.name, "ID:", project._id);
           
           // Check if tasks have project IDs and count them properly
           const tasksInProject = tasks.filter(task => {
             // Debug task project relationship
-            if (task.project) {
-              console.log("Task project ID:", task.project, "comparing with:", project._id);
-            }
-            
+         
             // Check for both string and object ID comparison
             return task.project === project._id || 
                   (task.project && task.project._id === project._id) ||
@@ -97,7 +93,7 @@ const TaskAnalytics = () => {
           });
           
           projectTaskCounts[project.name] = tasksInProject.length;
-          console.log(`Found ${tasksInProject.length} tasks for project ${project.name}`);
+          // console.log(`Found ${tasksInProject.length} tasks for project ${project.name}`);
         });
       }
 

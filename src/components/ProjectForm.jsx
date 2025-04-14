@@ -124,7 +124,7 @@ const ProjectForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(projectData, "Project data submitted");
+    // console.log(projectData, "Project data submitted");
     if (validateForm()) {
       setIsSubmitting(true);
       try {

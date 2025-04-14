@@ -187,7 +187,18 @@ const TaskComponent = () => {
   };
 
   const handleEditClick = (task) => {
-    setCurrentTask(task);
+    // Create a formatted version of the task with proper data types
+    const formattedTask = {
+      ...task,
+      // Convert object references to string IDs
+      assignedTo: typeof task.assignedTo === 'object' ? task.assignedTo._id : task.assignedTo,
+      assignedBy: typeof task.assignedBy === 'object' ? task.assignedBy._id : task.assignedBy,
+      project: typeof task.project === 'object' ? task.project._id : task.project,
+      // Convert number to string for estimatedTime
+      estimatedTime: task.estimatedTime?.toString() || ''
+    };
+    
+    setCurrentTask(formattedTask);
     setIsEditModalOpen(true);
   };
 
@@ -206,6 +217,7 @@ const TaskComponent = () => {
 
     dispatch(applyAIPriority(taskId)).finally(() => {
       // Clear loading state for the task
+      dispatch(fetchTasks());
       setLoadingTasks((prev) => ({ ...prev, [taskId]: false }));
     });
   };
@@ -485,8 +497,8 @@ const TaskComponent = () => {
               Confirm Delete
             </h3>
             <p className="text-gray-700 dark:text-gray-300 mb-6">
-              Are you sure you want to delete task "
-              {deleteConfirmation.taskTitle}"? This action cannot be undone.
+              Are you sure you want to delete task
+              {deleteConfirmation.taskTitle}"? This action cannot be undone.ne.
             </p>
             <div className="flex justify-end space-x-3">
               <button

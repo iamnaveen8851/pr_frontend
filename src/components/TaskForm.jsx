@@ -59,7 +59,7 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
         deadline: initialData.deadline ? initialData.deadline.split('T')[0] : "",
       };
       
-      console.log("Formatted task data for editing:", formattedTaskData);
+      // console.log("Formatted task data for editing:", formattedTaskData);
       setTaskData(formattedTaskData);
     }
   }, [isEditing, initialData]);
