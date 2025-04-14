@@ -11,6 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useGoogleLogin } from "@react-oauth/google";
 import {
+  listCalendarEvents,
   createCalendarEvent,
   taskToGoogleEvent,
 } from "../services/googleCalendarService";
@@ -31,7 +32,7 @@ const Calendar = () => {
   // Google login handler
   const googleLogin = useGoogleLogin({
     onSuccess: (tokenResponse) => {
-      // console.log("Google login successful", tokenResponse);
+      console.log("Google login successful", tokenResponse);
       localStorage.setItem("googleToken", tokenResponse.access_token);
       setIsGoogleAuthenticated(true);
       fetchGoogleCalendarEvents();
@@ -92,7 +93,7 @@ const Calendar = () => {
     try {
       const createdEvent = await createCalendarEvent(googleEvent);
       if (createdEvent) {
-        // console.log("Event created in Google Calendar", createdEvent);
+        console.log("Event created in Google Calendar", createdEvent);
         fetchGoogleCalendarEvents(); // Refresh events
       }
     } catch (error) {
@@ -261,12 +262,12 @@ const Calendar = () => {
               </button>
             </div>
 
-            {/* Google Calendar integration button */}
+            {/* Google Calendar integration button with sync message */}
             {isGoogleAuthenticated ? (
-              <div className="flex items-center">
+              <div className="flex items-center gap-2">
                 <button
                   onClick={fetchGoogleCalendarEvents}
-                  className="px-2 py-1 rounded-md bg-green-500 text-white hover:bg-green-600 transition-colors flex items-center text-xs"
+                  className="p-5 py-2 rounded-md bg-green-500 text-white hover:bg-green-600 transition-colors flex items-center text-xs"
                   disabled={isLoadingEvents}
                 >
                   <FontAwesomeIcon
@@ -392,25 +393,6 @@ const Calendar = () => {
               <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
                 Tasks for {selectedDate.toLocaleDateString()}
               </h3>
-
-              {isGoogleAuthenticated &&
-                getTasksForDate(selectedDate).filter((t) => !t.isGoogleEvent)
-                  .length > 0 && (
-                  <button
-                    onClick={() => {
-                      const regularTasks = getTasksForDate(selectedDate).filter(
-                        (t) => !t.isGoogleEvent
-                      );
-                      if (regularTasks.length > 0) {
-                        addTaskToGoogleCalendar(regularTasks[0]);
-                      }
-                    }}
-                    className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-200 rounded-md text-sm flex items-center"
-                  >
-                    <FontAwesomeIcon icon={faPlus} className="mr-1" />
-                    Add to Google
-                  </button>
-                )}
             </div>
 
             {getTasksForDate(selectedDate).length > 0 ? (
