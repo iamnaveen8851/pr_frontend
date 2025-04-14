@@ -126,7 +126,7 @@ const Sidebar = () => {
           {expanded && <h2 className="text-xl font-bold">Menu</h2>}
           <button
             onClick={handleExpand}
-            className={`p-2 rounded ${
+            className={`p-2  ${
               theme === "dark" ? "hover:bg-blue-600" : "hover:bg-gray-200"
             } transition-colors`}
             aria-label={expanded ? "Collapse sidebar" : "Expand sidebar"}
@@ -136,7 +136,7 @@ const Sidebar = () => {
         </div>
 
         <nav
-          className="mt-6 overflow-y-auto"
+          className="mt-0 overflow-y-auto"
           style={{ maxHeight: "calc(100vh - 12rem)" }}
         >
           <ul>
@@ -151,7 +151,7 @@ const Sidebar = () => {
                   theme === "dark"
                     ? "hover:bg-blue-600"
                     : "hover:bg-blue-600  hover:text-white"
-                } rounded transition-colors`}
+                }  transition-colors`}
               >
                 <FontAwesomeIcon
                   icon={faTasks}
@@ -174,7 +174,7 @@ const Sidebar = () => {
                   theme === "dark"
                     ? "hover:bg-blue-600"
                     : "hover:bg-blue-600  hover:text-white"
-                } rounded transition-colors`}
+                }  transition-colors`}
               >
                 <FontAwesomeIcon
                   icon={faProjectDiagram}
@@ -198,7 +198,7 @@ const Sidebar = () => {
                   theme === "dark"
                     ? "hover:bg-blue-600"
                     : "hover:bg-blue-600  hover:text-white"
-                } rounded transition-colors`}
+                }  transition-colors`}
               >
                 <FontAwesomeIcon
                   icon={faCalendarAlt}
@@ -221,7 +221,7 @@ const Sidebar = () => {
                   theme === "dark"
                     ? "hover:bg-blue-600"
                     : "hover:bg-blue-600  hover:text-white"
-                } rounded transition-colors`}
+                }  transition-colors`}
               >
                 <FontAwesomeIcon
                   icon={faComments}
@@ -244,7 +244,7 @@ const Sidebar = () => {
                   theme === "dark"
                     ? "hover:bg-blue-600"
                     : "hover:bg-blue-600  hover:text-white"
-                } rounded transition-colors`}
+                }  transition-colors`}
               >
                 <FontAwesomeIcon
                   icon={faFileAlt}
@@ -266,7 +266,7 @@ const Sidebar = () => {
                   theme === "dark"
                     ? "hover:bg-blue-600"
                     : "hover:bg-blue-600  hover:text-white"
-                }  rounded transition-colors`}
+                }  transition-colors`}
               >
                 <FontAwesomeIcon
                   icon={faChartBar}

@@ -1,0 +1,124 @@
+.container {
+  @apply w-full;
+}
+
+.header {
+  @apply flex justify-between items-center mb-6;
+}
+
+.headerTitle {
+  @apply text-2xl font-bold text-gray-800 dark:text-white transition-colors duration-300;
+}
+
+.createButton {
+  @apply px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-300 flex items-center;
+}
+
+.loadingSpinner {
+  @apply flex justify-center items-center min-h-[200px];
+}
+
+.spinnerIcon {
+  @apply w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin;
+}
+
+.gridContainer {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4;
+}
+
+.columnContainer {
+  @apply bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md min-h-[200px];
+}
+
+.taskCard {
+  @apply p-4 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 
+  hover:shadow-md transition-all duration-300 relative mb-3;
+}
+
+.taskTitle {
+  @apply text-gray-900 dark:text-white font-medium mb-2;
+}
+
+.taskDescription {
+  @apply text-sm text-gray-600 dark:text-gray-300;
+}
+
+.taskBadge {
+  @apply text-xs font-medium px-2.5 py-0.5 rounded-full;
+}
+
+.assignedTo {
+  @apply text-xs text-gray-500 dark:text-gray-400 mt-2;
+}
+
+.taskStatus {
+  @apply text-xs font-medium;
+}
+
+.taskCardPending {
+  @apply border-l-4 border-l-yellow-500 dark:border-l-yellow-400;
+}
+
+.taskCardInProgress {
+  @apply border-l-4 border-l-blue-500 dark:border-l-blue-400;
+}
+
+.taskCardReview {
+  @apply border-l-4 border-l-purple-500 dark:border-l-purple-400;
+}
+
+.taskCardCompleted {
+  @apply border-l-4 border-l-green-500 dark:border-l-green-400;
+}
+
+.priorityHigh {
+  @apply bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200;
+}
+
+.priorityMedium {
+  @apply bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200;
+}
+
+.priorityLow {
+  @apply bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200;
+}
+
+.roleManager {
+  @apply bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200;
+}
+
+.roleEmployee {
+  @apply bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200;
+}
+
+.taskMenu {
+  @apply absolute top-6 right-0 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg z-50 transition-colors duration-300;
+}
+
+.menuButton {
+  @apply w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-300;
+}
+
+.deleteButton {
+  @apply w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-300;
+}
+
+.projectTag {
+  @apply inline-block px-2 py-1 text-xs font-medium bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-200 rounded-md transition-colors duration-300;
+}
+
+.taskDescription {
+  @apply text-sm text-gray-600 dark:text-gray-300 truncate transition-colors duration-300;
+}
+
+.assignmentInfo {
+  @apply mt-2 text-xs text-gray-500 dark:text-gray-400 flex flex-col gap-2 transition-colors duration-300;
+}
+
+.priorityBadge {
+  @apply px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full transition-colors duration-300;
+}
+
+.deadline {
+  @apply text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300;
+}

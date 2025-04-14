@@ -1,0 +1,167 @@
+.container {
+  @apply w-[95%] sm:w-[90%] lg:w-[88%] mx-auto px-2 sm:px-4 py-4 sm:py-8 dark:bg-gray-800;
+}
+
+.sectionTitle {
+  @apply text-3xl font-bold text-center mb-8 dark:text-white;
+}
+
+.loadingText {
+  @apply text-center dark:text-gray-300;
+}
+
+.errorText {
+  @apply text-center text-red-500;
+}
+
+.emptyDataText {
+  @apply text-center text-gray-500 dark:text-gray-400 mb-12;
+}
+
+.tableContainer {
+  @apply overflow-x-auto shadow-lg rounded-lg mb-12;
+}
+
+.table {
+  @apply min-w-full bg-white dark:bg-gray-700;
+}
+
+.tableHead {
+  @apply bg-gray-100 dark:bg-gray-600;
+}
+
+.tableHeaderCell {
+  @apply py-3 px-4 text-left font-semibold text-gray-700 dark:text-gray-200;
+}
+
+.tableHeaderCellCenter {
+  @apply py-3 px-4 text-center font-semibold text-gray-700 dark:text-gray-200;
+}
+
+.tableRow {
+  @apply hover:bg-gray-50 dark:hover:bg-gray-600;
+}
+
+.tableCell {
+  @apply py-3 px-4 text-gray-800 dark:text-gray-200;
+}
+
+.tableCellCenter {
+  @apply py-3 px-4 text-center dark:text-gray-200;
+}
+
+.tableCellBold {
+  @apply py-3 px-4 text-gray-800 dark:text-gray-200 font-medium;
+}
+
+.progressBarContainer {
+  @apply flex items-center justify-center;
+}
+
+.progressBar {
+  @apply w-16 bg-gray-200 dark:bg-gray-500 rounded-full h-2.5;
+}
+
+.progressBarFill {
+  @apply bg-blue-600 h-2.5 rounded-full;
+}
+
+.progressText {
+  @apply ml-2;
+}
+
+.positiveValue {
+  @apply text-green-600 dark:text-green-400 font-medium;
+}
+
+.negativeValue {
+  @apply text-red-600 dark:text-red-400 font-medium;
+}
+
+.cardContainer {
+  @apply space-y-8;
+}
+
+.card {
+  @apply bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden;
+}
+
+.cardHeader {
+  @apply bg-gray-100 dark:bg-gray-600 p-4 flex justify-between items-center;
+}
+
+.cardTitle {
+  @apply text-base font-semibold text-gray-800 dark:text-gray-200;
+}
+
+.badgeContainer {
+  @apply flex space-x-4;
+}
+
+.badge {
+  @apply px-3 py-1 rounded-full text-sm;
+}
+
+.blueBadge {
+  @apply bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200;
+}
+
+.redBadge {
+  @apply bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200;
+}
+
+.smallTable {
+  @apply min-w-full;
+}
+
+.smallTableHead {
+  @apply bg-gray-50 dark:bg-gray-800;
+}
+
+.smallTableHeaderCell {
+  @apply py-2 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider;
+}
+
+.smallTableCell {
+  @apply py-3 px-4 text-sm text-gray-800 dark:text-gray-200;
+}
+
+.statusBadge {
+  @apply px-2 py-1 rounded-full text-xs font-medium;
+}
+
+.pendingBadge {
+  @apply bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300;
+}
+
+.inProgressBadge {
+  @apply bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200;
+}
+
+.reviewBadge {
+  @apply bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200;
+}
+
+.completedBadge {
+  @apply bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200;
+}
+
+.priorityBadge {
+  @apply px-2 py-1 rounded-full text-xs font-medium;
+}
+
+.highPriorityBadge {
+  @apply bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200;
+}
+
+.mediumPriorityBadge {
+  @apply bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200;
+}
+
+.lowPriorityBadge {
+  @apply bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200;
+}
+
+.sectionSpacer {
+  @apply my-8;
+}
