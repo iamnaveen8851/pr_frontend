@@ -240,7 +240,7 @@ const Project = () => {
   return (
     <div className=" w-[90%] lg:w-[92%] m-auto mx-auto py-5 m-auto md:m-auto lg:ml-[6%]  bg-white dark:bg-gray-900">
       <NavigationTabs />
-      <div className="flex justify-between items-center  mb-6">
+      <div className="flex justify-between items-center px-2  mb-6">
         <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">
           Projects
         </h1>
