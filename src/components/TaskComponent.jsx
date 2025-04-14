@@ -229,7 +229,7 @@ const TaskComponent = () => {
   return (
     <>
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-xl font-bold text-gray-800 dark:text-white">
+        <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">
           Tasks
         </h1>
         <button
