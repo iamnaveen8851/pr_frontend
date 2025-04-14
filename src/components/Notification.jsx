@@ -38,7 +38,7 @@ useEffect(() => {
 
   // Mark notification as read
   const handleMarkAsRead = (notificationId) => {
-    console.log("mark as read", notificationId);
+    // console.log("mark as read", notificationId);
     dispatch(markNotificationAsRead(notificationId)); //check it why its not invoking
   };
 
@@ -88,9 +88,9 @@ useEffect(() => {
             </h3>
             {unreadCount > 0 && (
               <button
-                onClick={() =>
-                  console.log("mark all as read make an api for that also")
-                }
+                // onClick={() =>
+                //   console.log("mark all as read make an api for that also")
+                // }
                 className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
               >
                 Mark all as read

@@ -17,8 +17,8 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import Notification from "./Notification";
 import * as avatars from "@dicebear/avatars";
 // Change this import to use initials sprites
-import * as style from "@dicebear/avatars-initials-sprites";
-import { avataaarsNeutral, funEmoji } from "@dicebear/collection";
+
+import { funEmoji } from "@dicebear/collection";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -67,7 +67,7 @@ const Navbar = () => {
 
   // handle logout
   const handleLogout = () => {
-    console.log("logout Clicked");
+    // console.log("logout Clicked");
     dispatch(clearCookie({ navigate }));
     setProfileModalOpen(false);
     setMobileMenuOpen(false);

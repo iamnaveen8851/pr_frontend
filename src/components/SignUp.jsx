@@ -137,7 +137,7 @@ const SignUp = () => {
     }
 
     setIsSubmitting(true);
-    console.log("Sign up form submitted:", formState);
+    // console.log("Sign up form submitted:", formState);
     dispatch(handleSignUp({ formState, navigate }));
   };
 

@@ -11,7 +11,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useGoogleLogin } from "@react-oauth/google";
 import {
-  listCalendarEvents,
   createCalendarEvent,
   taskToGoogleEvent,
 } from "../services/googleCalendarService";
@@ -32,7 +31,7 @@ const Calendar = () => {
   // Google login handler
   const googleLogin = useGoogleLogin({
     onSuccess: (tokenResponse) => {
-      console.log("Google login successful", tokenResponse);
+      // console.log("Google login successful", tokenResponse);
       localStorage.setItem("googleToken", tokenResponse.access_token);
       setIsGoogleAuthenticated(true);
       fetchGoogleCalendarEvents();
@@ -93,7 +92,7 @@ const Calendar = () => {
     try {
       const createdEvent = await createCalendarEvent(googleEvent);
       if (createdEvent) {
-        console.log("Event created in Google Calendar", createdEvent);
+        // console.log("Event created in Google Calendar", createdEvent);
         fetchGoogleCalendarEvents(); // Refresh events
       }
     } catch (error) {

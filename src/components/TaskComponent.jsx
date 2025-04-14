@@ -182,7 +182,18 @@ const TaskComponent = () => {
   };
 
   const handleEditClick = (task) => {
-    setCurrentTask(task);
+    // Create a formatted version of the task with proper data types
+    const formattedTask = {
+      ...task,
+      // Convert object references to string IDs
+      assignedTo: typeof task.assignedTo === 'object' ? task.assignedTo._id : task.assignedTo,
+      assignedBy: typeof task.assignedBy === 'object' ? task.assignedBy._id : task.assignedBy,
+      project: typeof task.project === 'object' ? task.project._id : task.project,
+      // Convert number to string for estimatedTime
+      estimatedTime: task.estimatedTime?.toString() || ''
+    };
+    
+    setCurrentTask(formattedTask);
     setIsEditModalOpen(true);
   };
 

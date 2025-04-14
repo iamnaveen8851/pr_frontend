@@ -17,8 +17,6 @@ const PublicRoute = () => {
   const [isLoading, setIsLoading] = useState(true);
   const token = localStorage.getItem("accessToken");
   const location = useLocation();
-  // console.log("Token", token);
-  // console.log("Current path:", location.pathname);
 
   useEffect(() => {
     // Short timeout to ensure token is properly checked
@@ -54,7 +52,7 @@ const PublicRoute = () => {
         <div className="flex flex-1 pt-16">
           <Sidebar />
           <main className={`flex-1 transition-all duration-150 ease-in-out ${
-            sidebarExpanded ? 'ml-[100px]' : 'ml-0'}`}>
+            sidebarExpanded ? 'ml-48' : 'ml-16'}`}>
             {children}
           </main>
         </div>
