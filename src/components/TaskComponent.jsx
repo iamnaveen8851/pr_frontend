@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPlus,
   faEllipsisH,
-  faMicrochip,
   faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -19,10 +18,6 @@ import TaskForm from "./TaskForm";
 import AIRecommendationModal from "./AiRecommendationModal";
 
 import { applyAIPriority } from "../redux/actions/aiPriorityAction";
-import * as avatars from "@dicebear/avatars";
-// Change this import to use initials sprites
-import * as style from "@dicebear/avatars-initials-sprites";
-import { avataaarsNeutral, bottts, funEmoji } from "@dicebear/collection";
 
 const TaskComponent = () => {
   const dispatch = useDispatch();
@@ -210,10 +205,6 @@ const TaskComponent = () => {
     });
   };
 
-  const avatarSvg = avatars.createAvatar(bottts, {
-    dataUri: true,
-    eyes: ["roundFrame02"],
-  });
   return (
     <>
       <div className="flex justify-between items-center mb-4">
@@ -485,8 +476,8 @@ const TaskComponent = () => {
               Confirm Delete
             </h3>
             <p className="text-gray-700 dark:text-gray-300 mb-6">
-              Are you sure you want to delete task "
-              {deleteConfirmation.taskTitle}"? This action cannot be undone.
+              Are you sure you want to delete task
+              {deleteConfirmation.taskTitle}&quot;? This action cannot be undone.
             </p>
             <div className="flex justify-end space-x-3">
               <button
