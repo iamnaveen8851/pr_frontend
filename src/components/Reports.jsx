@@ -20,7 +20,7 @@ const Reports = () => {
   }, [dispatch]);
 
   return (
-    <div className="container w-[88%] mx-auto mt-12 px-4 py-8 dark:bg-gray-800">
+    <div className="container w-[95%] sm:w-[90%] lg:w-[88%] mx-auto px-2 sm:px-4 py-4 sm:py-8 dark:bg-gray-800">
       <NavigationTabs />
 
       {/* Team Performance Section */}
