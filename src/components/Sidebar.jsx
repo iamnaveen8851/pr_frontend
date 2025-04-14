@@ -14,7 +14,11 @@ import {
 
 const Sidebar = () => {
   const location = useLocation();
-  const [expanded, setExpanded] = useState(false);
+  // Initialize expanded state from localStorage
+  const [expanded, setExpanded] = useState(() => {
+    const savedState = localStorage.getItem("sidebarExpanded");
+    return savedState ? savedState === "true" : false;
+  });
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   // Near the top of your component
   const [isMobileOrTablet, setIsMobileOrTablet] = useState(window.innerWidth < 1024);
