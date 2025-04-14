@@ -300,18 +300,18 @@ const TaskComponent = () => {
                                       toggleMenu(task._id);
                                     }}
                                   />
-                                  
+
                                   <img
-                                    src={avatarSvg}
+                                    src="https://cdn-icons-png.flaticon.com/512/11184/11184109.png"
                                     alt="Avatar"
                                     onClick={() =>
                                       handleApplyAIPriority(task._id)
                                     }
                                     title="Ask AI to set priority"
-                                    className={`w-5 h-5 cursor-pointer text-gray-600 dark:text-gray-300 mt-2 hover:text-gray-800 dark:hover:text-gray-100 hover:scale-110 transition-transform ${
+                                    className={`w-7 h-8 cursor-pointer text-gray-600 dark:text-gray-300 mt-2 hover:text-gray-800 dark:hover:text-gray-100 transition-transform ${
                                       loadingTasks[task._id]
                                         ? "animate-spin"
-                                        : ""
+                                        : "hover:scale-110"
                                     }`}
                                   />
 
