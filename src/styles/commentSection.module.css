@@ -1,0 +1,135 @@
+.container {
+  @apply w-[88%] mx-auto mt-12 bg-white dark:bg-gray-800 rounded-lg shadow p-5;
+}
+
+.title {
+  @apply text-lg font-semibold text-gray-800 dark:text-white mb-4;
+}
+
+.commentForm {
+  @apply mb-4;
+}
+
+.textareaWrapper {
+  @apply mb-3 relative;
+}
+
+.textarea {
+  @apply w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white;
+}
+
+.mentionsDropdown {
+  @apply absolute z-10 mt-1 w-64 bg-white dark:bg-gray-700 rounded-md shadow-lg max-h-60 overflow-auto;
+}
+
+.mentionsList {
+  @apply py-1;
+}
+
+.mentionItem {
+  @apply px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer flex items-center;
+}
+
+.mentionAvatar {
+  @apply w-8 h-8 rounded-full bg-blue-200 dark:bg-blue-600 flex items-center justify-center mr-2;
+}
+
+.mentionInitial {
+  @apply text-sm font-medium text-blue-800 dark:text-blue-200;
+}
+
+.mentionInfo {
+  @apply text-sm font-medium text-gray-800 dark:text-white;
+}
+
+.mentionRole {
+  @apply text-xs text-gray-500 dark:text-gray-400;
+}
+
+.selectGrid {
+  @apply grid grid-cols-2 gap-4 mb-3;
+}
+
+.selectLabel {
+  @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1;
+}
+
+.select {
+  @apply w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white;
+}
+
+.submitButton {
+  @apply px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.loadingSpinner {
+  @apply flex justify-center py-4;
+}
+
+.spinner {
+  @apply animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500;
+}
+
+.commentsList {
+  @apply space-y-4;
+}
+
+.commentCard {
+  @apply bg-gray-50 dark:bg-gray-700 rounded-lg p-4;
+}
+
+.commentHeader {
+  @apply flex items-start;
+}
+
+.userAvatar {
+  @apply w-10 h-10 rounded-full mr-3;
+}
+
+.defaultAvatar {
+  @apply w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-600 mr-3 flex items-center justify-center;
+}
+
+.avatarInitial {
+  @apply text-lg font-medium text-gray-600 dark:text-gray-300;
+}
+
+.commentContent {
+  @apply flex-1;
+}
+
+.commentMeta {
+  @apply flex items-center mb-1;
+}
+
+.userName {
+  @apply font-medium text-gray-800 dark:text-white mr-2;
+}
+
+.timestamp {
+  @apply text-xs text-gray-500 dark:text-gray-400;
+}
+
+.commentText {
+  @apply text-gray-700 dark:text-gray-300;
+}
+
+.taskProjectInfo {
+  @apply mt-2 text-xs text-gray-500 dark:text-gray-400;
+}
+
+.taskBadge {
+  @apply inline-block bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-100 px-2 py-1 rounded mr-2;
+}
+
+.projectBadge {
+  @apply inline-block bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-100 px-2 py-1 rounded;
+}
+
+.noComments {
+  @apply text-center py-4 text-gray-500 dark:text-gray-400;
+}
+
+.mentionHighlight {
+  @apply bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-100 px-1 rounded;
+}

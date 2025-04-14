@@ -1,0 +1,91 @@
+.modalOverlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+}
+
+.modalContainer {
+  @apply bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md;
+}
+
+.modalContent {
+  @apply p-6;
+}
+
+.modalHeader {
+  @apply flex justify-between items-center mb-4;
+}
+
+.modalTitle {
+  @apply text-xl font-semibold text-gray-800 dark:text-white;
+}
+
+.closeButton {
+  @apply text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white;
+}
+
+.loadingContainer {
+  @apply text-center py-4;
+}
+
+.loadingSpinner {
+  @apply animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto;
+}
+
+.loadingText {
+  @apply mt-2 text-gray-600 dark:text-gray-300;
+}
+
+.errorText {
+  @apply text-center py-4 text-red-500;
+}
+
+.description {
+  @apply text-gray-600 dark:text-gray-300 mb-4;
+}
+
+.userList {
+  @apply space-y-2 mb-6;
+}
+
+.userCard {
+  @apply p-3 border rounded-lg cursor-pointer transition-colors;
+}
+
+.userCardSelected {
+  @apply border-blue-500 bg-blue-50 dark:bg-blue-900 dark:border-blue-400;
+}
+
+.userCardDefault {
+  @apply border-gray-200 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700;
+}
+
+.userInfo {
+  @apply flex items-center;
+}
+
+.userAvatar {
+  @apply w-8 h-8 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-300 font-semibold;
+}
+
+.userName {
+  @apply ml-3 text-gray-800 dark:text-gray-200;
+}
+
+.actionButtons {
+  @apply flex justify-end space-x-3;
+}
+
+.cancelButton {
+  @apply px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700;
+}
+
+.assignButton {
+  @apply px-4 py-2 rounded-md text-white;
+}
+
+.assignButtonEnabled {
+  @apply bg-blue-600 hover:bg-blue-700;
+}
+
+.assignButtonDisabled {
+  @apply bg-blue-400 cursor-not-allowed;
+}

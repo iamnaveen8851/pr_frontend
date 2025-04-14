@@ -1,0 +1,19 @@
+
+NEXT WEEK: 
+
+work on 
+  - Real Time Communication - using web socket.io
+  - AI 
+  - machine learning 
+
+
+
+
+fix deployment at last --- check OR review once 
+OR 
+Redeploy the frontend again and integrate it with all following
+    - google console
+    - firebase
+    - pro url add in server 
+    - test it again 
+
