@@ -73,25 +73,6 @@ export const updateProject = createAsyncThunk(
   }
 );
 
-// export const updateTaskStatus = createAsyncThunk(
-//   "tasks/updateStatus",
-//   async ({ taskId, status }, { rejectWithValue }) => {
-//     try {
-//       const response = await axiosInstance.patch(
-//         `/tasks/updateTask/${taskId}`,
-//         {
-//           status,
-//         }
-//       );
-//       toast.success(`${response.data.message}`);
-//       return response.data;
-//     } catch (error) {
-//       toast.error("Failed to update task status");
-//       return rejectWithValue(error.response.data);
-//     }
-//   }
-// );
-
 export const deleteProject = createAsyncThunk(
   "projects/deleteTask",
   async ({ id }, { rejectWithValue }) => {
@@ -100,7 +81,7 @@ export const deleteProject = createAsyncThunk(
       toast.success("Project deleted successfully");
       return id;
     } catch (error) {
-      toast.error("Failed to delete Project");
+      toast.error(error.response.data.message);
       return rejectWithValue(error.response.data);
     }
   }

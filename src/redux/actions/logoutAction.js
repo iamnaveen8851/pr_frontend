@@ -9,11 +9,9 @@ export const clearCookie = createAsyncThunk(
       const res = await axiosInstance.post(`/users/logout`);
       console.log(res, "logout res");
       localStorage.removeItem("accessToken");
-      
 
       navigate("/login");
       dispatch(logoutSuccess());
-
     } catch (error) {
       console.log("Error while logging out", error.message);
       return rejectWithValue(error.message);
