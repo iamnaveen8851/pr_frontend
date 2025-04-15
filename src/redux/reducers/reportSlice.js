@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getTeamPerformance, getPendingTasks, getTimeSpent } from "../actions/reportAction";
+import {
+  getTeamPerformance,
+  getPendingTasks,
+  getTimeSpent,
+} from "../actions/reportAction";
 
 // Add timeSpent to initialState
 const initialState = {
@@ -9,7 +13,6 @@ const initialState = {
   loading: false,
   error: null,
 };
-
 
 const reportSlice = createSlice({
   name: "reports",

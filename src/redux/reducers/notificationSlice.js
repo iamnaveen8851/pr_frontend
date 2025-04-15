@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   getNotifications,
   markNotificationAsRead,
- 
 } from "../actions/notificationAction";
 
 const initialState = {
