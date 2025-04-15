@@ -9,28 +9,30 @@ export const getGoogleAuthToken = async () => {
 export const listCalendarEvents = async (timeMin, timeMax) => {
   try {
     const token = await getGoogleAuthToken();
-    if (!token) throw new Error('Not authenticated with Google');
+    if (!token) throw new Error("Not authenticated with Google");
 
     // Initialize the calendar API if not already initialized
     if (!window.gapi.client.calendar) {
       await window.gapi.client.init({
         apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
-        discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
+        discoveryDocs: [
+          "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        ],
       });
     }
 
-    console.log("Token", token)
+    console.log("Token", token);
 
     // Set the auth token for the request
     window.gapi.client.setToken({ access_token: token });
 
     // Make the API request
     const response = await window.gapi.client.calendar.events.list({
-      calendarId: 'primary',
+      calendarId: "primary",
       timeMin: timeMin || new Date().toISOString(),
       timeMax: timeMax,
       singleEvents: true,
-      orderBy: 'startTime',
+      orderBy: "startTime",
     });
 
     return response.result.items;
@@ -44,19 +46,19 @@ export const listCalendarEvents = async (timeMin, timeMax) => {
 export const createCalendarEvent = async (event) => {
   try {
     const token = await getGoogleAuthToken();
-    if (!token) throw new Error('Not authenticated with Google');
+    if (!token) throw new Error("Not authenticated with Google");
 
     // Set the auth token for the request
     window.gapi.client.setToken({ access_token: token });
 
     const response = await window.gapi.client.calendar.events.insert({
-      calendarId: 'primary',
+      calendarId: "primary",
       resource: event,
     });
 
     return response.result;
   } catch (error) {
-    console.error('Error creating calendar event:', error);
+    console.error("Error creating calendar event:", error);
     return null;
   }
 };
@@ -71,7 +73,7 @@ export const taskToGoogleEvent = (task) => {
 
   return {
     summary: task.title,
-    description: task.description || '',
+    description: task.description || "",
     start: {
       dateTime: deadline.toISOString(),
       timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
