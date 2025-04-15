@@ -38,7 +38,6 @@ const CommentSection = ({
   // Function to fetch users
   const fetchUsers = async () => {
     try {
-      ;
       const response = await axiosInstance.get("/users");
       setUsers(response.data.data || []);
     } catch (error) {
@@ -177,16 +176,16 @@ const CommentSection = ({
   };
 
   return (
-    <div className="container w-[88%] mx-auto mt-12 bg-white dark:bg-gray-800 rounded-lg shadow p-5">
+    <div className="w-[90%] lg:w-[92%] mx-auto px-2 py-6 m-auto md:m-auto lg:ml-[6%] bg-white dark:bg-gray-800 rounded-lg shadow ">
       <NavigationTabs />
-      <br />
-      <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+
+      <h3 className="text-2xl text-center md:text-left lg:text-left font-semibold text-gray-800 dark:text-white mb-6">
         Comments
       </h3>
 
       {/* Comment form */}
       <form onSubmit={handleSubmit} className="mb-4">
-        <div className="mb-3 relative">
+        <div className="mb-3  relative">
           <textarea
             ref={commentInputRef}
             value={newComment}

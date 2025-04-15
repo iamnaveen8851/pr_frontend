@@ -9,7 +9,6 @@ const AIRecommendationModal = ({ isOpen, onClose, taskId, onAssign }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedUserId, setSelectedUserId] = useState(null);
- 
 
   useEffect(() => {
     if (isOpen && taskId) {
@@ -24,8 +23,7 @@ const AIRecommendationModal = ({ isOpen, onClose, taskId, onAssign }) => {
       const response = await axiosInstance.get(
         `/task-allocation/${taskId}/recommendations`
       );
-      // console.log(response, "Res");
-      console.log("");
+
       setRecommendations(response.data.data.recommendations);
       setError(null);
     } catch (err) {
@@ -142,7 +140,5 @@ const AIRecommendationModal = ({ isOpen, onClose, taskId, onAssign }) => {
     </div>
   );
 };
-
-
 
 export default AIRecommendationModal;

@@ -122,7 +122,7 @@ const Login = () => {
     // console.log(formState, "formState");
 
     dispatch(handleLogin({ formState, navigate }));
-    console.log(formState, "for change");
+    // console.log(formState, "for change");
   };
 
   // handle Google login
@@ -139,7 +139,7 @@ const Login = () => {
 
   const handleGoogleLoginError = () => {
     // toast.error("Google login failed. Please try again.");
-    return
+    return;
   };
 
   // Github login handler
@@ -177,16 +177,12 @@ const Login = () => {
     }
   };
 
-
-  
   useEffect(() => {
     // console.log("Loading", loading);
     if (!loading) {
       setIsSubmitting(false);
     }
   }, [loading]);
-
-
 
   return (
     <>
@@ -275,10 +271,7 @@ const Login = () => {
                     : ""
                 }`}
                 type="submit"
-                disabled={
-                  isSubmitting ||
-                  (!touched.email && !touched.password)
-                }
+                disabled={isSubmitting || (!touched.email && !touched.password)}
               >
                 {isSubmitting ? (
                   <div className="flex items-center justify-center">

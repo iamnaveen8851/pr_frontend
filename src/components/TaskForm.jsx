@@ -6,11 +6,9 @@ import { createTask, updateTask } from "../redux/actions/taskAction";
 import { axiosInstance } from "../utils/axiosInstance";
 import { fetchProjects } from "../redux/actions/projectAction";
 
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
-
-
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
@@ -35,8 +33,8 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
   const [taskData, setTaskData] = useState({
     title: "",
     description: "",
-    priority: "Medium",
-    status: "Pending",
+    priority: "",
+    status: "",
     assignedTo: "",
     assignedBy: user?.id || "",
     estimatedTime: "",
@@ -46,6 +44,27 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
   });
 
   const [errors, setErrors] = useState({});
+
+  // Add this useEffect to properly handle initialData when editing
+  useEffect(() => {
+    if (isEditing && initialData) {
+      // Format the task data properly for the form
+      const formattedTaskData = {
+        ...initialData,
+        // Handle object references for IDs
+        assignedTo: initialData.assignedTo?._id || initialData.assignedTo || "",
+        assignedBy: initialData.assignedBy?._id || initialData.assignedBy || "",
+        project: initialData.project?._id || initialData.project || "",
+        // Format the date for the date input (remove time portion)
+        deadline: initialData.deadline
+          ? initialData.deadline.split("T")[0]
+          : "",
+      };
+
+      // console.log("Formatted task data for editing:", formattedTaskData);
+      setTaskData(formattedTaskData);
+    }
+  }, [isEditing, initialData]);
 
   // Fetch users for assignment
   useEffect(() => {
@@ -113,7 +132,7 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
         // Make sure we have the task ID before dispatching the update action
         if (!taskData._id) {
           console.error("Task ID is missing for update operation");
-         
+
           return;
         }
 
@@ -125,7 +144,6 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
           })
           .catch((error) => {
             console.error("Failed to update task:", error);
-          
           });
       } else {
         dispatch(createTask(filteredTaskData))
@@ -135,7 +153,6 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
           })
           .catch((error) => {
             console.error("Failed to create task:", error);
-           
           });
       }
     }
@@ -143,20 +160,24 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // Special handling for assignedTo and assignedBy to store both ID and username
+
+    // Clear error for this field if it was previously showing an error
+    if (errors[name]) {
+      setErrors({
+        ...errors,
+        [name]: undefined,
+      });
+    }
+
+    // Rest of your existing handleChange logic
     if (name === "assignedTo" || name === "assignedBy") {
       const selectedUser = users.find((user) => user._id === value);
       if (selectedUser) {
-        // Store username in the task data
         setTaskData({
           ...taskData,
           [name]: value,
           [`${name}Name`]: selectedUser.username,
         });
-
-        // Also store in localStorage for reference
-        // localStorage.setItem(`${name}Name`, selectedUser.username);
-        // localStorage.setItem(`${name}Role`, selectedUser.role);
       } else {
         setTaskData({
           ...taskData,
@@ -175,10 +196,7 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
   const statusOptions = ["Pending", "In Progress", "Review", "Completed"];
 
   return (
-    <div
-     
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-    >
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold text-gray-800 dark:text-white">
@@ -192,7 +210,7 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
           </button>
         </div>
 
-        <form  onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Title */}
             <div className="col-span-2">
@@ -344,6 +362,7 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 dark:text-white"
               >
+                <option value="">Select Priority</option>
                 {priorityOptions.map((option) => (
                   <option key={option} value={option}>
                     {option}
@@ -363,6 +382,7 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 dark:text-white"
               >
+                <option value="">Select Status</option>
                 {statusOptions.map((option) => (
                   <option key={option} value={option}>
                     {option}

@@ -14,10 +14,16 @@ import {
 
 const Sidebar = () => {
   const location = useLocation();
-  const [expanded, setExpanded] = useState(false);
+  // Initialize expanded state from localStorage
+  const [expanded, setExpanded] = useState(() => {
+    const savedState = localStorage.getItem("sidebarExpanded");
+    return savedState ? savedState === "true" : false;
+  });
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   // Near the top of your component
-  const [isMobileOrTablet, setIsMobileOrTablet] = useState(window.innerWidth < 1024);
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(
+    window.innerWidth < 1024
+  );
   const [isVisible, setIsVisible] = useState(window.innerWidth >= 1024); // Only visible on desktop initially
 
   // Handle window resize
@@ -25,7 +31,7 @@ const Sidebar = () => {
     const handleResize = () => {
       const mobileOrTablet = window.innerWidth < 1024;
       const wasMobileOrTablet = isMobileOrTablet;
-      
+
       setIsMobileOrTablet(mobileOrTablet);
 
       // If transitioning from desktop to mobile/tablet, hide the sidebar
@@ -36,7 +42,7 @@ const Sidebar = () => {
       else if (!mobileOrTablet && wasMobileOrTablet) {
         setIsVisible(true);
       }
-      
+
       // On mobile/tablet, collapse the sidebar when resizing
       if (mobileOrTablet && expanded) {
         setExpanded(false);
@@ -89,25 +95,41 @@ const Sidebar = () => {
     }
   };
 
+  // Add this function to handle sidebar expansion
+  const handleExpand = () => {
+    const newExpandedState = !expanded;
+    setExpanded(newExpandedState);
+
+    // Store in localStorage for persistence
+    localStorage.setItem("sidebarExpanded", newExpandedState.toString());
+
+    // Dispatch custom event for other components to listen to
+    window.dispatchEvent(
+      new CustomEvent("sidebar-toggle", {
+        detail: { expanded: newExpandedState },
+      })
+    );
+  };
+
   return (
     <>
       {/* Sidebar */}
       <div
         className={`h-[calc(100vh-4rem)] fixed top-16 ${
-          theme === "dark" ? "bg-gray-800" : "bg-gray-100"
+          theme === "dark" ? "bg-gray-800" : "bg-white"
         } 
         ${
           theme === "dark" ? "text-white" : "text-gray-800"
-        } transition-all duration-300 ${expanded ? "w-64" : "w-16"} ${
-          isVisible ? "left-0" : "-left-20"
-        } z-20 shadow-lg`}
+        } transition-all duration-400 ease-in-out ${
+          expanded ? "w-48" : "w-16"
+        } ${isVisible ? "left-0" : "-left-20"} z-20 shadow-lg`}
       >
         <div className="p-4 flex justify-between items-center">
           {expanded && <h2 className="text-xl font-bold">Menu</h2>}
           <button
-            onClick={() => setExpanded(!expanded)}
-            className={`p-2 rounded ${
-              theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-200"
+            onClick={handleExpand}
+            className={`p-2  ${
+              theme === "dark" ? "hover:bg-blue-600" : "hover:bg-gray-200"
             } transition-colors`}
             aria-label={expanded ? "Collapse sidebar" : "Expand sidebar"}
           >
@@ -116,20 +138,22 @@ const Sidebar = () => {
         </div>
 
         <nav
-          className="mt-6 overflow-y-auto"
+          className="mt-0 overflow-y-auto"
           style={{ maxHeight: "calc(100vh - 12rem)" }}
         >
           <ul>
             <li
               className={`mb-2 ${
-                location.pathname === "/" ? "bg-blue-600 text-white" : ""
+                location.pathname === "/" ? "bg-orange-500 text-white" : ""
               }`}
             >
               <Link
                 to="/"
                 className={`flex items-center p-4 ${
-                  theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-200"
-                } rounded transition-colors`}
+                  theme === "dark"
+                    ? "hover:bg-blue-600"
+                    : "hover:bg-blue-600  hover:text-white"
+                }  transition-colors`}
               >
                 <FontAwesomeIcon
                   icon={faTasks}
@@ -142,15 +166,17 @@ const Sidebar = () => {
             <li
               className={`mb-2 ${
                 location.pathname === "/projects"
-                  ? "bg-blue-600 text-white"
+                  ? "bg-orange-500 text-white"
                   : ""
               }`}
             >
               <Link
                 to="/projects"
                 className={`flex items-center p-4 ${
-                  theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-200"
-                } rounded transition-colors`}
+                  theme === "dark"
+                    ? "hover:bg-blue-600"
+                    : "hover:bg-blue-600  hover:text-white"
+                }  transition-colors`}
               >
                 <FontAwesomeIcon
                   icon={faProjectDiagram}
@@ -164,15 +190,17 @@ const Sidebar = () => {
             <li
               className={`mb-2 ${
                 location.pathname === "/calendar"
-                  ? "bg-blue-600 text-white"
+                  ? "bg-orange-500 text-white"
                   : ""
               }`}
             >
               <Link
                 to="/calendar"
                 className={`flex items-center p-4 ${
-                  theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-200"
-                } rounded transition-colors`}
+                  theme === "dark"
+                    ? "hover:bg-blue-600"
+                    : "hover:bg-blue-600  hover:text-white"
+                }  transition-colors`}
               >
                 <FontAwesomeIcon
                   icon={faCalendarAlt}
@@ -185,15 +213,17 @@ const Sidebar = () => {
             <li
               className={`mb-2 ${
                 location.pathname === "/comments"
-                  ? "bg-blue-600 text-white"
+                  ? "bg-orange-500 text-white"
                   : ""
               }`}
             >
               <Link
                 to="/comments"
                 className={`flex items-center p-4 ${
-                  theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-200"
-                } rounded transition-colors`}
+                  theme === "dark"
+                    ? "hover:bg-blue-600"
+                    : "hover:bg-blue-600  hover:text-white"
+                }  transition-colors`}
               >
                 <FontAwesomeIcon
                   icon={faComments}
@@ -205,14 +235,18 @@ const Sidebar = () => {
 
             <li
               className={`mb-2 ${
-                location.pathname === "/reports" ? "bg-blue-600 text-white" : ""
+                location.pathname === "/reports"
+                  ? "bg-orange-500 text-white"
+                  : ""
               }`}
             >
               <Link
                 to="/reports"
                 className={`flex items-center p-4 ${
-                  theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-200"
-                } rounded transition-colors`}
+                  theme === "dark"
+                    ? "hover:bg-blue-600"
+                    : "hover:bg-blue-600  hover:text-white"
+                }  transition-colors`}
               >
                 <FontAwesomeIcon
                   icon={faFileAlt}
@@ -224,15 +258,17 @@ const Sidebar = () => {
             <li
               className={`mb-2 ${
                 location.pathname === "/analytics"
-                  ? "bg-blue-600 text-white"
+                  ? "bg-orange-500 text-white"
                   : ""
               }`}
             >
               <Link
                 to="/analytics"
                 className={`flex items-center p-4 ${
-                  theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-200"
-                } rounded transition-colors`}
+                  theme === "dark"
+                    ? "hover:bg-blue-600"
+                    : "hover:bg-blue-600  hover:text-white"
+                }  transition-colors`}
               >
                 <FontAwesomeIcon
                   icon={faChartBar}

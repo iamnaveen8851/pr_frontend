@@ -50,9 +50,6 @@ const TaskAnalytics = () => {
     workflowCounts: {},
   });
 
-  //   console.log(tasks, "tasks data");
-  //   console.log(projects, "project data");
-
   // Fetch tasks and projects when the component mounts
   useEffect(() => {
     dispatch(fetchTasks());
@@ -62,14 +59,12 @@ const TaskAnalytics = () => {
   // Process task data when tasks or projects change
   useEffect(() => {
     if (tasks && tasks.length > 0) {
-      // Count tasks by status
-      const statusCounts = {
-        "To Do": tasks.filter((task) => task.status === "To Do").length,
-        "In Progress": tasks.filter((task) => task.status === "In Progress")
-          .length,
-        "In Review": tasks.filter((task) => task.status === "In Review").length,
-        Completed: tasks.filter((task) => task.status === "Completed").length,
-      };
+      // Count tasks by status - fixing the status values to match what's in your data
+      const statusCounts = {};
+
+      tasks.forEach((task) => {
+        statusCounts[task.status] = (statusCounts[task.status] || 0) + 1;
+      });
 
       // Count tasks by priority
       const priorityCounts = {
@@ -82,9 +77,25 @@ const TaskAnalytics = () => {
       const projectTaskCounts = {};
       if (projects && projects.length > 0) {
         projects.forEach((project) => {
-          projectTaskCounts[project.name] = tasks.filter(
-            (task) => task.project === project._id
-          ).length;
+          // Debug the project data
+          // console.log("Project:", project.name, "ID:", project._id);
+
+          // Check if tasks have project IDs and count them properly
+          const tasksInProject = tasks.filter((task) => {
+            // Debug task project relationship
+
+            // Check for both string and object ID comparison
+            return (
+              task.project === project._id ||
+              (task.project && task.project._id === project._id) ||
+              (typeof task.project === "object" &&
+                task.project &&
+                task.project.toString() === project._id)
+            );
+          });
+
+          projectTaskCounts[project.name] = tasksInProject.length;
+          // console.log(`Found ${tasksInProject.length} tasks for project ${project.name}`);
         });
       }
 
@@ -356,9 +367,9 @@ const TaskAnalytics = () => {
   };
 
   return (
-    <div className="p-5 container w-[90%] mx-auto mt-12">
+    <div className="w-[90%] lg:w-[92%] m-auto mx-auto py-6  p-5 md:m-auto lg:ml-[6%]">
       <NavigationTabs />
-      <h2 className="text-xl font-bold mb-6 text-gray-800 dark:text-white">
+      <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">
         Task Analytics
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">

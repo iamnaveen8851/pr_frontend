@@ -4,15 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getTeamPerformance,
   getPendingTasks,
-  getTimeSpent
+  getTimeSpent,
 } from "../redux/actions/reportAction";
 import NavigationTabs from "./NavigationTabs";
 
 const Reports = () => {
   const dispatch = useDispatch();
-  const { teamPerformance, pendingTasks, timeSpent, loading, error } = useSelector(
-    (state) => state.reports
-  );
+  const { teamPerformance, pendingTasks, timeSpent, loading, error } =
+    useSelector((state) => state.reports);
 
   useEffect(() => {
     dispatch(getTeamPerformance());
@@ -21,15 +20,21 @@ const Reports = () => {
   }, [dispatch]);
 
   return (
-    <div className="container w-[88%] mx-auto mt-12 px-4 py-8 dark:bg-gray-800">
+    <div className="w-[90%] lg:w-[92%] m-auto mx-auto py-6  p-5 md:m-auto lg:ml-[6%] dark:bg-gray-800">
       <NavigationTabs />
-
+      <div>
+        <h1 className="text-[25px] text-left underline text-red-500 font-semibold mb-8 dark:text-white">
+          Reports
+        </h1>
+      </div>
       {/* Team Performance Section */}
-      <h1 className="text-3xl font-bold text-center mb-8 dark:text-white">
-        Team Performance Report
-      </h1>
+      <div>
+        <h1 className="text-[22px] text-left font-semibold mb-8 dark:text-white">
+          Team Performance Report
+        </h1>
+      </div>
 
-      {loading && (
+      {loading && !teamPerformance && (
         <div className="text-center dark:text-gray-300">
           Loading team performance data...
         </div>
@@ -37,8 +42,8 @@ const Reports = () => {
       {error && <div className="text-center text-red-500">Error: {error}</div>}
 
       {teamPerformance && teamPerformance.length > 0 && (
-        <div className="overflow-x-auto shadow-lg rounded-lg mb-12">
-          <table className="min-w-full bg-white dark:bg-gray-700">
+        <div className="overflow-x-auto  max-w-full shadow-lg rounded-lg mb-12">
+          <table className="w-max min-w-full bg-white dark:bg-gray-700">
             <thead className="bg-gray-100 dark:bg-gray-600">
               <tr>
                 <th className="py-3 px-4 text-left font-semibold text-gray-700 dark:text-gray-200">
@@ -78,7 +83,7 @@ const Reports = () => {
                   </td>
                   <td className="py-3 px-4 text-center dark:text-gray-200">
                     <div className="flex items-center justify-center">
-                      <div className="w-16 bg-gray-200 dark:bg-gray-500 rounded-full h-2.5">
+                      <div className="w-4 lg:w-16 bg-gray-200 dark:bg-gray-500 rounded-full h-2.5">
                         <div
                           className="bg-blue-600 h-2.5 rounded-full"
                           style={{ width: `${member.onTimeCompletion}%` }}
@@ -116,18 +121,18 @@ const Reports = () => {
 
       {teamPerformance && teamPerformance.length === 0 && (
         <div className="text-center text-gray-500 dark:text-gray-400 mb-12">
-          No team performance data available
+          Loading team performance data...
         </div>
       )}
 
       <br />
       <br />
       {/* Pending Tasks Section */}
-      <h1 className="text-3xl font-bold text-center mb-8 dark:text-white">
+      <h1 className="text-[22px] text-left font-semibold mb-8 dark:text-white">
         Pending Tasks Report
       </h1>
 
-      {loading && (
+      {loading && !pendingTasks && (
         <div className="text-center dark:text-gray-300">
           Loading pending tasks data...
         </div>
@@ -140,15 +145,15 @@ const Reports = () => {
               key={userTasks.userId}
               className="bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden"
             >
-              <div className="bg-gray-100 dark:bg-gray-600 p-4 flex justify-between items-center">
-                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+              <div className="bg-gray-100 dark:bg-gray-600 p-2 lg:p-4 flex justify-between items-center">
+                <h2 className="text-md font-semibold text-gray-800 dark:text-gray-200">
                   {userTasks.username}
                 </h2>
-                <div className="flex space-x-4">
-                  <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">
+                <div className="flex space-x-2 lg:space-x-4">
+                  <span className=" px-1 lg:px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">
                     Total: {userTasks.totalTasks}
                   </span>
-                  <span className="px-3 py-1 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded-full text-sm">
+                  <span className="px-1 lg:px-3 py-1 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded-full text-sm">
                     High Priority: {userTasks.highPriorityTasks}
                   </span>
                 </div>
@@ -158,19 +163,19 @@ const Reports = () => {
                 <table className="min-w-full">
                   <thead className="bg-gray-50 dark:bg-gray-800">
                     <tr>
-                      <th className="py-2 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      <th className="py-2 px-2 lg:px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                         Title
                       </th>
-                      <th className="py-2 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      <th className="py-2 px-2 lg:px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                         Priority
                       </th>
-                      <th className="py-2 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      <th className="py-2 px-2 lg:px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                         Status
                       </th>
-                      <th className="py-2 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      <th className="py-2 px-2 lg:px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                         Deadline
                       </th>
-                      <th className="py-2 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      <th className="py-2 px-2 lg:px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                         Est. Time (hrs)
                       </th>
                     </tr>
@@ -181,10 +186,10 @@ const Reports = () => {
                         key={task._id}
                         className="hover:bg-gray-50 dark:hover:bg-gray-600"
                       >
-                        <td className="py-3 px-4 text-sm text-gray-800 dark:text-gray-200">
+                        <td className="py-3 px-2 lg:px-4 text-sm text-gray-800 dark:text-gray-200">
                           {task.title}
                         </td>
-                        <td className="py-3 px-4 text-sm">
+                        <td className="py-3 px-2 lg:px-4 text-sm">
                           <span
                             className={`px-2 py-1 rounded-full text-xs font-medium ${
                               task.priority === "High"
@@ -197,7 +202,7 @@ const Reports = () => {
                             {task.priority}
                           </span>
                         </td>
-                        <td className="py-3 px-4 text-sm">
+                        <td className="py-3 px-2 lg:px-4 text-sm">
                           <span
                             className={`px-2 py-1 rounded-full text-xs font-medium ${
                               task.status === "Pending"
@@ -210,10 +215,10 @@ const Reports = () => {
                             {task.status}
                           </span>
                         </td>
-                        <td className="py-3 px-4 text-sm text-gray-800 dark:text-gray-200">
+                        <td className="py-3 px-2 lg:px-4 text-sm text-gray-800 dark:text-gray-200">
                           {new Date(task.deadline).toLocaleDateString()}
                         </td>
-                        <td className="py-3 px-4 text-sm text-gray-800 dark:text-gray-200">
+                        <td className="py-3 px-2 lg:px-4 text-sm text-gray-800 dark:text-gray-200">
                           {task.estimatedTime}
                         </td>
                       </tr>
@@ -234,11 +239,11 @@ const Reports = () => {
       <br />
       <br />
       {/* Time Spent Section */}
-      <h1 className="text-3xl font-bold text-center mb-8 dark:text-white">
+      <h1 className="text-[22px] text-left font-semibold mb-8 dark:text-white">
         Time Spent Report
       </h1>
 
-      {loading && (
+      {loading && !timeSpent && (
         <div className="text-center dark:text-gray-300">
           Loading time spent data...
         </div>
@@ -252,7 +257,7 @@ const Reports = () => {
               className="bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden"
             >
               <div className="bg-gray-100 dark:bg-gray-600 p-4 flex justify-between items-center">
-                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                <h2 className="text-nd font-semibold text-gray-800 dark:text-gray-200">
                   {userData.username}
                 </h2>
                 <div>
@@ -337,7 +342,7 @@ const Reports = () => {
       )}
 
       {timeSpent && timeSpent.length === 0 && (
-        <div className="text-center text-gray-500 dark:text-gray-400">
+        <div className="text-[23px] text-center text-gray-500 dark:text-gray-400">
           No time spent data available
         </div>
       )}

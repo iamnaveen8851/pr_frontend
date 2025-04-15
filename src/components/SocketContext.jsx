@@ -1,9 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
 
@@ -49,41 +44,43 @@ export const SocketProvider = ({ children }) => {
   // Methods to join/leave rooms
   const joinTaskRoom = (taskId) => {
     if (socket && taskId) {
-      socket.emit('join-task', taskId);
+      socket.emit("join-task", taskId);
       console.log(`Joined task room: ${taskId}`);
     }
   };
-  
+
   const leaveTaskRoom = (taskId) => {
     if (socket && taskId) {
-      socket.emit('leave-task', taskId);
+      socket.emit("leave-task", taskId);
       console.log(`Left task room: ${taskId}`);
     }
   };
-  
+
   const joinProjectRoom = (projectId) => {
     if (socket && projectId) {
-      socket.emit('join-project', projectId);
+      socket.emit("join-project", projectId);
       console.log(`Joined project room: ${projectId}`);
     }
   };
-  
+
   const leaveProjectRoom = (projectId) => {
     if (socket && projectId) {
-      socket.emit('leave-project', projectId);
+      socket.emit("leave-project", projectId);
       console.log(`Left project room: ${projectId}`);
     }
   };
 
-  return(
-    <SocketContext.Provider value={{
+  return (
+    <SocketContext.Provider
+      value={{
         socket,
         joinTaskRoom,
         leaveTaskRoom,
         joinProjectRoom,
-        leaveProjectRoom
-    }}>
+        leaveProjectRoom,
+      }}
+    >
       {children}
     </SocketContext.Provider>
-  )
+  );
 };

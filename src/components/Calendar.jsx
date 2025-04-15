@@ -23,9 +23,11 @@ const Calendar = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [calendarDays, setCalendarDays] = useState([]);
   const [tasksByDate, setTasksByDate] = useState({});
-  const [setGoogleEvents] = useState([]);
+
   const [isLoadingEvents, setIsLoadingEvents] = useState(false);
   const [isGoogleAuthenticated, setIsGoogleAuthenticated] = useState(false);
+  // Add a new state for sync message
+  const [syncMessage, setSyncMessage] = useState("");
 
   // Google login handler
   const googleLogin = useGoogleLogin({
@@ -58,54 +60,21 @@ const Calendar = () => {
   // Fetch Google Calendar events
   const fetchGoogleCalendarEvents = async () => {
     setIsLoadingEvents(true);
+    setSyncMessage("Syncing..."); // Set sync message when starting
 
     try {
       // Calculate first and last day of the month for the API request
-      const year = currentDate.getFullYear();
-      const month = currentDate.getMonth();
-      const firstDay = new Date(year, month, 1);
-      const lastDay = new Date(year, month + 1, 0);
 
-      const events = await listCalendarEvents(
-        firstDay.toISOString(),
-        lastDay.toISOString()
-      );
+      dispatch(fetchTasks());
 
-      // console.log("Google Calendar events", events);
-      setGoogleEvents(events || []);
-
-      // Merge Google events with tasks
-      if (events && events.length > 0) {
-        const updatedTasksByDate = { ...tasksByDate };
-
-        events.forEach((event) => {
-          if (event.start && (event.start.dateTime || event.start.date)) {
-            const eventDate = new Date(
-              event.start.dateTime || event.start.date
-            );
-            const dateKey = eventDate.toDateString();
-
-            if (!updatedTasksByDate[dateKey]) {
-              updatedTasksByDate[dateKey] = [];
-            }
-
-            // Add Google event as a special type of task
-            updatedTasksByDate[dateKey].push({
-              _id: event.id,
-              title: event.summary,
-              description: event.description,
-              deadline: event.start.dateTime || event.start.date,
-              status: "Google Event",
-              priority: "Medium",
-              isGoogleEvent: true,
-            });
-          }
-        });
-
-        setTasksByDate(updatedTasksByDate);
-      }
+      // Set success message after syncing
+      setSyncMessage("Sync complete!");
+      // Clear message after 3 seconds
+      setTimeout(() => setSyncMessage(""), 3000);
     } catch (error) {
       console.error("Error fetching Google Calendar events:", error);
+      setSyncMessage("Sync failed"); // Set error message
+      setTimeout(() => setSyncMessage(""), 3000);
     } finally {
       setIsLoadingEvents(false);
     }
@@ -264,11 +233,11 @@ const Calendar = () => {
   };
 
   return (
-    <div className="container w-[88%] md:w-[88%] lg:w-[88%] mx-auto px-5 py-16 mt-2 transition-all duration-300">
+    <div className="w-[90%] lg:w-[92%] m-auto mx-auto py-3 m-auto md:m-auto lg:ml-[6%] transition-all duration-300">
       <NavigationTabs />
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-3">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
-          <h1 className="text-lg font-bold text-gray-800 dark:text-white">
+          <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">
             Calendar
           </h1>
           <div className="flex flex-wrap gap-1">
@@ -293,19 +262,21 @@ const Calendar = () => {
               </button>
             </div>
 
-            {/* Google Calendar integration button */}
+            {/* Google Calendar integration button with sync message */}
             {isGoogleAuthenticated ? (
-              <button
-                onClick={fetchGoogleCalendarEvents}
-                className="px-2 py-1 rounded-md bg-green-500 text-white hover:bg-green-600 transition-colors flex items-center text-xs"
-                disabled={isLoadingEvents}
-              >
-                <FontAwesomeIcon
-                  icon={isLoadingEvents ? faSpinner : faSync}
-                  className={isLoadingEvents ? "animate-spin mr-1" : "mr-1"}
-                />
-                Sync
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={fetchGoogleCalendarEvents}
+                  className="p-5 py-2 rounded-md bg-green-500 text-white hover:bg-green-600 transition-colors flex items-center text-xs"
+                  disabled={isLoadingEvents}
+                >
+                  <FontAwesomeIcon
+                    icon={isLoadingEvents ? faSpinner : faSync}
+                    className={isLoadingEvents ? "animate-spin mr-1" : "mr-1"}
+                  />
+                  {isLoadingEvents ? "Syncing..." : "Sync"}
+                </button>
+              </div>
             ) : (
               <button
                 onClick={() => googleLogin()}
@@ -422,25 +393,6 @@ const Calendar = () => {
               <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
                 Tasks for {selectedDate.toLocaleDateString()}
               </h3>
-
-              {isGoogleAuthenticated &&
-                getTasksForDate(selectedDate).filter((t) => !t.isGoogleEvent)
-                  .length > 0 && (
-                  <button
-                    onClick={() => {
-                      const regularTasks = getTasksForDate(selectedDate).filter(
-                        (t) => !t.isGoogleEvent
-                      );
-                      if (regularTasks.length > 0) {
-                        addTaskToGoogleCalendar(regularTasks[0]);
-                      }
-                    }}
-                    className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-200 rounded-md text-sm flex items-center"
-                  >
-                    <FontAwesomeIcon icon={faPlus} className="mr-1" />
-                    Add to Google
-                  </button>
-                )}
             </div>
 
             {getTasksForDate(selectedDate).length > 0 ? (

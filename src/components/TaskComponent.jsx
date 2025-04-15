@@ -35,6 +35,13 @@ const TaskComponent = () => {
   // Add a loading state for each task
   const [loadingTasks, setLoadingTasks] = useState({});
 
+  // Add state for delete confirmation
+  const [deleteConfirmation, setDeleteConfirmation] = useState({
+    show: false,
+    taskId: null,
+    taskTitle: "",
+  });
+
   const [columns, setColumns] = useState({
     Pending: { id: "Pending", title: "To Do", tasks: [] },
     "In Progress": { id: "In Progress", title: "In Progress", tasks: [] },
@@ -152,9 +159,26 @@ const TaskComponent = () => {
 
     return <Droppable {...props}>{children}</Droppable>;
   };
-  const handleDeleteTask = (taskId) => {
-    dispatch(deleteTask(taskId));
+
+  // Modified to show confirmation popup
+  const handleDeleteClick = (taskId, taskTitle) => {
+    setDeleteConfirmation({
+      show: true,
+      taskId,
+      taskTitle,
+    });
     setMenuOpen(null);
+  };
+
+  // Actual delete function that will be called after confirmation
+  const handleDeleteTask = () => {
+    dispatch(deleteTask(deleteConfirmation.taskId));
+    setDeleteConfirmation({ show: false, taskId: null, taskTitle: "" });
+  };
+
+  // Cancel delete
+  const handleCancelDelete = () => {
+    setDeleteConfirmation({ show: false, taskId: null, taskTitle: "" });
   };
 
   const handleEditClick = (task) => {
@@ -162,6 +186,16 @@ const TaskComponent = () => {
     const formattedTask = {
       ...task,
       // Convert object references to string IDs
+      assignedTo:
+        typeof task.assignedTo === "object"
+          ? task.assignedTo._id
+          : task.assignedTo,
+      assignedBy:
+        typeof task.assignedBy === "object"
+          ? task.assignedBy._id
+          : task.assignedBy,
+      project:
+        typeof task.project === "object" ? task.project._id : task.project,
       assignedTo:
         typeof task.assignedTo === "object"
           ? task.assignedTo._id
@@ -195,6 +229,7 @@ const TaskComponent = () => {
 
     dispatch(applyAIPriority(taskId)).finally(() => {
       // Clear loading state for the task
+      dispatch(fetchTasks());
       setLoadingTasks((prev) => ({ ...prev, [taskId]: false }));
     });
   };
@@ -285,16 +320,19 @@ const TaskComponent = () => {
                                       toggleMenu(task._id);
                                     }}
                                   />
-                                  <FontAwesomeIcon
-                                    icon={faMicrochip}
-                                    className={`cursor-pointer text-gray-600 dark:text-gray-300 mt-2 hover:text-gray-800 dark:hover:text-gray-100 ${
-                                      loadingTasks[task._id]
-                                        ? "animate-spin"
-                                        : ""
-                                    }`}
+
+                                  <img
+                                    src="https://cdn-icons-png.flaticon.com/512/11184/11184109.png"
+                                    alt="Avatar"
                                     onClick={() =>
                                       handleApplyAIPriority(task._id)
                                     }
+                                    title="Ask AI to set priority"
+                                    className={`w-7 h-8 cursor-pointer text-gray-600 dark:text-gray-300 mt-2 hover:text-gray-800 dark:hover:text-gray-100 transition-transform ${
+                                      loadingTasks[task._id]
+                                        ? "animate-spin"
+                                        : "hover:scale-110"
+                                    }`}
                                   />
 
                                   {/* Improved positioning for the menu */}
@@ -336,7 +374,10 @@ const TaskComponent = () => {
                                           className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-600"
                                           onClick={(e) => {
                                             e.stopPropagation();
-                                            handleDeleteTask(task._id);
+                                            handleDeleteClick(
+                                              task._id,
+                                              task.title
+                                            );
                                           }}
                                         >
                                           Delete
@@ -456,12 +497,40 @@ const TaskComponent = () => {
         </div>
       )}
 
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmation.show && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md mx-4 shadow-xl">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Confirm Delete
+            </h3>
+            <p className="text-gray-700 dark:text-gray-300 mb-6">
+              Are you sure you want to delete task
+              {deleteConfirmation.taskTitle}"? This action cannot be undone.ne.
+            </p>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={handleCancelDelete}
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteTask}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showTaskForm && (
         <TaskForm
           onClose={() => {
             setShowTaskForm(false);
             setTaskToEdit(null);
-            dispatch(fetchTasks());
           }}
           taskToEdit={taskToEdit}
         />

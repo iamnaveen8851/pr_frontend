@@ -36,7 +36,7 @@ const ForgotPassword = ({ onClose }) => {
         email,
       });
 
-      console.log("res", response);
+      // console.log("res", response);
       setMessage(response.data.message);
 
       // Optionally close the modal after a delay

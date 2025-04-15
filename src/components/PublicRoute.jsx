@@ -17,8 +17,6 @@ const PublicRoute = () => {
   const [isLoading, setIsLoading] = useState(true);
   const token = localStorage.getItem("accessToken");
   const location = useLocation();
-  // console.log("Token", token);
-  // console.log("Current path:", location.pathname);
 
   useEffect(() => {
     // Short timeout to ensure token is properly checked
@@ -30,13 +28,44 @@ const PublicRoute = () => {
   }, []);
 
   // Wrapper component for layout consistency
-  const AppLayout = ({ children }) => (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-      <Navbar />
-      <Sidebar />
-      {children}
-    </div>
-  );
+  const AppLayout = ({ children }) => {
+    // Get sidebar expanded state from somewhere (localStorage or context)
+    const [sidebarExpanded, setSidebarExpanded] = useState(
+      localStorage.getItem("sidebarExpanded") === "true"
+    );
+
+    // Listen for sidebar toggle events
+    useEffect(() => {
+      const handleSidebarToggle = (e) => {
+        if (
+          e.detail &&
+          Object.prototype.hasOwnProperty.call(e.detail, "expanded")
+        ) {
+          setSidebarExpanded(e.detail.expanded);
+        }
+      };
+
+      window.addEventListener("sidebar-toggle", handleSidebarToggle);
+      return () =>
+        window.removeEventListener("sidebar-toggle", handleSidebarToggle);
+    }, []);
+
+    return (
+      <div className="flex flex-col min-h-screen w-full bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+        <Navbar />
+        <div className="flex flex-1 w-full pt-4">
+          <Sidebar />
+          <main
+            className={`flex-1 transition-all duration-150 ease-in-out ${
+              sidebarExpanded ? "ml-[130px]" : "ml-0"
+            }`}
+          >
+            {children}
+          </main>
+        </div>
+      </div>
+    );
+  };
 
   if (isLoading) {
     return (

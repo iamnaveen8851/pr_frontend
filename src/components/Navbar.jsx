@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearCookie } from "../redux/actions/logoutAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,15 +15,23 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import Notification from "./Notification";
+import * as avatars from "@dicebear/avatars";
+// Change this import to use initials sprites
+
+import { funEmoji } from "@dicebear/collection";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useSelector((state) => state.auth);
+  const { user, profilePicture } = useSelector((state) => state.auth);
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileModalOpen, setProfileModalOpen] = useState(false);
+
+  // Profile dropdown ref for handling outside clicks
+  const profileDropdownRef = useRef(null);
 
   // Initialize theme from localStorage on component mount
   useEffect(() => {
@@ -33,7 +41,24 @@ const Navbar = () => {
       document.documentElement.classList.remove("dark");
     }
     localStorage.setItem("theme", theme);
-  }, [theme]);
+  }, [theme, profilePicture]);
+
+  // Close profile modal when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        profileDropdownRef.current &&
+        !profileDropdownRef.current.contains(event.target)
+      ) {
+        setProfileModalOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [profileDropdownRef]);
 
   // Toggle theme function
   const toggleTheme = () => {
@@ -42,9 +67,15 @@ const Navbar = () => {
 
   // handle logout
   const handleLogout = () => {
-    console.log("logout Clicked");
+    // console.log("logout Clicked");
     dispatch(clearCookie({ navigate }));
+    setProfileModalOpen(false);
     setMobileMenuOpen(false);
+  };
+
+  // Toggle profile modal
+  const toggleProfileModal = () => {
+    setProfileModalOpen(!profileModalOpen);
   };
 
   // Toggle sidebar
@@ -60,20 +91,27 @@ const Navbar = () => {
   // Close mobile menu when navigating
   const handleNavigation = () => {
     setMobileMenuOpen(false);
+    setProfileModalOpen(false);
   };
+  // Generate avatar using DiceBear with Initials style
+  const avatarSvg = avatars.createAvatar(funEmoji, {
+    seed: funEmoji, // Use the username as seed for consistent emoji
+    dataUri: true,
+    flip: true,
+  });
 
   return (
     <>
       {/* Navbar */}
       <nav className="bg-white dark:bg-gray-800 shadow-md w-full px-4 sm:px-6 py-3 flex justify-between items-center transition-colors duration-300 fixed top-0 z-30">
-        <div className="text-xl md:text-2xl lg:text-2xl  font-bold text-gray-800 dark:text-white  m-auto md:m-0 lg:m-0 ">
+        <div className="text-xl md:text-2xl lg:text-2xl font-bold text-gray-800 dark:text-white m-auto md:m-0 lg:m-0">
           Task Management
         </div>
 
-        <div className=" md:hidden lg:hidden  ">
+        <div className="md:hidden lg:hidden">
           <Notification />
         </div>
-        {/* Sidebar toggle button for mobile */}
+
         {/* Mobile menu button */}
         <button
           className="md:hidden p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
@@ -85,36 +123,91 @@ const Navbar = () => {
         {/* Desktop menu */}
         <div className="hidden md:flex items-center space-x-4">
           <Notification />
-          <button
-            onClick={toggleTheme}
-            className="px-3 py-2 rounded-full hover:bg-gray-200 hover:rounded-full dark:hover:bg-gray-700 transition-colors duration-300"
-            aria-label="Toggle theme"
-          >
-            <FontAwesomeIcon
-              icon={theme === "light" ? faMoon : faSun}
-              className={`text-lg ${
-                theme === "light" ? "text-gray-700" : "text-yellow-300"
-              }`}
-            />
-          </button>
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center">
-              <FontAwesomeIcon
-                icon={faUser}
-                className="text-gray-600 dark:text-gray-300"
-              />
-            </div>
-            <span className="font-medium text-gray-700 dark:text-gray-200">
-              {user}
-            </span>
+
+          <div className="relative" ref={profileDropdownRef}>
+            {/* Profile picture that triggers the dropdown */}
+            <button
+              className="flex items-center space-x-2 focus:outline-none"
+              onClick={toggleProfileModal}
+              aria-label="Open profile menu"
+            >
+              <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-600 flex items-center justify-center cursor-pointer">
+                {profilePicture ? (
+                  <img
+                    src={profilePicture}
+                    alt={user}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      // Fallback to user icon if image fails to load
+                      e.target.onerror = null;
+                      e.target.style.display = "none";
+                    }}
+                  />
+                ) : (
+                  <img
+                    src={avatarSvg}
+                    alt="Avatar"
+                    className="w-full h-full object-cover"
+                  />
+                )}
+              </div>
+            </button>
+
+            {/* Profile dropdown modal */}
+            {profileModalOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50 border dark:border-gray-700">
+                <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-600 mr-3">
+                      {profilePicture ? (
+                        <img
+                          src={profilePicture}
+                          alt={user}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <img
+                            src={avatarSvg}
+                            alt="Avatar"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                        {user}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={toggleTheme}
+                  className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center"
+                >
+                  <FontAwesomeIcon
+                    icon={theme === "light" ? faMoon : faSun}
+                    className={`mr-2 ${
+                      theme === "light" ? "text-gray-700" : "text-yellow-300"
+                    }`}
+                  />
+                  <span className="text-sm text-gray-700 dark:text-gray-200">
+                    {theme === "light" ? "Dark Mode" : "Light Mode"}
+                  </span>
+                </button>
+
+                <button
+                  onClick={handleLogout}
+                  className="w-full px-4 py-2 text-left text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 flex items-center"
+                >
+                  <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />
+                  <span className="text-sm">Logout</span>
+                </button>
+              </div>
+            )}
           </div>
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded flex items-center transition-colors duration-300"
-          >
-            <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />
-            Logout
-          </button>
         </div>
       </nav>
 
@@ -125,6 +218,29 @@ const Navbar = () => {
         }`}
       >
         <div className="p-4 flex flex-col space-y-4">
+          {/* User profile for mobile */}
+          <div className="flex items-center space-x-3 p-2 border-b border-gray-200 dark:border-gray-700 pb-4">
+            <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-600 flex items-center justify-center">
+              {profilePicture ? (
+                <img
+                  src={profilePicture}
+                  alt={user}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <FontAwesomeIcon
+                  icon={faUser}
+                  className="text-gray-600 dark:text-gray-300"
+                />
+              )}
+            </div>
+            <div>
+              <p className="font-medium text-gray-800 dark:text-white">
+                {user}
+              </p>
+            </div>
+          </div>
+
           {/* Navigation links for mobile */}
           <div className="border-b border-gray-200 dark:border-gray-700 pb-4 mb-2">
             <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">

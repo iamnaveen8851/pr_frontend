@@ -9,16 +9,24 @@ import {
 } from "../redux/actions/projectAction";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import NavigationTabs from "./NavigationTabs"; // Import the NavigationTabs component
+import { axiosInstance } from "../utils/axiosInstance";
 
 const Project = () => {
   const { projects, loading, error } = useSelector((state) => state.projects);
   const dispatch = useDispatch();
   const [showProjectForm, setShowProjectForm] = useState(false);
+  const [users, setUsers] = useState([]);
   const [projectsByStatus, setProjectsByStatus] = useState({
     Planning: [],
     "In Progress": [],
     "On Hold": [],
     Completed: [],
+  });
+  // Add state for delete confirmation
+  const [deleteConfirmation, setDeleteConfirmation] = useState({
+    show: false,
+    projectId: null,
+    projectName: "",
   });
 
   // console.log(projects, "Project state");
@@ -31,7 +39,18 @@ const Project = () => {
     setShowProjectForm(false);
   };
 
+  const fetchUsers = async () => {
+    try {
+      const response = await axiosInstance.get(`/users`);
+      // console.log("Users fetched successfully", response.data.data);
+      setUsers(response.data.data);
+    } catch (error) {
+      console.log("Error while fething users", error);
+    }
+  };
   useEffect(() => {
+    fetchUsers();
+
     dispatch(fetchProjects());
   }, []);
 
@@ -129,10 +148,31 @@ const Project = () => {
     }
   };
 
-  // to delete the project
-  const handleDeleteProject = (projectId) => {
-    console.log("Delete project:", projectId);
-    dispatch(deleteProject({ id: projectId }));
+  // Modified to show confirmation popup first
+  const handleDeleteClick = (projectId, projectName) => {
+    setDeleteConfirmation({
+      show: true,
+      projectId,
+      projectName,
+    });
+  };
+
+  // Actual delete function that will be called after confirmation
+  const handleDeleteProject = () => {
+    // console.log("Delete project:", deleteConfirmation.projectId);
+    const isManager = projects.find((p) =>
+      users.some((user) => user._id === p.manager._id)
+    );
+
+    console.log(isManager, "isManager");
+    dispatch(deleteProject({ id: deleteConfirmation.projectId }));
+    // Close the confirmation dialog
+    setDeleteConfirmation({ show: false, projectId: null, projectName: "" });
+  };
+
+  // Cancel delete
+  const handleCancelDelete = () => {
+    setDeleteConfirmation({ show: false, projectId: null, projectName: "" });
   };
 
   // Add this function to get workflow stages from projects
@@ -197,10 +237,10 @@ const Project = () => {
   };
 
   return (
-    <div className="container w-[88%] mx-auto  px-6 py-16 bg-white dark:bg-gray-900">
+    <div className=" w-[90%] lg:w-[92%] m-auto mx-auto py-5 m-auto md:m-auto lg:ml-[6%]  bg-white dark:bg-gray-900">
       <NavigationTabs />
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+      <div className="flex justify-between items-center px-2  mb-6">
+        <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">
           Projects
         </h1>
         <button
@@ -211,69 +251,6 @@ const Project = () => {
         </button>
       </div>
 
-      {/* Workflow Graph */}
-      {/* <div className="mb-8 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-        <h2 className="text-lg font-semibold mb-4 text-left text-gray-800 dark:text-white">
-          Project Workflow
-        </h2>
-        <div className="flex justify-center items-center m-auto p-5">
-          <div className="flex  justify-between items-center m-auto  w-[95%]   ">
-            {getWorkflowStages().map((stage, index, array) => {
-              const stageName = stage.name;
-              const count = projectsByStatus[stageName]
-                ? projectsByStatus[stageName].length
-                : 0;
-
-              return (
-                <div
-                  key={stage._id || index}
-                  className=" flex items-center flex-grow "
-                >
-                  <div className="flex flex-col items-center">
-                    <div
-                      className={`rounded-full p-3 flex items-center justify-center  w-10 h-10 ${
-                        stageName === "Planning" || stageName === "Pending"
-                          ? "bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-200"
-                          : stageName === "In Progress"
-                          ? "bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200"
-                          : stageName === "On Hold"
-                          ? "bg-orange-100 dark:bg-orange-900/50 text-orange-800 dark:text-orange-200"
-                          : "bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200"
-                      }`}
-                    >
-                      <span className="font-medium text-sm">{count}</span>
-                    </div>
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-2">
-                      {stageName}
-                    </span>
-                    <span className="text-xs text-gray-500">
-                      Stage {stage.order}
-                    </span>
-                  </div>
-                  {index < array.length - 1 && (
-                    <div className="flex-grow mx-4 relative">
-                      <div className="h-0.5 bg-gray-300 dark:bg-gray-600 w-full absolute top-5"></div>
-                      <div className="absolute right-0 top-3.5 transform translate-x-1/2">
-                        <svg
-                          className="h-4 w-4 text-gray-400 dark:text-gray-500"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div> */}
       {/* Workflow Graph */}
       <div className="mb-8 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
         <h2 className="text-lg font-semibold mb-4 text-center text-gray-800 dark:text-white">
@@ -345,10 +322,6 @@ const Project = () => {
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
         </div>
-      ) : error ? (
-        <div className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded">
-          {error}
-        </div>
       ) : (
         <DragDropContext onDragEnd={onDragEnd}>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -403,7 +376,10 @@ const Project = () => {
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation(); // Prevent drag when clicking delete
-                                    handleDeleteProject(project._id);
+                                    handleDeleteClick(
+                                      project._id,
+                                      project.name
+                                    );
                                   }}
                                   className="text-red-500 hover:text-red-700 transition-colors"
                                 >
@@ -494,6 +470,35 @@ const Project = () => {
             ))}
           </div>
         </DragDropContext>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmation.show && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md mx-4 shadow-xl">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Confirm Delete
+            </h3>
+            <p className="text-gray-700 dark:text-gray-300 mb-6">
+              Are you sure you want to delete project "
+              {deleteConfirmation.projectName}"? This action cannot be undone.
+            </p>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={handleCancelDelete}
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteProject}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {showProjectForm && (

@@ -9,7 +9,6 @@ import TaskAnalytics from "./TaskAnalytics";
 import NavigationTabs from "./NavigationTabs";
 
 const Dashboard = () => {
- 
   const location = useLocation();
   const [activeView, setActiveView] = useState("tasks");
 
@@ -49,13 +48,16 @@ const Dashboard = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-      <Navbar />
+      {/* <Navbar /> */}
 
-      <div className="flex flex-1 relative">
-      
+      <div
+        className="flex flex-1
+       "
+      >
+        {/* relative */}
 
         {/* Main content - adjusted for responsive layout */}
-        <div className="flex-1 w-full transition-all duration-300 p-6 pt-0 lg:ml-16">
+        <div className="flex-1 w-full transition-all duration-300 p-6  lg:ml-16">
           {/* Navigation tabs */}
           <NavigationTabs />
 

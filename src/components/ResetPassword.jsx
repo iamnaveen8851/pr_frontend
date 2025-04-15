@@ -83,7 +83,9 @@ const ResetPassword = () => {
 
       <div className={styles.rightChild}>
         <div className={styles.formContainer}>
-          <h3 className="text-[25px] text-center text-orange-500 font-semibold">Reset Your Password</h3>
+          <h3 className="text-[25px] text-center text-orange-500 font-semibold">
+            Reset Your Password
+          </h3>
           <br />
 
           {message && (
