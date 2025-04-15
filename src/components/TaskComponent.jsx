@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPlus,
   faEllipsisH,
-  faMicrochip,
   faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -191,13 +190,20 @@ const TaskComponent = () => {
     const formattedTask = {
       ...task,
       // Convert object references to string IDs
-      assignedTo: typeof task.assignedTo === 'object' ? task.assignedTo._id : task.assignedTo,
-      assignedBy: typeof task.assignedBy === 'object' ? task.assignedBy._id : task.assignedBy,
-      project: typeof task.project === 'object' ? task.project._id : task.project,
+      assignedTo:
+        typeof task.assignedTo === "object"
+          ? task.assignedTo._id
+          : task.assignedTo,
+      assignedBy:
+        typeof task.assignedBy === "object"
+          ? task.assignedBy._id
+          : task.assignedBy,
+      project:
+        typeof task.project === "object" ? task.project._id : task.project,
       // Convert number to string for estimatedTime
-      estimatedTime: task.estimatedTime?.toString() || ''
+      estimatedTime: task.estimatedTime?.toString() || "",
     };
-    
+
     setCurrentTask(formattedTask);
     setIsEditModalOpen(true);
   };
@@ -222,10 +228,7 @@ const TaskComponent = () => {
     });
   };
 
-  const avatarSvg = avatars.createAvatar(bottts, {
-    dataUri: true,
-    eyes: ["roundFrame02"],
-  });
+
   return (
     <>
       <div className="flex justify-between items-center mb-4">
