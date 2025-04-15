@@ -18,10 +18,7 @@ import TaskForm from "./TaskForm";
 import AIRecommendationModal from "./AiRecommendationModal";
 
 import { applyAIPriority } from "../redux/actions/aiPriorityAction";
-import * as avatars from "@dicebear/avatars";
-// Change this import to use initials sprites
-import * as style from "@dicebear/avatars-initials-sprites";
-import { avataaarsNeutral, bottts, funEmoji } from "@dicebear/collection";
+
 
 const TaskComponent = () => {
   const dispatch = useDispatch();
@@ -200,6 +197,16 @@ const TaskComponent = () => {
           : task.assignedBy,
       project:
         typeof task.project === "object" ? task.project._id : task.project,
+      assignedTo:
+        typeof task.assignedTo === "object"
+          ? task.assignedTo._id
+          : task.assignedTo,
+      assignedBy:
+        typeof task.assignedBy === "object"
+          ? task.assignedBy._id
+          : task.assignedBy,
+      project:
+        typeof task.project === "object" ? task.project._id : task.project,
       // Convert number to string for estimatedTime
       estimatedTime: task.estimatedTime?.toString() || "",
     };
@@ -228,16 +235,15 @@ const TaskComponent = () => {
     });
   };
 
-
   return (
     <>
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center px-2 mb-4">
         <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">
           Tasks
         </h1>
         <button
           onClick={() => setShowTaskForm(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md flex items-center text-sm"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md flex items-center text-sm"
         >
           <FontAwesomeIcon icon={faPlus} className="mr-2" />
           Create Task
