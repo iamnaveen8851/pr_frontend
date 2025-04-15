@@ -46,6 +46,7 @@ export const updateTask = createAsyncThunk(
         `/tasks/updateTask/${id}`,
         taskData
       );
+      console.log("Res", res);
       toast.success(`${res.data.message}`);
       return res.data;
     } catch (error) {

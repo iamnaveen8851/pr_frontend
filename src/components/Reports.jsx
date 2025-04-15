@@ -19,6 +19,9 @@ const Reports = () => {
     dispatch(getTimeSpent());
   }, [dispatch]);
 
+  console.log("Team Performance:", teamPerformance);
+  console.log("Pending Tasks:", pendingTasks);
+  console.log("Time Spent:", timeSpent);
   return (
     <div className="w-[90%] lg:w-[92%] m-auto mx-auto py-6  p-5 md:m-auto lg:ml-[6%] dark:bg-gray-800">
       <NavigationTabs />
