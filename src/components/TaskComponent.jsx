@@ -109,6 +109,29 @@ const TaskComponent = () => {
     }
   }, [tasks]); // Ensure this effect runs when tasks change
 
+  // Add useEffect for scroll control
+  useEffect(() => {
+    if (
+      showTaskForm ||
+      isEditModalOpen ||
+      deleteConfirmation.show ||
+      showAIRecommendations
+    ) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [
+    showTaskForm,
+    isEditModalOpen,
+    deleteConfirmation.show,
+    showAIRecommendations,
+  ]);
+
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
 
@@ -227,7 +250,16 @@ const TaskComponent = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center px-2 mb-4">
+      <div
+        className={`flex justify-between items-center px-2 mb-4 ${
+          showTaskForm ||
+          isEditModalOpen ||
+          deleteConfirmation.show ||
+          showAIRecommendations
+            ? "overflow-hidden h-screen"
+            : ""
+        }`}
+      >
         <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">
           Tasks
         </h1>

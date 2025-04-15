@@ -76,6 +76,19 @@ const Project = () => {
     }
   }, [projects]);
 
+  useEffect(() => {
+    if (showProjectForm) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    // Cleanup function
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [showProjectForm]);
+
   // Handle drag end
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -237,7 +250,11 @@ const Project = () => {
   };
 
   return (
-    <div className="w-[90%] lg:w-[92%]  mx-auto py-5 m-auto md:m-auto lg:ml-[6%]  bg-white dark:bg-gray-900">
+    <div
+      className={`w-[90%] lg:w-[92%] mx-auto py-5 m-auto md:m-auto lg:ml-[6%] bg-white dark:bg-gray-900 ${
+        showProjectForm ? "overflow-hidden h-screen" : ""
+      }`}
+    >
       <NavigationTabs />
 
       <div className="flex justify-between items-center px-2  mb-6">
