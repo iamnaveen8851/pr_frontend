@@ -372,87 +372,104 @@ const TaskAnalytics = () => {
       <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">
         Task Analytics
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-          <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
-            Task Status Distribution
-          </h3>
-          <div className="h-64">
-            <Pie data={statusData} options={{ maintainAspectRatio: false }} />
-          </div>
-        </div>
+      {tasks.length === 0 && projects.length === 0 ? (
+        <h1 className="text-center pt-[15%] pb-[15%] text-xl md:text-2xl lg:text-3xl font-normal dark:text-gray-300">
+          No Task Analytics Data found.
+        </h1>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+              <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
+                Task Status Distribution
+              </h3>
+              <div className="h-64">
+                <Pie
+                  data={statusData}
+                  options={{ maintainAspectRatio: false }}
+                />
+              </div>
+            </div>
 
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-          <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
-            Task Priority Distribution
-          </h3>
-          <div className="h-64">
-            <Pie data={priorityData} options={{ maintainAspectRatio: false }} />
-          </div>
-        </div>
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+              <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
+                Task Priority Distribution
+              </h3>
+              <div className="h-64">
+                <Pie
+                  data={priorityData}
+                  options={{ maintainAspectRatio: false }}
+                />
+              </div>
+            </div>
 
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-          <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
-            Tasks per Project
-          </h3>
-          <div className="h-64">
-            <Bar options={barOptions} data={projectTasksData} />
-          </div>
-        </div>
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+              <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
+                Tasks per Project
+              </h3>
+              <div className="h-64">
+                <Bar options={barOptions} data={projectTasksData} />
+              </div>
+            </div>
 
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-          <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
-            Tasks per Assignee
-          </h3>
-          <div className="h-64">
-            <Bar options={assigneeOptions} data={assigneeTasksData} />
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+              <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
+                Tasks per Assignee
+              </h3>
+              <div className="h-64">
+                <Bar options={assigneeOptions} data={assigneeTasksData} />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <h2 className="text-xl font-bold mb-6 text-gray-800 dark:text-white">
-        Project Analytics
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-          <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
-            Project Status Distribution
-          </h3>
-          <div className="h-64">
-            <Pie
-              data={projectStatusData}
-              options={{ maintainAspectRatio: false }}
-            />
-          </div>
-        </div>
+          <h2 className="text-xl font-bold mb-6 text-gray-800 dark:text-white">
+            Project Analytics
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+              <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
+                Project Status Distribution
+              </h3>
+              <div className="h-64">
+                <Pie
+                  data={projectStatusData}
+                  options={{ maintainAspectRatio: false }}
+                />
+              </div>
+            </div>
 
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-          <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
-            Projects by Team Size
-          </h3>
-          <div className="h-64">
-            <Pie data={teamSizeData} options={{ maintainAspectRatio: false }} />
-          </div>
-        </div>
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+              <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
+                Projects by Team Size
+              </h3>
+              <div className="h-64">
+                <Pie
+                  data={teamSizeData}
+                  options={{ maintainAspectRatio: false }}
+                />
+              </div>
+            </div>
 
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-          <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
-            Project Durations (months)
-          </h3>
-          <div className="h-64">
-            <Bar options={projectOptions} data={projectDurationData} />
-          </div>
-        </div>
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+              <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
+                Project Durations (months)
+              </h3>
+              <div className="h-64">
+                <Bar options={projectOptions} data={projectDurationData} />
+              </div>
+            </div>
 
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-          <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
-            Workflow Stages Usage
-          </h3>
-          <div className="h-64">
-            <Bar options={projectOptions} data={workflowData} />
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+              <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
+                Workflow Stages Usage
+              </h3>
+              <div className="h-64">
+                <Bar options={projectOptions} data={workflowData} />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };

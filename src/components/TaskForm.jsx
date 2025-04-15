@@ -84,26 +84,29 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
     dispatch(fetchProjects());
   }, []);
 
-  const validateForm = () => {
-    // Skip validation if we're editing
-    if (isEditing) return true;
+ const validateForm = () => {
+   // Skip validation if we're editing
+   if (isEditing) return true;
 
-    const newErrors = {};
-    if (!taskData.title.trim()) newErrors.title = "Title is required";
-    if (!taskData.description.trim())
-      newErrors.description = "Description is required";
-    if (!taskData.assignedTo)
-      newErrors.assignedTo = "Please assign this task to someone";
-    if (!taskData.assignedBy)
-      newErrors.assignedBy = "Please select who is assigning this task";
-    if (!taskData.deadline) newErrors.deadline = "Deadline is required";
-    if (!taskData.estimatedTime)
-      newErrors.estimatedTime = "Estimated time is required";
-    if (!taskData.project) newErrors.project = "Please select a project";
+   const newErrors = {};
+   if (!taskData.title.trim()) newErrors.title = "Title is required";
+   if (!taskData.description.trim())
+     newErrors.description = "Description is required";
+   if (!taskData.assignedTo)
+     newErrors.assignedTo = "Please assign this task to someone";
+   if (!taskData.assignedBy)
+     newErrors.assignedBy = "Please select who is assigning this task";
+   if (!taskData.deadline) newErrors.deadline = "Deadline is required";
+   if (!taskData.estimatedTime)
+     newErrors.estimatedTime = "Estimated time is required";
+   // Only validate project if projects exist
+   if (projects.length > 0 && !taskData.project) {
+     newErrors.project = "Please select a project";
+   }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+   setErrors(newErrors);
+   return Object.keys(newErrors).length === 0;
+ };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -118,7 +121,8 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
         assignedBy: taskData.assignedBy,
         estimatedTime: taskData.estimatedTime,
         deadline: taskData.deadline,
-        project: taskData.project, // Include project ID
+        // Set project to null if no projects exist
+        project: projects.length > 0 ? taskData.project : null,
       };
 
       // If editing, include the _id
@@ -393,34 +397,40 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
 
             {/* Project */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Project{!isEditing && "*"}
-              </label>
-              <select
-                name="project"
-                value={taskData.project}
-                onChange={handleChange}
-                className={`w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:text-white ${
-                  errors.project
-                    ? "border-red-500"
-                    : "border-gray-300 dark:border-gray-600"
-                }`}
-              >
-                <option value="">Select Project</option>
-                {projects && projects.length > 0 ? (
-                  projects.map((project) => (
-                    <option key={project._id} value={project._id}>
-                      {project.name}
-                    </option>
-                  ))
-                ) : (
-                  <option disabled>No projects available</option>
-                )}
-              </select>
-              {!isEditing && errors.project && (
-                <p className="text-red-500 dark:text-red-400 text-xs mt-1">
-                  {errors.project}
-                </p>
+              {projects.length === 0 ? (
+                ""
+              ) : (
+                <>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Project{!isEditing && "*"}
+                  </label>
+                  <select
+                    name="project"
+                    value={taskData.project}
+                    onChange={handleChange}
+                    className={`w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:text-white ${
+                      errors.project
+                        ? "border-red-500"
+                        : "border-gray-300 dark:border-gray-600"
+                    }`}
+                  >
+                    <option value="">Select Project</option>
+                    {projects && projects.length > 0 ? (
+                      projects.map((project) => (
+                        <option key={project._id} value={project._id}>
+                          {project.name}
+                        </option>
+                      ))
+                    ) : (
+                      <option disabled>No projects available</option>
+                    )}
+                  </select>
+                  {!isEditing && errors.project && (
+                    <p className="text-red-500 dark:text-red-400 text-xs mt-1">
+                      {errors.project}
+                    </p>
+                  )}
+                </>
               )}
             </div>
 
