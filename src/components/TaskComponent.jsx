@@ -18,10 +18,6 @@ import TaskForm from "./TaskForm";
 import AIRecommendationModal from "./AiRecommendationModal";
 
 import { applyAIPriority } from "../redux/actions/aiPriorityAction";
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 
 const TaskComponent = () => {
   const dispatch = useDispatch();
@@ -162,9 +158,6 @@ const TaskComponent = () => {
   };
 
   const handleEditClick = (task) => {
-<<<<<<< Updated upstream
-    setCurrentTask(task);
-=======
     // Create a formatted version of the task with proper data types
     const formattedTask = {
       ...task,
@@ -184,7 +177,6 @@ const TaskComponent = () => {
     };
 
     setCurrentTask(formattedTask);
->>>>>>> Stashed changes
     setIsEditModalOpen(true);
   };
 
@@ -209,13 +201,8 @@ const TaskComponent = () => {
 
   return (
     <>
-<<<<<<< Updated upstream
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-xl font-bold text-gray-800 dark:text-white">
-=======
       <div className="flex justify-between items-center px-2 mb-4">
         <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">
->>>>>>> Stashed changes
           Tasks
         </h1>
         <button
