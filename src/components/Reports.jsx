@@ -19,11 +19,16 @@ const Reports = () => {
   }, [dispatch]);
 
   // Add loading state check
-  if (loading && (teamPerformance?.length > 0 || pendingTasks?.length > 0 || timeSpent?.length > 0)) {
+  if (
+    loading &&
+    (teamPerformance?.length > 0 ||
+      pendingTasks?.length > 0 ||
+      timeSpent?.length > 0)
+  ) {
     return (
-      <div className="w-full md:w-[90%] lg:w-[100%] mx-auto py-6 px-8 md:m-auto dark:bg-gray-800">
+      <div className="w-full md:w-[90%] lg:w-[100%] mx-auto py-6 px-8 md:m-auto">
         <NavigationTabs />
-        <div>
+        <div className="dark:bg-gray-900">
           <h1 className="text-xl md:text-[25px] text-left underline text-red-500 font-semibold mb-6 md:mb-8 dark:text-white">
             Reports
           </h1>
@@ -107,12 +112,18 @@ const Reports = () => {
 
         <div className="space-y-4 md:space-y-8 animate-pulse">
           {[1, 2].map((index) => (
-            <div key={index} className="bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden">
+            <div
+              key={index}
+              className="bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden"
+            >
               <div className="p-4">
                 <div className="h-6 bg-gray-200 dark:bg-gray-600 rounded w-48 mb-4"></div>
                 <div className="space-y-3">
                   {[1, 2, 3].map((taskIndex) => (
-                    <div key={taskIndex} className="h-4 bg-gray-200 dark:bg-gray-600 rounded"></div>
+                    <div
+                      key={taskIndex}
+                      className="h-4 bg-gray-200 dark:bg-gray-600 rounded"
+                    ></div>
                   ))}
                 </div>
               </div>
@@ -130,12 +141,18 @@ const Reports = () => {
 
         <div className="space-y-4 md:space-y-8 animate-pulse">
           {[1, 2].map((index) => (
-            <div key={index} className="bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden">
+            <div
+              key={index}
+              className="bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden"
+            >
               <div className="p-4">
                 <div className="h-6 bg-gray-200 dark:bg-gray-600 rounded w-48 mb-4"></div>
                 <div className="space-y-3">
                   {[1, 2, 3].map((taskIndex) => (
-                    <div key={taskIndex} className="h-4 bg-gray-200 dark:bg-gray-600 rounded"></div>
+                    <div
+                      key={taskIndex}
+                      className="h-4 bg-gray-200 dark:bg-gray-600 rounded"
+                    ></div>
                   ))}
                 </div>
               </div>
@@ -154,7 +171,7 @@ const Reports = () => {
     (!timeSpent || timeSpent.length === 0);
 
   return (
-    <div className="w-full md:w-[90%] lg:w-[100%] mx-auto py-6 px-8 md:m-auto dark:bg-gray-800">
+    <div className="w-full md:w-[90%] lg:w-[100%] mx-auto py-6 px-8 md:m-auto dark:bg-gray-900">
       <NavigationTabs />
       <div>
         <h1 className="text-xl md:text-[25px] text-left underline text-red-500 font-semibold mb-6 md:mb-8 dark:text-white">
@@ -179,27 +196,27 @@ const Reports = () => {
             <div className="overflow-x-auto relative max-w-full shadow-lg rounded-lg mb-8 md:mb-12">
               <div className="inline-block min-w-full align-middle">
                 <table className="min-w-full bg-white dark:bg-gray-700 table-auto">
-                  <thead className="bg-gray-100 dark:bg-gray-600">
+                  <thead className="bg-gray-100">
                     <tr>
-                      <th className="py-3 px-3 md:px-4 text-left text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-gray-600 border-b-2 border-gray-300 dark:border-gray-500">
+                      <th className="py-3 px-3 md:px-4 text-left text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-pink-600 border-b-2 border-gray-300 dark:border-gray-500">
                         Team Member
                       </th>
-                      <th className="py-3 px-3 md:px-4 text-center text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-gray-600 border-b-2 border-gray-300 dark:border-gray-500">
+                      <th className="py-3 px-3 md:px-4 text-center text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-pink-600 border-b-2 border-gray-300 dark:border-gray-500">
                         Tasks
                       </th>
-                      <th className="py-3 px-3 md:px-4 text-center text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-gray-600 border-b-2 border-gray-300 dark:border-gray-500">
+                      <th className="py-3 px-3 md:px-4 text-center text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-pink-600 border-b-2 border-gray-300 dark:border-gray-500">
                         On-Time %
                       </th>
-                      <th className="py-3 px-3 md:px-4 text-center text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-gray-600 border-b-2 border-gray-300 dark:border-gray-500 hidden sm:table-cell">
+                      <th className="py-3 px-3 md:px-4 text-center text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-pink-600 border-b-2 border-gray-300 dark:border-gray-500 hidden sm:table-cell">
                         Tasks On Time
                       </th>
-                      <th className="py-3 px-3 md:px-4 text-center text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-gray-600 border-b-2 border-gray-300 dark:border-gray-500 hidden md:table-cell">
+                      <th className="py-3 px-3 md:px-4 text-center text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-pink-600 border-b-2 border-gray-300 dark:border-gray-500 hidden md:table-cell">
                         Est. (hrs)
                       </th>
-                      <th className="py-3 px-3 md:px-4 text-center text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-gray-600 border-b-2 border-gray-300 dark:border-gray-500 hidden md:table-cell">
+                      <th className="py-3 px-3 md:px-4 text-center text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-pink-600 border-b-2 border-gray-300 dark:border-gray-500 hidden md:table-cell">
                         Actual (hrs)
                       </th>
-                      <th className="py-3 px-3 md:px-4 text-center text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-gray-600 border-b-2 border-gray-300 dark:border-gray-500">
+                      <th className="py-3 px-3 md:px-4 text-center text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-pink-600 border-b-2 border-gray-300 dark:border-gray-500">
                         Efficiency
                       </th>
                     </tr>
@@ -280,7 +297,7 @@ const Reports = () => {
                           <tr>
                             <th
                               colSpan="5"
-                              className="py-3 px-3 md:px-4 text-left text-xs md:text-sm font-semibold bg-gray-200 dark:bg-gray-600 border-b-2 border-gray-300 dark:border-gray-500"
+                              className="py-3 px-3 md:px-4 text-left text-xs md:text-sm font-semibold bg-gray-200 dark:bg-blue-600 border-b-2 border-gray-300 dark:border-gray-500"
                             >
                               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                                 <span className="text-gray-700 dark:text-gray-200 text-sm md:text-base">
@@ -390,7 +407,7 @@ const Reports = () => {
                           <tr>
                             <th
                               colSpan="4"
-                              className="py-3 px-3 md:px-4 text-left text-xs md:text-sm font-semibold bg-gray-200 dark:bg-gray-600 border-b-2 border-gray-300 dark:border-gray-500"
+                              className="py-3 px-3 md:px-4 text-left text-xs md:text-sm font-semibold bg-gray-200 dark:bg-yellow-600 border-b-2 border-gray-300 dark:border-gray-500"
                             >
                               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                                 <span className="text-gray-700 dark:text-gray-200 text-sm md:text-base">

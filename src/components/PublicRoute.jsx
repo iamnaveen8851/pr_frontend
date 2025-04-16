@@ -204,16 +204,16 @@ const AppLayout = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen w-full bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       <Navbar />
-      <div className="flex flex-1 w-full pt-4 relative">
+      <div className="flex flex-1 w-full  relative">
         <Sidebar expanded={sidebarExpanded} onToggle={toggleSidebar} />
         <div
-          className={`transition-all duration-150 ease-in-out ${
+          className={`transition-all duration-300 ease-in-out flex-1 ${
             isDesktop
               ? sidebarExpanded
-                ? "w-[calc(100%-12rem)] ml-48" // Adjusted width and margin for expanded sidebar
-                : "w-[calc(100%-4rem)] ml-16"  // Adjusted width and margin for collapsed sidebar
-              : "w-full ml-0"
-          } absolute top-0 right-0`}
+                ? "ml-48" // Margin for expanded sidebar
+                : "ml-16" // Margin for collapsed sidebar
+              : "ml-0"
+          }`}
         >
           {children}
         </div>

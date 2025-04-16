@@ -321,13 +321,17 @@ const Sidebar = ({ expanded, onToggle }) => {
         ${
           theme === "dark" ? "bg-gray-800 text-white" : "bg-white text-gray-800"
         }
-        transition-all duration-400 ease-in-out 
+        transition-all duration-300 ease-in-out 
         ${expanded ? "w-48" : "w-16"}
-        ${isVisible ? "left-0" : "-left-20"} 
+        ${isVisible ? "translate-x-0" : "-translate-x-full"} 
         z-20 shadow-lg`}
       >
         <div className="p-4 flex justify-between items-center">
-          {expanded && <h2 className="text-xl font-bold">Menu</h2>}
+          {expanded && (
+            <h2 className="text-xl font-bold opacity-100 transition-opacity duration-300">
+              Menu
+            </h2>
+          )}
           <button
             onClick={onToggle}
             className={`p-2 ${
@@ -358,7 +362,11 @@ const Sidebar = ({ expanded, onToggle }) => {
                   icon={faTasks}
                   className={expanded ? "mr-3 text-sm" : "mx-auto text-sm"}
                 />
-                {expanded && <span>Tasks</span>}
+                {expanded && (
+                  <span className="whitespace-nowrap transition-opacity duration-300">
+                    Tasks
+                  </span>
+                )}
               </Link>
             </li>
 
@@ -381,7 +389,11 @@ const Sidebar = ({ expanded, onToggle }) => {
                   icon={faProjectDiagram}
                   className={expanded ? "mr-3 text-sm" : "mx-auto text-sm"}
                 />
-                {expanded && <span>Projects</span>}
+                {expanded && (
+                  <span className="whitespace-nowrap transition-opacity duration-300">
+                    Projects
+                  </span>
+                )}
               </Link>
             </li>
 
@@ -404,7 +416,11 @@ const Sidebar = ({ expanded, onToggle }) => {
                   icon={faCalendarAlt}
                   className={expanded ? "mr-3 text-sm" : "mx-auto text-sm"}
                 />
-                {expanded && <span>Google Calendar</span>}
+                {expanded && (
+                  <span className="whitespace-nowrap transition-opacity duration-300">
+                    Google Calendar
+                  </span>
+                )}
               </Link>
             </li>
 
@@ -427,7 +443,11 @@ const Sidebar = ({ expanded, onToggle }) => {
                   icon={faComments}
                   className={expanded ? "mr-3 text-sm" : "mx-auto text-sm"}
                 />
-                {expanded && <span>Comments</span>}
+                {expanded && (
+                  <span className="whitespace-nowrap transition-opacity duration-300">
+                    Comments
+                  </span>
+                )}
               </Link>
             </li>
 
@@ -450,7 +470,11 @@ const Sidebar = ({ expanded, onToggle }) => {
                   icon={faFileAlt}
                   className={expanded ? "mr-3 text-sm" : "mx-auto text-sm"}
                 />
-                {expanded && <span>Reports</span>}
+                {expanded && (
+                  <span className="whitespace-nowrap transition-opacity duration-300">
+                    Reports
+                  </span>
+                )}
               </Link>
             </li>
 
@@ -473,20 +497,27 @@ const Sidebar = ({ expanded, onToggle }) => {
                   icon={faChartBar}
                   className={expanded ? "mr-3 text-sm" : "mx-auto text-sm"}
                 />
-                {expanded && <span>Analytics</span>}
+                {expanded && (
+                  <span className="whitespace-nowrap transition-opacity duration-300">
+                    Analytics
+                  </span>
+                )}
               </Link>
             </li>
           </ul>
         </nav>
       </div>
 
-      {isMobileOrTablet && isVisible && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-10"
-          onClick={onToggle}
-          aria-hidden="true"
-        />
-      )}
+      {/* Transition the overlay for smooth appearance/disappearance */}
+      <div
+        className={`fixed inset-0 bg-black transition-opacity duration-300 z-10 ${
+          isMobileOrTablet && isVisible
+            ? "opacity-50"
+            : "opacity-0 pointer-events-none"
+        }`}
+        onClick={onToggle}
+        aria-hidden="true"
+      />
     </>
   );
 };
