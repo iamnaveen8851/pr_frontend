@@ -380,7 +380,7 @@ const TaskAnalytics = () => {
       <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">
         Task Analytics
       </h2>
-      {isLoading && tasks.length > 0 ? (
+      {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           {[1, 2, 3, 4].map((index) => (
             <div

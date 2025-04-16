@@ -233,7 +233,7 @@ const Calendar = () => {
   };
 
   return (
-    <div className="w-[99%] lg:w-[100%] px-6 m-auto py-5 md:py-5 lg:py-0  md:m-auto transition-all duration-300">
+    <div className="w-[98%] md:w-[99%] lg:w-[100%] px-4 md:px-5 lg:px-6 m-auto py-5 md:py-5 lg:py-0  md:m-auto transition-all duration-300">
       <NavigationTabs />
       <div className="bg-white-300 dark:bg-gray-900  px-2 py-6">
         <div className="flex flex-col sm:flex-row justify-between  items-start sm:items-center gap-2 mb-3">
@@ -291,9 +291,9 @@ const Calendar = () => {
           {formatDate(currentDate)}
         </h2>
         {loading || isLoadingEvents ? (
-          <div className="grid grid-cols-7 gap-1">
+          <div className="grid grid-cols-7 md:grid-cols-7 lg:grid-cols-7 gap-0 md:gap-2 lg:gap-2">
             {/* Day headers skeleton */}
-            {[...Array(7)].map((_, index) => (
+            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
               <div key={index} className="text-center p-2">
                 <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
               </div>
@@ -313,7 +313,7 @@ const Calendar = () => {
             ))}
           </div>
         ) : (
-          <div className=" grid grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-2 md:gap-3 lg:gap-2">
+          <div className=" grid grid-cols-7 md:grid-cols-7 lg:grid-cols-7 gap-0 md:gap-2 lg:gap-2">
             {/* Day headers */}
             {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
               <div
