@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -19,9 +19,9 @@ const Reports = () => {
   }, [dispatch]);
 
   // Add loading state check
-  if (loading) {
+  if (loading && (teamPerformance?.length > 0 || pendingTasks?.length > 0 || timeSpent?.length > 0)) {
     return (
-      <div className="w-full md:w-[90%] lg:w-[92%] mx-auto py-6 px-4 md:m-auto lg:ml-[6%] dark:bg-gray-800">
+      <div className="w-full md:w-[90%] lg:w-[100%] mx-auto py-6 px-8 md:m-auto dark:bg-gray-800">
         <NavigationTabs />
         <div>
           <h1 className="text-xl md:text-[25px] text-left underline text-red-500 font-semibold mb-6 md:mb-8 dark:text-white">
@@ -154,7 +154,7 @@ const Reports = () => {
     (!timeSpent || timeSpent.length === 0);
 
   return (
-    <div className="w-full md:w-[90%] lg:w-[92%] mx-auto py-6 px-4 md:m-auto lg:ml-[6%] dark:bg-gray-800">
+    <div className="w-full md:w-[90%] lg:w-[100%] mx-auto py-6 px-8 md:m-auto dark:bg-gray-800">
       <NavigationTabs />
       <div>
         <h1 className="text-xl md:text-[25px] text-left underline text-red-500 font-semibold mb-6 md:mb-8 dark:text-white">
@@ -163,7 +163,7 @@ const Reports = () => {
       </div>
 
       {!hasData || hasNoData ? (
-        <h1 className="text-center pt-[15%] pb-[15%] text-xl md:text-2xl lg:text-3xl font-normal dark:text-gray-300">
+        <h1 className="text-left pt-[2%] pb-[15%] text-xl md:text-xl lg:text-xl font-normal text-gray-500 dark:text-gray-400">
           No Reports Data Found.
         </h1>
       ) : (
@@ -485,4 +485,4 @@ const Reports = () => {
   );
 };
 
-export default Reports;
+export default memo(Reports);

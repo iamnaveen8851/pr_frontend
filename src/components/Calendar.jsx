@@ -233,7 +233,7 @@ const Calendar = () => {
   };
 
   return (
-    <div className="w-[90%] lg:w-[92%] m-auto mx-auto py-3 m-auto md:m-auto lg:ml-[6%] transition-all duration-300">
+    <div className="w-[90%] lg:w-[100%] px-8 mx-auto py-3 m-auto md:m-auto transition-all duration-300">
       <NavigationTabs />
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
