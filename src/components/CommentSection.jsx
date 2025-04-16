@@ -176,7 +176,7 @@ const CommentSection = ({
   };
 
   return (
-    <div className="w-[90%] lg:w-[92%] mx-auto px-2 py-6 m-auto md:m-auto lg:ml-[6%] bg-white dark:bg-gray-800 rounded-lg shadow ">
+    <div className="w-[90%] lg:w-[100%] mx-auto px-8 py-8 m-auto md:m-auto  bg-white dark:bg-gray-800 rounded-lg shadow ">
       <NavigationTabs />
 
       <h3 className="text-2xl text-center md:text-left lg:text-left font-semibold text-gray-800 dark:text-white mb-6">

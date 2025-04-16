@@ -251,7 +251,7 @@ const Project = () => {
 
   return (
     <div
-      className={`w-[90%] lg:w-[92%] mx-auto py-5 m-auto md:m-auto lg:ml-[6%] bg-white dark:bg-gray-900 ${
+      className={`w-[90%] lg:w-[100%] mx-auto px-8 py-5 m-auto md:m-auto  bg-white dark:bg-gray-900 ${
         showProjectForm ? "overflow-hidden h-screen" : ""
       }`}
     >

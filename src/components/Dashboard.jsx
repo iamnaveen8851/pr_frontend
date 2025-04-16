@@ -57,7 +57,7 @@ const Dashboard = () => {
         {/* relative */}
 
         {/* Main content - adjusted for responsive layout */}
-        <div className="flex-1 w-full transition-all duration-300 p-6  lg:ml-16">
+        <div className="flex-1 w-full transition-all duration-300 p-6">
           {/* Navigation tabs */}
           <NavigationTabs />
 

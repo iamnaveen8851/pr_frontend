@@ -375,12 +375,12 @@ const TaskAnalytics = () => {
   };
 
   return (
-    <div className="w-[90%] lg:w-[92%] m-auto mx-auto py-6  p-5 md:m-auto lg:ml-[6%]">
+    <div className="w-[90%] lg:w-[100%] m-auto mx-auto py-6  px-8 md:m-auto ">
       <NavigationTabs />
       <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">
         Task Analytics
       </h2>
-      {isLoading ? (
+      {isLoading && tasks.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           {[1, 2, 3, 4].map((index) => (
             <div
@@ -393,22 +393,9 @@ const TaskAnalytics = () => {
           ))}
         </div>
       ) : tasks.length === 0 && projects.length === 0 ? (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            {[1, 2, 3, 4].map((index) => (
-              <div
-                key={index}
-                className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow animate-pulse"
-              >
-                <div className="h-4 w-48 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
-                <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded"></div>
-              </div>
-            ))}
-          </div>
-          <h1 className="text-center pt-[15%] pb-[15%] text-xl md:text-2xl lg:text-3xl font-normal dark:text-gray-300">
-            No Task Analytics Data found.
-          </h1>
-        </>
+        <h1 className="text-left pt-2%] pb-[15%] text-xl md:text-xl lg:text-xl font-normal text-gray-500 dark:text-gray-400">
+          No Task Analytics Data found.
+        </h1>
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
