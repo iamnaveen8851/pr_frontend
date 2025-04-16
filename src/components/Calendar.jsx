@@ -291,25 +291,38 @@ const Calendar = () => {
           {formatDate(currentDate)}
         </h2>
         {loading || isLoadingEvents ? (
-          <div className="flex justify-center items-center p-8">
-            <FontAwesomeIcon
-              icon={faSpinner}
-              className="animate-spin text-3xl text-blue-500"
-            />
+          <div className="grid grid-cols-7 gap-1">
+            {/* Day headers skeleton */}
+            {[...Array(7)].map((_, index) => (
+              <div key={index} className="text-center p-2">
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+              </div>
+            ))}
+
+            {/* Calendar days skeleton */}
+            {[...Array(35)].map((_, index) => (
+              <div key={index} className="min-h-[100px] p-2 border border-gray-200 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-800">
+                <div className="flex justify-between items-start mb-2">
+                  <div className="h-4 w-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                </div>
+                <div className="space-y-1">
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-3/4"></div>
+                </div>
+              </div>
+            ))}
           </div>
         ) : (
           <div className="grid grid-cols-7 gap-1">
             {/* Day headers */}
-            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
-              (day, index) => (
-                <div
-                  key={index}
-                  className="text-center font-medium text-gray-500 dark:text-gray-400 p-2"
-                >
-                  {day}
-                </div>
-              )
-            )}
+            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
+              <div
+                key={index}
+                className="text-center font-medium text-gray-500 dark:text-gray-400 p-2"
+              >
+                {day}
+              </div>
+            ))}
 
             {/* Calendar days */}
             {calendarDays.map((day, index) => (

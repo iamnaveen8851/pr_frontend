@@ -273,8 +273,28 @@ const TaskComponent = () => {
       </div>
 
       {loading ? (
-        <div className="flex justify-center items-center p-4">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+          {[1, 2, 3, 4].map((colIndex) => (
+            <div key={colIndex} className="bg-gray-100 dark:bg-gray-800 rounded-lg p-2">
+              <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-24 mb-2"></div>
+              <div className="space-y-2">
+                {[1, 2, 3].map((taskIndex) => (
+                  <div key={taskIndex} className="bg-white dark:bg-gray-700 p-3 rounded-md shadow animate-pulse">
+                    <div className="flex justify-between mb-2">
+                      <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-2/3"></div>
+                      <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-6"></div>
+                    </div>
+                    <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-1/4 mb-2"></div>
+                    <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-full mb-3"></div>
+                    <div className="flex justify-between items-center">
+                      <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-1/3"></div>
+                      <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-1/4"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       ) : tasks && tasks.length > 0 ? (
         <DragDropContext onDragEnd={onDragEnd}>
