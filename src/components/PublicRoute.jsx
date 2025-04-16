@@ -57,7 +57,7 @@ const PublicRoute = () => {
           <Sidebar />
           <main
             className={`flex-1 transition-all duration-150 ease-in-out ${
-              sidebarExpanded ? "ml-[130px]" : "ml-0"
+              sidebarExpanded ? "ml-0  md:ml:[60px]   lg:ml-[130px]" : "ml-0"
             }`}
           >
             {children}
