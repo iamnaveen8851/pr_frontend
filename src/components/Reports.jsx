@@ -26,7 +26,7 @@ const Reports = () => {
       timeSpent?.length > 0)
   ) {
     return (
-      <div className="w-full md:w-[90%] lg:w-[100%] mx-auto py-6 px-8 md:m-auto">
+      <div className="w-full mx-auto py-6 px-8 md:m-auto">
         <NavigationTabs />
         <div className="dark:bg-gray-900">
           <h1 className="text-xl md:text-[25px] text-left underline text-red-500 font-semibold mb-6 md:mb-8 dark:text-white">
@@ -171,7 +171,7 @@ const Reports = () => {
     (!timeSpent || timeSpent.length === 0);
 
   return (
-    <div className="w-full md:w-[90%] lg:w-[100%] mx-auto py-6 px-8 md:m-auto dark:bg-gray-900">
+    <div className="w-full md:w-[99%] lg:w-[100%] mx-auto py-6 px-8 md:m-auto dark:bg-gray-900">
       <NavigationTabs />
       <div>
         <h1 className="text-xl md:text-[25px] text-left underline text-red-500 font-semibold mb-6 md:mb-8 dark:text-white">

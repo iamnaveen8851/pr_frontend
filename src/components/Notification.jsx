@@ -71,7 +71,7 @@ const Notification = () => {
 
         {/* Notification Badge */}
         {unreadCount > 0 && (
-          <span className="absolute top-[9px] bottom-[12px] right-[8px] inline-flex items-center justify-center px-[7px] py-[5px] text-[12px] font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-500 rounded-full">
+          <span className="absolute top-[7px] bottom-[12px] right-[7px] inline-flex items-center justify-center px-[7px] py-[5px] text-[12px] font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-500 rounded-full">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}

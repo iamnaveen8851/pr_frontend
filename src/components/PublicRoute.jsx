@@ -12,153 +12,6 @@ import CommentSection from "./CommentSection";
 import TaskAnalytics from "./TaskAnalytics";
 import Reports from "./Reports";
 import ResetPassword from "./ResetPassword";
-
-// const PublicRoute = () => {
-//   const [isLoading, setIsLoading] = useState(true);
-//   const token = localStorage.getItem("accessToken");
-//   const location = useLocation();
-
-//   // Define sidebar expanded state
-//   const [sidebarExpanded, setSidebarExpanded] = useState(
-//     localStorage.getItem("sidebarExpanded") === "true"
-//   );
-
-//   useEffect(() => {
-//     // Short timeout to ensure token is properly checked
-//     const timer = setTimeout(() => {
-//       setIsLoading(false);
-//     }, 100);
-
-//     return () => clearTimeout(timer);
-//   }, []);
-
-//   // Wrapper component for layout consistency
-//   const AppLayout = ({ children }) => {
-//     // Determine if we're on desktop
-//     const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
-
-//     useEffect(() => {
-//       const handleResize = () => {
-//         setIsDesktop(window.innerWidth >= 1024);
-//       };
-
-//       window.addEventListener("resize", handleResize);
-//       return () => window.removeEventListener("resize", handleResize);
-//     }, []);
-
-//     return (
-//       <div className="flex flex-col min-h-screen w-full bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-//         <Navbar />
-//         <div className="flex flex-1 w-full pt-4">
-//           <Sidebar expanded={sidebarExpanded} onToggle={toggleSidebar} />
-//           <main
-//             className={`flex-1 transition-all duration-150 ease-in-out ${
-//               isDesktop
-//                 ? sidebarExpanded
-//                   ? "w-[calc(100%-12rem)] ml-48"
-//                   : "w-[calc(100%-4rem)] ml-16"
-//                 : "w-full ml-0"
-//             }`}
-//           >
-//             {children}
-//           </main>
-//         </div>
-//       </div>
-//     );
-//   };
-
-//   if (isLoading) {
-//     return (
-//       <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
-//         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <>
-//       <Routes>
-//         <Route
-//           path="/"
-//           element={
-//             <PrivateRoute>
-//               <AppLayout>
-//                 <Dashboard />
-//               </AppLayout>
-//             </PrivateRoute>
-//           }
-//         />
-
-//         <Route
-//           path="/calendar"
-//           element={
-//             <PrivateRoute>
-//               <AppLayout>
-//                 <Calendar />
-//               </AppLayout>
-//             </PrivateRoute>
-//           }
-//         />
-//         <Route
-//           path="/projects"
-//           element={
-//             <PrivateRoute>
-//               <AppLayout>
-//                 <Project />
-//               </AppLayout>
-//             </PrivateRoute>
-//           }
-//         />
-
-//         <Route
-//           path="/comments"
-//           element={
-//             <PrivateRoute>
-//               <AppLayout>
-//                 <CommentSection />
-//               </AppLayout>
-//             </PrivateRoute>
-//           }
-//         />
-
-//         {/* Add Analytics route */}
-//         <Route
-//           path="/analytics"
-//           element={
-//             <PrivateRoute>
-//               <AppLayout>
-//                 <TaskAnalytics />
-//               </AppLayout>
-//             </PrivateRoute>
-//           }
-//         />
-//         {/* Add Analytics route */}
-//         <Route
-//           path="/reports"
-//           element={
-//             <PrivateRoute>
-//               <AppLayout>
-//                 <Reports />
-//               </AppLayout>
-//             </PrivateRoute>
-//           }
-//         />
-
-//         <Route
-//           path="/login"
-//           element={token ? <Navigate to="/" /> : <Login />}
-//         />
-//         <Route path="/reset-password/:token" element={<ResetPassword />} />
-//         <Route
-//           path="/signup"
-//           element={token ? <Navigate to="/" /> : <SignUp />}
-//         />
-//         {/* Catch-all route for any undefined routes */}
-//         {/* <Route path="*" element={<Navigate to={token ? "/" : "/login"} />} /> */}
-//       </Routes>
-//     </>
-//   );
-// };
 const PublicRoute = () => {
   const [isLoading, setIsLoading] = useState(true);
   const token = localStorage.getItem("accessToken");
@@ -200,27 +53,28 @@ const PublicRoute = () => {
     return () => clearTimeout(timer);
   }, []);
 
-const AppLayout = ({ children }) => {
-  return (
-    <div className="flex flex-col min-h-screen w-full bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-      <Navbar />
-      <div className="flex flex-1 w-full  relative">
-        <Sidebar expanded={sidebarExpanded} onToggle={toggleSidebar} />
-        <div
-          className={`transition-all duration-300 ease-in-out flex-1 ${
-            isDesktop
-              ? sidebarExpanded
-                ? "ml-48" // Margin for expanded sidebar
-                : "ml-16" // Margin for collapsed sidebar
-              : "ml-0"
-          }`}
-        >
-          {children}
+  const AppLayout = ({ children }) => {
+    return (
+      <div className="flex flex-col min-h-screen w-full bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+        <Navbar />
+        <div className="flex flex-1 w-full  relative">
+          <Sidebar expanded={sidebarExpanded} onToggle={toggleSidebar} />
+          <div
+          
+            className={`transform transition-all duration-300 ease-in-out flex-1 ${
+              isDesktop
+                ? sidebarExpanded
+                  ? "ml-48" // Margin for expanded sidebar
+                  : "ml-16" // Margin for collapsed sidebar
+                : "ml-0"
+            }`}
+          >
+            {children}
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
