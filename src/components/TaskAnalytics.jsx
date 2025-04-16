@@ -375,7 +375,7 @@ const TaskAnalytics = () => {
   };
 
   return (
-    <div className="w-[90%] lg:w-[100%] m-auto mx-auto py-6  px-8 md:m-auto ">
+    <div className="w-[100%] lg:w-[100%] m-auto mx-auto py-6  px-8 md:m-auto ">
       <NavigationTabs />
       <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">
         Task Analytics

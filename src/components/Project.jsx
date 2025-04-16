@@ -251,7 +251,7 @@ const Project = () => {
 
   return (
     <div
-      className={`w-[90%] lg:w-[100%] mx-auto px-6 py-5 m-auto md:m-auto  bg-white dark:bg-gray-900 ${
+      className={`w-[98%] lg:w-[100%] mx-auto px-6 py-5 m-auto md:m-auto  bg-white dark:bg-gray-900 ${
         showProjectForm ? "overflow-hidden h-screen" : ""
       }`}
     >
@@ -304,7 +304,7 @@ const Project = () => {
                   : projectsByStatus[stageName]
                     ? projectsByStatus[stageName].length
                     : 0;
-                console.log(stageName, count);
+               
                 return (
                   <div
                     key={stage._id || index}

@@ -12,7 +12,7 @@ import {
   faFileAlt, // Add hamburger menu icon
 } from "@fortawesome/free-solid-svg-icons";
 
-// const Sidebar = ({ expanded, onToggle }) => {
+
 //   const location = useLocation();
 //   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 //   const [isMobileOrTablet, setIsMobileOrTablet] = useState(
@@ -321,7 +321,7 @@ const Sidebar = ({ expanded, onToggle }) => {
         ${
           theme === "dark" ? "bg-gray-800 text-white" : "bg-white text-gray-800"
         }
-        transition-all duration-300 ease-in-out 
+         transform   transition-all duration-300 ease-in-out 
         ${expanded ? "w-48" : "w-16"}
         ${isVisible ? "translate-x-0" : "-translate-x-full"} 
         z-20 shadow-lg`}
