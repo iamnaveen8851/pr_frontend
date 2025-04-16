@@ -360,7 +360,62 @@ const Project = () => {
       )}
 
       {/* Projects List */}
-      {projects.length === 0 ? (
+      {loading ? (
+        <>
+          {/* Workflow Skeleton */}
+          <div className="mb-8 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-md animate-pulse">
+            <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-48 mx-auto mb-4"></div>
+            <div className="flex justify-center items-center p-2 sm:p-5">
+              <div className="flex items-center justify-center w-full max-w-3xl">
+                {[1, 2, 3, 4].map((index) => (
+                  <div key={index} className="flex items-center flex-grow">
+                    <div className="flex flex-col items-center gap-1 sm:gap-2">
+                      <div className="rounded-full p-2 sm:p-3 flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 bg-gray-200 dark:bg-gray-700">
+                        <div className="w-4 h-4 bg-gray-300 dark:bg-gray-600 rounded"></div>
+                      </div>
+                      <div className="w-16 h-4 bg-gray-200 dark:bg-gray-700 rounded mt-1"></div>
+                      <div className="w-12 h-3 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                    </div>
+                    {index < 4 - 1 && (
+                      <div className="flex-grow mx-2 sm:mx-4 relative">
+                        <div className="h-0.5 bg-gray-200 dark:bg-gray-700 w-full absolute top-4 sm:top-5"></div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Projects Grid Skeleton */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map((columnIndex) => (
+              <div key={columnIndex} className="rounded-lg p-4 shadow-md bg-gray-50 dark:bg-gray-800">
+                <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-24 mx-auto mb-4"></div>
+                <div className="space-y-4">
+                  {[1, 2].map((cardIndex) => (
+                    <div key={cardIndex} className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
+                      <div className="h-5 bg-gray-200 dark:bg-gray-600 rounded w-3/4 mb-3"></div>
+                      <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-full mb-3"></div>
+                      <div className="grid grid-cols-2 gap-2 mb-3">
+                        <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded"></div>
+                        <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded"></div>
+                      </div>
+                      <div className="flex justify-between">
+                        <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-1/3"></div>
+                        <div className="flex space-x-1">
+                          <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600"></div>
+                          <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600"></div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : projects.length === 0 ? (
         <>
           <h1 className="text-center pt-[15%] pb-[15%] text-xl md:text-2xl lg:text-3xl font-normal dark:text-gray-300">
             No projects assigned to you yet.
@@ -369,202 +424,196 @@ const Project = () => {
       ) : (
         // display Project
         <>
-          {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-            </div>
-          ) : (
-            <DragDropContext onDragEnd={onDragEnd}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {Object.keys(projectsByStatus).map((status) => (
-                  <div
-                    key={status}
-                    className={`rounded-lg p-4 shadow-md ${
-                      status === "Planning"
-                        ? "bg-yellow-100/50 dark:bg-yellow-900/20"
-                        : status === "In Progress"
-                        ? "bg-blue-100/50 dark:bg-blue-900/20"
-                        : status === "On Hold"
-                        ? "bg-orange-100/50 dark:bg-orange-900/20"
-                        : "bg-green-100/50 dark:bg-green-900/20"
-                    }`}
-                  >
-                    <h2 className="text-lg font-semibold mb-4 text-center text-gray-800 dark:text-white">
-                      {status} ({projectsByStatus[status].length})
-                    </h2>
-                    <Droppable droppableId={status}>
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          className="min-h-[200px]"
-                        >
-                          {projectsByStatus[status].map((project, index) => (
-                            <Draggable
-                              key={project._id}
-                              draggableId={project._id}
-                              index={index}
-                            >
-                              {(provided) => (
-                                <div
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  className={`${getStatusColor(
-                                    project.status
-                                  )} rounded-lg shadow-md p-4 mb-3 hover:shadow-lg transition-shadow`}
-                                >
-                                  <div className="flex justify-between items-start mb-2">
-                                    <h3
-                                      className={`font-medium text-lg text-gray-800 dark:text-white ${
-                                        project.status === "Completed"
-                                          ? "line-through"
-                                          : ""
-                                      }`}
-                                    >
-                                      {project.name}
-                                    </h3>
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation(); // Prevent drag when clicking delete
-                                        handleDeleteClick(
-                                          project._id,
-                                          project.name
-                                        );
-                                      }}
-                                      className="text-red-500 hover:text-red-700 transition-colors"
-                                    >
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="h-5 w-5"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                      >
-                                        <path
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          strokeWidth={2}
-                                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                        />
-                                      </svg>
-                                    </button>
-                                  </div>
-                                  <p
-                                    className={`text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2 ${
+          <DragDropContext onDragEnd={onDragEnd}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {Object.keys(projectsByStatus).map((status) => (
+                <div
+                  key={status}
+                  className={`rounded-lg p-4 shadow-md ${
+                    status === "Planning"
+                      ? "bg-yellow-100/50 dark:bg-yellow-900/20"
+                      : status === "In Progress"
+                      ? "bg-blue-100/50 dark:bg-blue-900/20"
+                      : status === "On Hold"
+                      ? "bg-orange-100/50 dark:bg-orange-900/20"
+                      : "bg-green-100/50 dark:bg-green-900/20"
+                  }`}
+                >
+                  <h2 className="text-lg font-semibold mb-4 text-center text-gray-800 dark:text-white">
+                    {status} ({projectsByStatus[status].length})
+                  </h2>
+                  <Droppable droppableId={status}>
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className="min-h-[200px]"
+                      >
+                        {projectsByStatus[status].map((project, index) => (
+                          <Draggable
+                            key={project._id}
+                            draggableId={project._id}
+                            index={index}
+                          >
+                            {(provided) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                className={`${getStatusColor(
+                                  project.status
+                                )} rounded-lg shadow-md p-4 mb-3 hover:shadow-lg transition-shadow`}
+                              >
+                                <div className="flex justify-between items-start mb-2">
+                                  <h3
+                                    className={`font-medium text-lg text-gray-800 dark:text-white ${
                                       project.status === "Completed"
                                         ? "line-through"
                                         : ""
                                     }`}
                                   >
-                                    {project.description}
-                                  </p>
-                                  <div className="grid grid-cols-2 gap-2 text-xs mb-3">
-                                    <div>
-                                      <span className="text-gray-500 dark:text-gray-300">
-                                        Start:{" "}
-                                      </span>
-                                      <span className="dark:text-white">
-                                        {formatDate(project.startDate)}
-                                      </span>
-                                    </div>
-                                    <div>
-                                      <span className="text-gray-500 dark:text-gray-300">
-                                        End:{" "}
-                                      </span>
-                                      <span className="dark:text-white">
-                                        {formatDate(project.endDate)}
-                                      </span>
-                                    </div>
+                                    {project.name}
+                                  </h3>
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation(); // Prevent drag when clicking delete
+                                      handleDeleteClick(
+                                        project._id,
+                                        project.name
+                                      );
+                                    }}
+                                    className="text-red-500 hover:text-red-700 transition-colors"
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="h-5 w-5"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke="currentColor"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                      />
+                                    </svg>
+                                  </button>
+                                </div>
+                                <p
+                                  className={`text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2 ${
+                                    project.status === "Completed"
+                                      ? "line-through"
+                                      : ""
+                                  }`}
+                                >
+                                  {project.description}
+                                </p>
+                                <div className="grid grid-cols-2 gap-2 text-xs mb-3">
+                                  <div>
+                                    <span className="text-gray-500 dark:text-gray-300">
+                                      Start:{" "}
+                                    </span>
+                                    <span className="dark:text-white">
+                                      {formatDate(project.startDate)}
+                                    </span>
                                   </div>
-                                  <div className="flex justify-between items-center">
-                                    <div>
-                                      <span className="text-gray-500 dark:text-gray-300 text-xs">
-                                        Manager:{" "}
-                                      </span>
-                                      <span className="text-sm dark:text-white">
-                                        {project.manager?.username ||
-                                          "Not assigned"}
-                                      </span>
-                                    </div>
-                                    <div className="flex -space-x-2">
-                                      {project.team &&
-                                        project.team
-                                          .slice(0, 3)
-                                          .map((member, idx) => (
-                                            <div
-                                              key={idx}
-                                              className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs border-2 border-white dark:border-gray-700"
-                                              title={member.username}
-                                            >
-                                              {member.username
-                                                ?.charAt(0)
-                                                .toUpperCase()}
-                                            </div>
-                                          ))}
-                                      {project.team &&
-                                        project.team.length > 3 && (
-                                          <div className="w-6 h-6 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-xs border-2 border-white dark:border-gray-700">
-                                            +{project.team.length - 3}
-                                          </div>
-                                        )}
-                                    </div>
+                                  <div>
+                                    <span className="text-gray-500 dark:text-gray-300">
+                                      End:{" "}
+                                    </span>
+                                    <span className="dark:text-white">
+                                      {formatDate(project.endDate)}
+                                    </span>
                                   </div>
                                 </div>
-                              )}
-                            </Draggable>
-                          ))}
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
-                  </div>
-                ))}
-              </div>
-            </DragDropContext>
-          )}
-
-          {/* Delete Confirmation Modal */}
-          {deleteConfirmation.show && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md mx-4 shadow-xl">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  Confirm Delete
-                </h3>
-                <p className="text-gray-700 dark:text-gray-300 mb-6">
-                  Are you sure you want to delete project "
-                  {deleteConfirmation.projectName}"? This action cannot be
-                  undone.
-                </p>
-                <div className="flex justify-end space-x-3">
-                  <button
-                    onClick={handleCancelDelete}
-                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleDeleteProject}
-                    className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                  >
-                    Delete
-                  </button>
+                                <div className="flex justify-between items-center">
+                                  <div>
+                                    <span className="text-gray-500 dark:text-gray-300 text-xs">
+                                      Manager:{" "}
+                                    </span>
+                                    <span className="text-sm dark:text-white">
+                                      {project.manager?.username ||
+                                        "Not assigned"}
+                                    </span>
+                                  </div>
+                                  <div className="flex -space-x-2">
+                                    {project.team &&
+                                      project.team
+                                        .slice(0, 3)
+                                        .map((member, idx) => (
+                                          <div
+                                            key={idx}
+                                            className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs border-2 border-white dark:border-gray-700"
+                                            title={member.username}
+                                          >
+                                            {member.username
+                                              ?.charAt(0)
+                                              .toUpperCase()}
+                                          </div>
+                                        ))}
+                                    {project.team &&
+                                      project.team.length > 3 && (
+                                        <div className="w-6 h-6 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-xs border-2 border-white dark:border-gray-700">
+                                          +{project.team.length - 3}
+                                        </div>
+                                      )}
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
                 </div>
-              </div>
+              ))}
             </div>
-          )}
-
-          {showProjectForm && (
-            <ProjectForm
-              onClose={handleCloseProjectForm}
-              onSuccess={(project) => {
-                console.log("Project created:", project);
-                handleCloseProjectForm();
-                dispatch(fetchProjects());
-              }}
-            />
-          )}
+          </DragDropContext>
         </>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmation.show && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md mx-4 shadow-xl">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Confirm Delete
+            </h3>
+            <p className="text-gray-700 dark:text-gray-300 mb-6">
+              Are you sure you want to delete project "
+              {deleteConfirmation.projectName}"? This action cannot be
+              undone.
+            </p>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={handleCancelDelete}
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteProject}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showProjectForm && (
+        <ProjectForm
+          onClose={handleCloseProjectForm}
+          onSuccess={(project) => {
+            console.log("Project created:", project);
+            handleCloseProjectForm();
+            dispatch(fetchProjects());
+          }}
+        />
       )}
     </div>
   );
