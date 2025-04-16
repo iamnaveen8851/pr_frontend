@@ -49,21 +49,61 @@ const ProjectForm = ({
       newErrors.description = "Description is required";
     if (!projectData.startDate) newErrors.startDate = "Start date is required";
     if (!projectData.endDate) newErrors.endDate = "End date is required";
+    if (!projectData.status) newErrors.status = "Status is required";
     if (!projectData.manager) newErrors.manager = "Manager is required";
+    if (!projectData.team || projectData.team.length === 0)
+      newErrors.team = "At least one team member is required";
     if (!projectData.workflow.length)
       newErrors.workflow = "At least one workflow stage is required";
+
+    // Check if end date is before start date
+    if (projectData.startDate && projectData.endDate) {
+      const startDate = new Date(projectData.startDate);
+      const endDate = new Date(projectData.endDate);
+      if (endDate < startDate) {
+        newErrors.endDate = "End date cannot be before start date";
+      }
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  // console.log(projectData, "Project state");
 
+  // Validate dates whenever either date changes
+  const validateDates = () => {
+    const dateErrors = {};
+
+    if (projectData.startDate && projectData.endDate) {
+      const startDate = new Date(projectData.startDate);
+      const endDate = new Date(projectData.endDate);
+
+      if (endDate < startDate) {
+        dateErrors.endDate = "End date cannot be before start date";
+      }
+    }
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      endDate: dateErrors.endDate || undefined,
+    }));
+  };
+
+  // Update this function to handle date changes specifically
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProjectData({
-      ...projectData,
+
+    setProjectData((prevData) => ({
+      ...prevData,
       [name]: value,
-    });
+    }));
+
+    // If changing dates, validate immediately after state update
+    if (name === "startDate" || name === "endDate") {
+      // Use a setTimeout to ensure state is updated before validation
+      setTimeout(() => {
+        validateDates();
+      }, 0);
+    }
   };
 
   // Handle team member selection
@@ -114,18 +154,29 @@ const ProjectForm = ({
     });
   };
 
+  // Helper function to reorder workflow stages
+  const reorderWorkflowStages = (stages) => {
+    return stages.map((stage, index) => ({
+      ...stage,
+      order: index + 1,
+    }));
+  };
+
   const removeWorkflowStage = (index) => {
     const newWorkflow = [...projectData.workflow];
     newWorkflow.splice(index, 1);
+
+    // Reorder the remaining workflow stages
+    const reorderedWorkflow = reorderWorkflowStages(newWorkflow);
+
     setProjectData({
       ...projectData,
-      workflow: newWorkflow,
+      workflow: reorderedWorkflow,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(projectData, "Project data submitted");
     if (validateForm()) {
       setIsSubmitting(true);
       try {
@@ -161,6 +212,7 @@ const ProjectForm = ({
 
     fetchUsers();
   }, []);
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -177,9 +229,16 @@ const ProjectForm = ({
     fetchUsers();
   }, []);
 
+  // Re-validate dates when either date changes
+  useEffect(() => {
+    if (projectData.startDate || projectData.endDate) {
+      validateDates();
+    }
+  }, [projectData.startDate, projectData.endDate]);
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ">
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto ">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold dark:text-white">
             {isEditing ? "Edit Project" : "Create New Project"}
@@ -195,185 +254,237 @@ const ProjectForm = ({
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             {/* Project Name */}
-            <div className="flex items-center">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 w-1/4">
-                Project Name*
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={projectData.name}
-                onChange={handleChange}
-                className={`w-3/4 p-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600 ${
-                  errors.name ? "border-red-500" : "border-gray-300"
-                }`}
-                placeholder="Enter project name"
-              />
+            <div className="flex flex-col">
+              <div className="flex items-center">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 w-1/4">
+                  Project Name*
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={projectData.name}
+                  onChange={handleChange}
+                  className={`w-3/4 p-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600 ${
+                    errors.name ? "border-red-500" : "border-gray-300"
+                  }`}
+                  placeholder="Enter project name"
+                />
+              </div>
               {errors.name && (
-                <p className="text-red-500 text-xs mt-1">{errors.name}</p>
+                <div className="flex">
+                  <div className="w-1/4"></div>
+                  <p className="text-red-500 text-xs mt-1 w-3/4">
+                    {errors.name}
+                  </p>
+                </div>
               )}
             </div>
 
             {/* Description */}
-            <div className="flex items-center">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 w-1/4">
-                Description*
-              </label>
-              <textarea
-                name="description"
-                value={projectData.description}
-                onChange={handleChange}
-                rows="3"
-                className={`w-3/4 p-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600 ${
-                  errors.description ? "border-red-500" : "border-gray-300"
-                }`}
-                placeholder="Describe the project"
-              ></textarea>
+            <div className="flex flex-col">
+              <div className="flex items-start">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 w-1/4">
+                  Description*
+                </label>
+                <textarea
+                  name="description"
+                  value={projectData.description}
+                  onChange={handleChange}
+                  rows="3"
+                  className={`w-3/4 p-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600 ${
+                    errors.description ? "border-red-500" : "border-gray-300"
+                  }`}
+                  placeholder="Describe the project"
+                ></textarea>
+              </div>
               {errors.description && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.description}
-                </p>
+                <div className="flex">
+                  <div className="w-1/4"></div>
+                  <p className="text-red-500 text-xs mt-1 w-3/4">
+                    {errors.description}
+                  </p>
+                </div>
               )}
             </div>
 
             {/* Status */}
-            <div className="flex items-center">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 w-1/4">
-                Status*
-              </label>
-              <select
-                name="status"
-                value={projectData.status}
-                onChange={handleChange}
-                className="w-3/4 p-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
-              >
-                <option value="">Select-Status</option>
-                <option value="Planning">Planning</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Completed">Completed</option>
-              </select>
+            <div className="flex flex-col">
+              <div className="flex items-center">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 w-1/4">
+                  Status*
+                </label>
+                <select
+                  name="status"
+                  value={projectData.status}
+                  onChange={handleChange}
+                  className="w-3/4 p-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
+                >
+                  <option value="">Select-Status</option>
+                  <option value="Planning">Planning</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+              {errors.status && (
+                <div className="flex">
+                  <div className="w-1/4"></div>
+                  <p className="text-red-500 text-xs mt-1 w-3/4">
+                    {errors.status}
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Start Date */}
-            <div className="flex items-center">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 w-1/4">
-                Start Date*
-              </label>
-              <input
-                type="date"
-                name="startDate"
-                value={projectData.startDate}
-                onChange={handleChange}
-                className={`w-3/4 p-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600 ${
-                  errors.startDate ? "border-red-500" : "border-gray-300"
-                }`}
-              />
+            <div className="flex flex-col">
+              <div className="flex items-center">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 w-1/4">
+                  Start Date*
+                </label>
+                <input
+                  type="date"
+                  name="startDate"
+                  value={projectData.startDate}
+                  onChange={handleChange}
+                  className={`w-3/4 p-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600 ${
+                    errors.startDate ? "border-red-500" : "border-gray-300"
+                  }`}
+                />
+              </div>
               {errors.startDate && (
-                <p className="text-red-500 text-xs mt-1">{errors.startDate}</p>
+                <div className="flex">
+                  <div className="w-1/4"></div>
+                  <p className="text-red-500 text-xs mt-1 w-3/4">
+                    {errors.startDate}
+                  </p>
+                </div>
               )}
             </div>
 
             {/* End Date */}
-            <div className="flex items-center">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 w-1/4">
-                End Date*
-              </label>
-              <input
-                type="date"
-                name="endDate"
-                value={projectData.endDate}
-                onChange={handleChange}
-                className={`w-3/4 p-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600 ${
-                  errors.endDate ? "border-red-500" : "border-gray-300"
-                }`}
-              />
+            <div className="flex flex-col">
+              <div className="flex items-center">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 w-1/4">
+                  End Date*
+                </label>
+                <input
+                  type="date"
+                  name="endDate"
+                  value={projectData.endDate}
+                  onChange={handleChange}
+                  className={`w-3/4 p-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600 ${
+                    errors.endDate ? "border-red-500" : "border-gray-300"
+                  }`}
+                />
+              </div>
               {errors.endDate && (
-                <p className="text-red-500 text-xs mt-1">{errors.endDate}</p>
+                <div className="flex">
+                  <div className="w-1/4"></div>
+                  <p className="text-red-500 text-xs mt-1 w-3/4">
+                    {errors.endDate}
+                  </p>
+                </div>
               )}
             </div>
 
             {/* Manager */}
-            <div className="flex items-center">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 w-1/4">
-                Manager*
-              </label>
-              <select
-                name="manager"
-                value={projectData.manager}
-                onChange={handleChange}
-                className={`w-3/4 p-2 border rounded-md bg-white dark:bg-gray-700 dark:text-white ${
-                  errors.manager
-                    ? "border-red-500"
-                    : "border-gray-300 dark:border-gray-600"
-                }`}
-              >
-                <option value="">Select Manager</option>
-                {loading ? (
-                  <option disabled>Loading users...</option>
-                ) : (
-                  manager.map((user) => (
-                    <option key={user._id} value={user._id}>
-                      {user.username} ({user.role})
-                    </option>
-                  ))
-                )}
-              </select>
-              {errors.manager && (
-                <p className="text-red-500 text-xs mt-1">{errors.manager}</p>
-              )}
-            </div>
-
-            {/* Team Members */}
-            <div className="flex items-start">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 w-1/4">
-                Team Members
-              </label>
-              <div className="w-3/4">
+            <div className="flex flex-col">
+              <div className="flex items-center">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 w-1/4">
+                  Manager*
+                </label>
                 <select
-                  multiple
-                  name="team"
-                  value={projectData.team}
-                  onChange={handleTeamChange}
-                  className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white mb-2"
-                  size="4"
+                  name="manager"
+                  value={projectData.manager}
+                  onChange={handleChange}
+                  className={`w-3/4 p-2 border rounded-md bg-white dark:bg-gray-700 dark:text-white ${
+                    errors.manager
+                      ? "border-red-500"
+                      : "border-gray-300 dark:border-gray-600"
+                  }`}
                 >
+                  <option value="">Select Manager</option>
                   {loading ? (
                     <option disabled>Loading users...</option>
                   ) : (
-                    employee.map((user) => (
+                    manager.map((user) => (
                       <option key={user._id} value={user._id}>
-                        {user.username}
+                        {user.username} ({user.role})
                       </option>
                     ))
                   )}
                 </select>
+              </div>
+              {errors.manager && (
+                <div className="flex">
+                  <div className="w-1/4"></div>
+                  <p className="text-red-500 text-xs mt-1 w-3/4">
+                    {errors.manager}
+                  </p>
+                </div>
+              )}
+            </div>
 
-                {/* Selected Team Members Box */}
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {projectData.team.map((memberId) => {
-                    const member = employee.find((u) => u._id === memberId);
-                    return member ? (
-                      <div
-                        key={memberId}
-                        className="flex items-center bg-gray-200 dark:bg-gray-600 rounded-full px-3 py-1 text-sm text-gray-700 dark:text-gray-200"
-                      >
-                        {member.username}
-                        <button
-                          type="button"
-                          onClick={() => removeTeamMember(memberId)}
-                          className="ml-2 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+            {/* Team Members */}
+            <div className="flex flex-col">
+              <div className="flex items-start">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 w-1/4">
+                  Team Members
+                </label>
+                <div className="w-3/4">
+                  <select
+                    multiple
+                    name="team"
+                    value={projectData.team}
+                    onChange={handleTeamChange}
+                    className="w-full  p-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white mb-2"
+                    size="4"
+                  >
+                    {loading ? (
+                      <option disabled>Loading users...</option>
+                    ) : (
+                      employee.map((user) => (
+                        <option
+                          key={user._id}
+                          value={user._id}
+                          className="mb-2"
                         >
-                          <FontAwesomeIcon icon={faTimes} />
-                        </button>
-                      </div>
-                    ) : null;
-                  })}
+                          {user.username}
+                        </option>
+                      ))
+                    )}
+                  </select>
+                  {errors.team && (
+                    <p className="text-red-500 text-xs mt-1">{errors.team}</p>
+                  )}
+
+                  {/* Selected Team Members Box */}
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {projectData.team.map((memberId) => {
+                      const member = employee.find((u) => u._id === memberId);
+                      return member ? (
+                        <div
+                          key={memberId}
+                          className="flex items-center bg-gray-200 dark:bg-gray-600 rounded-full px-3 py-1 text-sm text-gray-700 dark:text-gray-200"
+                        >
+                          {member.username}
+                          <button
+                            type="button"
+                            onClick={() => removeTeamMember(memberId)}
+                            className="ml-2 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                          >
+                            <FontAwesomeIcon icon={faTimes} />
+                          </button>
+                        </div>
+                      ) : null;
+                    })}
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Workflow Stages */}
-            <div>
+            <div className="flex flex-col">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Workflow Stages*
               </label>
@@ -394,10 +505,8 @@ const ProjectForm = ({
                   <input
                     type="number"
                     value={stage.order}
-                    onChange={(e) =>
-                      handleWorkflowChange(index, "order", e.target.value)
-                    }
-                    className="w-16 p-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white ml-2"
+                    readOnly
+                    className="w-16 p-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white ml-2 bg-gray-100 dark:bg-gray-600"
                     placeholder="Order"
                   />
                   <button
@@ -481,5 +590,4 @@ const ProjectForm = ({
     </div>
   );
 };
-
 export default ProjectForm;

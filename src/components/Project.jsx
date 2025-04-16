@@ -298,10 +298,13 @@ const Project = () => {
             <div className="flex items-center justify-center w-full max-w-3xl">
               {getWorkflowStages().map((stage, index, array) => {
                 const stageName = stage.name;
-                const count = projectsByStatus[stageName]
-                  ? projectsByStatus[stageName].length
-                  : 0;
-
+                // Check if the stage is "Planning" and count both "Planning" and "Pending" projects
+                const count = stageName === "Planning" 
+                  ? (projectsByStatus["Planning"]?.length || 0) + (projectsByStatus["Pending"]?.length || 0)
+                  : projectsByStatus[stageName]
+                    ? projectsByStatus[stageName].length
+                    : 0;
+                console.log(stageName, count);
                 return (
                   <div
                     key={stage._id || index}
@@ -310,7 +313,7 @@ const Project = () => {
                     <div className="flex flex-col items-center gap-1 sm:gap-2">
                       <div
                         className={`rounded-full p-2 sm:p-3 flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 ${
-                          stageName === "Planning" || stageName === "Planning"
+                          stageName === "Planning"
                             ? "bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-200"
                             : stageName === "In Progress"
                             ? "bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200"
