@@ -237,8 +237,8 @@ const ProjectForm = ({
   }, [projectData.startDate, projectData.endDate]);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex  justify-center z-50">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-6  w-[35%] h-[80vh] my-6  overflow-y-auto scrollbar-hide absolute">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold dark:text-white">
             {isEditing ? "Edit Project" : "Create New Project"}
@@ -437,7 +437,7 @@ const ProjectForm = ({
                     name="team"
                     value={projectData.team}
                     onChange={handleTeamChange}
-                    className="w-full  p-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white mb-2"
+                    className="w-full  p-2 border border-gray-300 dark:border-gray-600 rounded-md scrollbar-hide dark:bg-gray-700 dark:text-white mb-2"
                     size="4"
                   >
                     {loading ? (
