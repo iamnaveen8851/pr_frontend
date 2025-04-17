@@ -111,27 +111,7 @@ const TaskComponent = () => {
   }, [tasks]); // Ensure this effect runs when tasks change
 
   // Add useEffect for scroll control
-  useEffect(() => {
-    if (
-      showTaskForm ||
-      isEditModalOpen ||
-      deleteConfirmation.show ||
-      showAIRecommendations
-    ) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [
-    showTaskForm,
-    isEditModalOpen,
-    deleteConfirmation.show,
-    showAIRecommendations,
-  ]);
+  useEffect(() => {}, [deleteConfirmation.show, showAIRecommendations]);
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -253,22 +233,13 @@ const TaskComponent = () => {
     <>
       <div className="px-2">
         <NavigationTabs />
-        <div
-          className={` flex justify-between items-center px-2  mb-4 ${
-            showTaskForm ||
-            isEditModalOpen ||
-            deleteConfirmation.show ||
-            showAIRecommendations
-              ? "overflow-hidden h-screen"
-              : ""
-          }`}
-        >
+        <div className={` flex justify-between  px-2  mb-4 `}>
           <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">
             Tasks
           </h1>
           <button
             onClick={() => setShowTaskForm(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md flex items-center text-sm"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md flex  items-center h-[40px] text-sm"
           >
             <FontAwesomeIcon icon={faPlus} className="mr-2" />
             Create Task
