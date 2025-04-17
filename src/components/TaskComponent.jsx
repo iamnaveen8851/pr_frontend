@@ -231,7 +231,7 @@ const TaskComponent = () => {
 
   return (
     <>
-      <div className="px-2">
+      <div className="px-2 ">
         <NavigationTabs />
         <div className={` flex justify-between  px-2  mb-4 `}>
           <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">

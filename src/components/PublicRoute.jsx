@@ -57,7 +57,7 @@ const PublicRoute = () => {
     return (
       <div className="flex flex-col min-h-screen w-full bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
         <Navbar />
-        <div className="flex flex-1 w-full  relative">
+        <div className="flex flex-1 w-full ">
           <Sidebar expanded={sidebarExpanded} onToggle={toggleSidebar} />
           <div
           

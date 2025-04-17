@@ -76,18 +76,18 @@ const Project = () => {
     }
   }, [projects]);
 
-  useEffect(() => {
-    if (showProjectForm) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+ useEffect(() => {
+   if (deleteConfirmation.show || showProjectForm) {
+     document.body.style.overflow = "hidden";
+   } else {
+     document.body.style.overflow = "auto";
+   }
 
-    // Cleanup function
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [showProjectForm]);
+   // Cleanup function
+   return () => {
+     document.body.style.overflow = "auto";
+   };
+ }, [deleteConfirmation.show, showProjectForm]);
 
   // Handle drag end
   const onDragEnd = (result) => {
@@ -251,8 +251,10 @@ const Project = () => {
 
   return (
     <div
-      className={`w-[98%] lg:w-[100%] mx-auto px-6 py-5 m-auto md:m-auto  bg-white dark:bg-gray-900 ${
-        showProjectForm ? "overflow-hidden h-screen" : ""
+      className={`w-[98%] lg:w-[100%] mx-auto px-6 py-5 m-auto md:m-auto bg-white dark:bg-gray-900 ${
+        showProjectForm || deleteConfirmation.show
+          ? "overflow-hidden h-screen"
+          : ""
       }`}
     >
       <NavigationTabs />
@@ -299,12 +301,14 @@ const Project = () => {
               {getWorkflowStages().map((stage, index, array) => {
                 const stageName = stage.name;
                 // Check if the stage is "Planning" and count both "Planning" and "Pending" projects
-                const count = stageName === "Planning" 
-                  ? (projectsByStatus["Planning"]?.length || 0) + (projectsByStatus["Pending"]?.length || 0)
-                  : projectsByStatus[stageName]
+                const count =
+                  stageName === "Planning"
+                    ? (projectsByStatus["Planning"]?.length || 0) +
+                      (projectsByStatus["Pending"]?.length || 0)
+                    : projectsByStatus[stageName]
                     ? projectsByStatus[stageName].length
                     : 0;
-               
+
                 return (
                   <div
                     key={stage._id || index}
@@ -390,11 +394,17 @@ const Project = () => {
           {/* Projects Grid Skeleton */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[1, 2, 3, 4].map((columnIndex) => (
-              <div key={columnIndex} className="rounded-lg p-4 shadow-md bg-gray-50 dark:bg-gray-800">
+              <div
+                key={columnIndex}
+                className="rounded-lg p-4 shadow-md bg-gray-50 dark:bg-gray-800"
+              >
                 <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-24 mx-auto mb-4"></div>
                 <div className="space-y-4">
                   {[1, 2].map((cardIndex) => (
-                    <div key={cardIndex} className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
+                    <div
+                      key={cardIndex}
+                      className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4"
+                    >
                       <div className="h-5 bg-gray-200 dark:bg-gray-600 rounded w-3/4 mb-3"></div>
                       <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-full mb-3"></div>
                       <div className="grid grid-cols-2 gap-2 mb-3">
@@ -584,8 +594,7 @@ const Project = () => {
             </h3>
             <p className="text-gray-700 dark:text-gray-300 mb-6">
               Are you sure you want to delete project "
-              {deleteConfirmation.projectName}"? This action cannot be
-              undone.
+              {deleteConfirmation.projectName}"? This action cannot be undone.
             </p>
             <div className="flex justify-end space-x-3">
               <button
