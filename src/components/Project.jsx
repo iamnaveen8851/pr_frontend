@@ -76,18 +76,18 @@ const Project = () => {
     }
   }, [projects]);
 
- useEffect(() => {
-   if (deleteConfirmation.show || showProjectForm) {
-     document.body.style.overflow = "hidden";
-   } else {
-     document.body.style.overflow = "auto";
-   }
+  useEffect(() => {
+    if (deleteConfirmation.show || showProjectForm) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
 
-   // Cleanup function
-   return () => {
-     document.body.style.overflow = "auto";
-   };
- }, [deleteConfirmation.show, showProjectForm]);
+    // Cleanup function
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [deleteConfirmation.show, showProjectForm]);
 
   // Handle drag end
   const onDragEnd = (result) => {
@@ -264,7 +264,9 @@ const Project = () => {
           Projects
         </h1>
         {/* if no projects data then hide the button for users only */}
-        {projects.length === 0 ? (
+        {loading ? (
+          ""
+        ) : projects.length === 0 ? (
           ""
         ) : (
           <button
@@ -287,8 +289,33 @@ const Project = () => {
         )}
       </div>
 
-      {/* Workflow Graph */}
-      {projects.length === 0 ? (
+      {/* Workflow Graph - Only show skeleton OR graph, not both */}
+      {loading ? (
+        /* Workflow Skeleton */
+        <div className="mb-8 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-md animate-pulse">
+          <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-48 mx-auto mb-4"></div>
+          <div className="flex justify-center items-center p-2 sm:p-5">
+            <div className="flex items-center justify-center w-full max-w-3xl">
+              {[1, 2, 3, 4].map((index) => (
+                <div key={index} className="flex items-center flex-grow">
+                  <div className="flex flex-col items-center gap-1 sm:gap-2">
+                    <div className="rounded-full p-2 sm:p-3 flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 bg-gray-200 dark:bg-gray-700">
+                      <div className="w-4 h-4 bg-gray-300 dark:bg-gray-600 rounded"></div>
+                    </div>
+                    <div className="w-16 h-4 bg-gray-200 dark:bg-gray-700 rounded mt-1"></div>
+                    <div className="w-12 h-3 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                  </div>
+                  {index < 4 - 1 && (
+                    <div className="flex-grow mx-2 sm:mx-4 relative">
+                      <div className="h-0.5 bg-gray-200 dark:bg-gray-700 w-full absolute top-4 sm:top-5"></div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : projects.length === 0 ? (
         ""
       ) : (
         <div className="mb-8 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
@@ -365,66 +392,39 @@ const Project = () => {
 
       {/* Projects List */}
       {loading ? (
-        <>
-          {/* Workflow Skeleton */}
-          <div className="mb-8 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-md animate-pulse">
-            <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-48 mx-auto mb-4"></div>
-            <div className="flex justify-center items-center p-2 sm:p-5">
-              <div className="flex items-center justify-center w-full max-w-3xl">
-                {[1, 2, 3, 4].map((index) => (
-                  <div key={index} className="flex items-center flex-grow">
-                    <div className="flex flex-col items-center gap-1 sm:gap-2">
-                      <div className="rounded-full p-2 sm:p-3 flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 bg-gray-200 dark:bg-gray-700">
-                        <div className="w-4 h-4 bg-gray-300 dark:bg-gray-600 rounded"></div>
-                      </div>
-                      <div className="w-16 h-4 bg-gray-200 dark:bg-gray-700 rounded mt-1"></div>
-                      <div className="w-12 h-3 bg-gray-200 dark:bg-gray-700 rounded"></div>
+        /* Projects Grid Skeleton */
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map((columnIndex) => (
+            <div
+              key={columnIndex}
+              className="rounded-lg p-4 shadow-md bg-gray-50 dark:bg-gray-800"
+            >
+              <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-24 mx-auto mb-4"></div>
+              <div className="space-y-4">
+                {[1, 2].map((cardIndex) => (
+                  <div
+                    key={cardIndex}
+                    className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4"
+                  >
+                    <div className="h-5 bg-gray-200 dark:bg-gray-600 rounded w-3/4 mb-3"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-full mb-3"></div>
+                    <div className="grid grid-cols-2 gap-2 mb-3">
+                      <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded"></div>
+                      <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded"></div>
                     </div>
-                    {index < 4 - 1 && (
-                      <div className="flex-grow mx-2 sm:mx-4 relative">
-                        <div className="h-0.5 bg-gray-200 dark:bg-gray-700 w-full absolute top-4 sm:top-5"></div>
+                    <div className="flex justify-between">
+                      <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-1/3"></div>
+                      <div className="flex space-x-1">
+                        <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600"></div>
+                        <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600"></div>
                       </div>
-                    )}
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
-          </div>
-
-          {/* Projects Grid Skeleton */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[1, 2, 3, 4].map((columnIndex) => (
-              <div
-                key={columnIndex}
-                className="rounded-lg p-4 shadow-md bg-gray-50 dark:bg-gray-800"
-              >
-                <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-24 mx-auto mb-4"></div>
-                <div className="space-y-4">
-                  {[1, 2].map((cardIndex) => (
-                    <div
-                      key={cardIndex}
-                      className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4"
-                    >
-                      <div className="h-5 bg-gray-200 dark:bg-gray-600 rounded w-3/4 mb-3"></div>
-                      <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-full mb-3"></div>
-                      <div className="grid grid-cols-2 gap-2 mb-3">
-                        <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded"></div>
-                        <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded"></div>
-                      </div>
-                      <div className="flex justify-between">
-                        <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-1/3"></div>
-                        <div className="flex space-x-1">
-                          <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600"></div>
-                          <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600"></div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </>
+          ))}
+        </div>
       ) : projects.length === 0 ? (
         <>
           <h1 className="text-center pt-[15%] pb-[15%] text-xl md:text-2xl lg:text-3xl font-normal dark:text-gray-300">
