@@ -200,8 +200,8 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
   const statusOptions = ["Pending", "In Progress", "Review", "Completed"];
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex  justify-center z-50">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl mx-auto my-6 absolute">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold text-gray-800 dark:text-white">
             {isEditing ? "Update Task" : "Create New Task"}
@@ -214,7 +214,7 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="space-y-4 overflow-y-auto max-h-[calc(100vh-200px)]">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Title */}
             <div className="col-span-2">
