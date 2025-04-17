@@ -84,8 +84,8 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
     dispatch(fetchProjects());
   }, []);
 
+  // Update the validateForm function
   const validateForm = () => {
-    // Skip validation if we're editing
     if (isEditing) return true;
 
     const newErrors = {};
@@ -99,6 +99,7 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
     if (!taskData.deadline) newErrors.deadline = "Deadline is required";
     if (!taskData.estimatedTime)
       newErrors.estimatedTime = "Estimated time is required";
+    if (!taskData.priority) newErrors.priority = "Please select a priority level";
     // Only validate project if projects exist
     if (projects.length > 0 && !taskData.project) {
       newErrors.project = "Please select a project";
@@ -202,7 +203,7 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex  justify-center z-50">
       <div className="flex justify-center">
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-[35%] h-[80vh] overflow-y-auto scrollbar-hide mx-auto my-6 absolute">
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-[90%] md:w-[80%] lg:w-[35%] h-[74vh] md:h-[70vh] lg:h-[80vh] overflow-y-auto scrollbar-hide mx-auto my-6 absolute">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold text-gray-800 dark:text-white">
               {isEditing ? "Update Task" : "Create New Task"}
@@ -357,15 +358,20 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
               </div>
 
               {/* Priority */}
+            
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Priority
+                  Priority{!isEditing && "*"}
                 </label>
                 <select
                   name="priority"
                   value={taskData.priority}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 dark:text-white"
+                  className={`w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:text-white ${
+                    errors.priority
+                      ? "border-red-500"
+                      : "border-gray-300 dark:border-gray-600"
+                  }`}
                 >
                   <option value="">Select Priority</option>
                   {priorityOptions.map((option) => (
@@ -374,6 +380,11 @@ const TaskForm = ({ onClose, isEditing = false, initialData = null }) => {
                     </option>
                   ))}
                 </select>
+                {!isEditing && errors.priority && (
+                  <p className="text-red-500 dark:text-red-400 text-xs mt-1">
+                    {errors.priority}
+                  </p>
+                )}
               </div>
 
               {/* Status */}

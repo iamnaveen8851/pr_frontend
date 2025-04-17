@@ -238,7 +238,7 @@ const ProjectForm = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex  justify-center z-50">
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-6  w-[35%] h-[80vh] my-6  overflow-y-auto scrollbar-hide absolute">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-6  w-[90%] md:w-[80%] lg:w-[35%] h-[80vh] my-6  overflow-y-auto scrollbar-hide absolute">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold dark:text-white">
             {isEditing ? "Edit Project" : "Create New Project"}
