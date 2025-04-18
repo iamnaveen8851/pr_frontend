@@ -12,7 +12,7 @@ function App() {
         {/* Toast for message */}
         <Toaster
           color={"green"}
-          position={"bottom-right"}
+          position={"top-right"}
           reverseOrder={false}
         />
       </SocketProvider>
