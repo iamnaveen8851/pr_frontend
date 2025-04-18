@@ -143,6 +143,7 @@ const SignUp = () => {
 
   return (
     <>
+    
       <div className={styles.parentContainer}>
         {/* left div for image */}
         <div className={styles.leftChild}>
@@ -153,7 +154,7 @@ const SignUp = () => {
         <div className={styles.rightChild}>
           <div className={styles.formContainer}>
             <h3 className={styles.heading}>Register</h3>
-            <br />
+
             <form className={styles.form} onSubmit={handleSubmit}>
               <div className={styles.inputGroup}>
                 <input
@@ -166,12 +167,6 @@ const SignUp = () => {
                   value={formState.username}
                   onChange={(e) => {
                     setFormState({ ...formState, username: e.target.value });
-                    // Mark as touched and validate on change
-                    // setTouched({ ...touched, username: true });
-                    // setErrors({
-                    //   ...errors,
-                    //   username: validateUsername(e.target.value),
-                    // });
                   }}
                   onBlur={handleBlur}
                 />
@@ -191,12 +186,6 @@ const SignUp = () => {
                   value={formState.email}
                   onChange={(e) => {
                     setFormState({ ...formState, email: e.target.value });
-                    // Mark as touched and validate on change
-                    // setTouched({ ...touched, email: true });
-                    // setErrors({
-                    //   ...errors,
-                    //   email: validateEmail(e.target.value),
-                    // });
                   }}
                   onBlur={handleBlur}
                 />
@@ -206,14 +195,14 @@ const SignUp = () => {
               </div>
 
               <div className={styles.inputGroup}>
-                <div className="relative">
+                <div className={styles.passwordContainer}>
                   <input
                     className={`${styles.inputBoxes} ${
                       errors.password && touched.password
                         ? styles.inputError
                         : ""
                     }`}
-                    type={showPassword ? "text" : "password"} // Toggle input type
+                    type={showPassword ? "text" : "password"}
                     name="password"
                     placeholder="Password"
                     value={formState.password}
@@ -222,26 +211,29 @@ const SignUp = () => {
                         ...formState,
                         password: e.target.value,
                       });
-                      // Mark as touched and validate on change
-                      // setTouched({ ...touched, password: true });
-                      // setErrors({
-                      //   ...errors,
-                      //   password: validatePassword(e.target.value),
-                      // });
                     }}
                     onBlur={handleBlur}
                   />
                   <span
-                    className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
-                    onClick={() => setShowPassword(!showPassword)} // Toggle visibility
+                    className={styles.passwordToggle}
+                    onClick={() => setShowPassword(!showPassword)}
                   >
-                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />{" "}
-                    {/* Toggle icon */}
+                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
                   </span>
                 </div>
                 {errors.password && touched.password && (
                   <p className={styles.errorText}>{errors.password}</p>
                 )}
+                <div className={styles.helperText}>
+                  Password must contain at least:
+                  <ul className={styles.passwordRequirements}>
+                    <li>6 characters</li>
+                    <li>One uppercase letter (A-Z)</li>
+                    <li>One lowercase letter (a-z)</li>
+                    <li>One number (0-9)</li>
+                    <li>One special character (!@#$%^&*(),.?":{}|&lt;&gt;)</li>
+                  </ul>
+                </div>
               </div>
 
               {/* Role Selection Dropdown */}
@@ -252,14 +244,12 @@ const SignUp = () => {
                   value={formState.role}
                   onChange={(e) => {
                     setFormState({ ...formState, role: e.target.value });
-                    // setTouched({ ...touched, role: true });
                   }}
                   onBlur={handleBlur}
                 >
                   <option value="">Select Role</option>
                   <option value="Employee">Employee</option>
                   <option value="Manager">Manager</option>
-                  {/* <option value="Admin">Admin</option> */}
                 </select>
                 {errors.role && touched.role && (
                   <p className={styles.errorText}>{errors.role}</p>
@@ -273,7 +263,7 @@ const SignUp = () => {
                   errors.password ||
                   errors.role ||
                   isSubmitting
-                    ? "opacity-50 cursor-not-allowed"
+                    ? styles.disabledBtn
                     : ""
                 }`}
                 type="submit"
@@ -286,9 +276,9 @@ const SignUp = () => {
                 }
               >
                 {isSubmitting ? (
-                  <div className="flex items-center justify-center">
+                  <div className={styles.loadingContainer}>
                     <svg
-                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                      className={styles.loadingSpinner}
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -314,7 +304,7 @@ const SignUp = () => {
                 )}
               </button>
 
-              <div className="m-auto">
+              <div className={styles.loginLinkContainer}>
                 <p>
                   If you have account{" "}
                   <button

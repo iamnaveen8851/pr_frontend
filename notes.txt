@@ -1,19 +1,9 @@
-
-NEXT WEEK: 
-
-work on 
-  - Real Time Communication - using web socket.io
-  - AI 
-  - machine learning 
-
-
-
-
-fix deployment at last --- check OR review once 
-OR 
-Redeploy the frontend again and integrate it with all following
-    - google console
-    - firebase
-    - pro url add in server 
-    - test it again 
-
+Password format is not shown on the signup field.
+Error messages appear on the bottom right, should be shown on the top right.
+Password should not sent back in the signup API response as well as login response.
+Manager can assign tasks to Admin, which should not be allowed.
+Edit button is not working on the Task page.
+In Create Task page: we can do(which should not be allowed)
+“Assigned To” field allows selecting Admin.
+“Assigned By” field allows selecting Employee.
+In report section it is showing pending task report which is not assigned to me as well as showing other team performance report.
